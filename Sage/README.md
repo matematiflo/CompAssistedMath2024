@@ -14,25 +14,30 @@
 
 SageMath offers a [great installation guide](https://doc.sagemath.org/html/en/installation/) for different OS. SageMath bundles a huge amount of different packages under one umbrella. This can make it a bit tricky to install. Luckily, for macOS and Linux (including WSL, the Windows Subsystem for Linux), we have Conda. [Conda](https://conda.org/) is a multi-platform package management ecosystem. Community-led distributions are available via [conda-forge](https://conda-forge.org/), including SageMath.
 
-So, the only real thing you need is a working conda-forge installation. As [described here](https://doc.sagemath.org/html/en/installation/conda.html), you can install Miniforge, a Conda forge distribution:
+So, the only real thing you need is a working conda-forge installation. As [described here](https://doc.sagemath.org/html/en/installation/conda.html), you can install Miniforge, a Conda forge distribution. First, download it:
 
 ```bash
 curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
+```
+
+Then, run the script to install it:
+```bash
 bash Miniforge3-$(uname)-$(uname -m).sh
 ```
 
-Then, create a new conda environment containing SageMath:
+After that, create a new conda environment containing SageMath. (Note that [mamba](https://mamba.readthedocs.io/en/latest/index.html) is a package manager that serves as a faster drop-in replacement for `conda`. It comes pre-installed with Miniforge.)
 ```
 mamba create -n sage sage python=3.11
 ```
 
-Note that this will download many packages, so it might take a while. It's also very big (around 1GB in size). Feel free to use another Python version if you prefer.
+This will download many packages, so it might take a while. It's also very big (it will install ~350 packages corresponding to ~1GB in size). Also feel free to use another Python version if you prefer.
 
-After that, access the new environment:
+After that, activate the new environment:
 ```bash
-conda activate sage
-sage
+mamba activate sage
 ```
+
+Now you can run `sage` to access the SageMath REPL that you can interact with in the terminal. But your commands won't get persisted, so a Jupyter Notebook might be a better choice. Read on if you want to use SageMath in Jupyter Notebooks inside VSCode.
 
 
 
