@@ -60,7 +60,6 @@ from sage.all import *
 
 at the beginning of the Jupyter notebook. This way, you will get proper IntelliSense including autocompletion. For example, write `ma` and press `Ctrl + Space` and you will see the available options, e.g. `matrix()`. Note that after first importing all modules, it might take a few seconds for IntelliSense to correctly work and recognize your commands.
 
-If a cell outputs LaTeX code, but you rather see something like `\(\displaystyle \left(\begin{array}{rrr}` etc., you can change the cell output presentation to LaTeX by clicking on the three `...`, then `Change Presentation`. LaTeX in markdown cells should work out of the box.
-
+If a cell outputs LaTeX code, but you rather see something like `\(\displaystyle \left(\begin{array}{rrr}` etc., you can change the cell output presentation to LaTeX by clicking on the three `...` next to a cell, then `Change Presentation` and choose `text/latex`. LaTeX in markdown cells should work out of the box.
 
 If you prefer to use a JupyterNotebook in the browser, open the terminal (`Ctrl + J` in VSCode), activate sage via `mamba activate sage`, then run `sage -n jupyter`. Your browser will open with a Jupyter Notebook running SageMath and you will see your local files. But this shouldn't have any advantages over the Jupyter Notebook experience in VSCode.
