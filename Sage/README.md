@@ -10,11 +10,12 @@
 - The Gram-Schmidt process. Least-square approximation.
 
 
+
 ## Installation of Sage via conda-forge
 
 SageMath offers a [great installation guide](https://doc.sagemath.org/html/en/installation/) for different OS. SageMath bundles a huge amount of different packages under one umbrella. This can make it a bit tricky to install. Luckily, for macOS and Linux (including WSL, the Windows Subsystem for Linux), we have Conda. [Conda](https://conda.org/) is a multi-platform package management ecosystem. Community-led distributions are available via [conda-forge](https://conda-forge.org/), including SageMath.
 
-So, the only real thing you need is a working conda-forge installation. As [described here](https://doc.sagemath.org/html/en/installation/conda.html), you can install Miniforge, a Conda forge distribution. First, download it:
+So, the only real thing you need is a working conda-forge installation. As [described here](https://doc.sagemath.org/html/en/installation/conda.html), you can install Miniforge, a conda-forge distribution. First, download it:
 
 ```bash
 curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
@@ -47,12 +48,19 @@ The widespread editor [VSCode](https://code.visualstudio.com/) (Visual Studio Co
 
 The Jupyter extension itself does _not_ provide a kernel for SageMath, but if you followed along with the installation above, you've already created a working conda environment. VSCode will recognize this and shows you [an option](https://code.visualstudio.com/docs/datascience/jupyter-notebooks#_create-or-open-a-jupyter-notebook) in a Jupyter Notebook to select the SageMath kernel. And that's it, now you can work with SageMath in a Jupyter Notebook locally in VSCode 🎉
 
-Note that you might want to add
+If SageMath does not appear in the kernel list, try to restart VSCode (`Ctrl + Shift + P` to open the command palette, then type in "Reload" and click on "Reload Window"). You may also want to refer to [the official guide](https://doc.sagemath.org/html/en/installation/launching.html#using-jupyter-notebook-through-visual-studio-code-vs-code-in-wsl). Rebooting your computer might also help.
 
+
+#### Tips to get the most out of SageMath in Jupyter Notebooks in VSCode
+
+You might want to add
 ```py
 from sage.all import *
 ```
 
-at the beginning of the Jupyter notebook. This way, you will get proper IntelliSense including autocompletion. For example, write `ma` and press `Ctrl + Space` and you will see the available options, e.g. `matrix()`. But there's much more that IntelliSense can do for you.
+at the beginning of the Jupyter notebook. This way, you will get proper IntelliSense including autocompletion. For example, write `ma` and press `Ctrl + Space` and you will see the available options, e.g. `matrix()`. Note that after first importing all modules, it might take a few seconds for IntelliSense to correctly work and recognize your commands.
 
-You may also want to use the integrated terminal of VSCode (open it by pressing `Ctrl + J`). Here you can also type in `conda activate sage` to activate the environment with SageMath installed. Then type `sage` to start the SageMath REPL.
+If a cell outputs LaTeX code, but you rather see something like `\(\displaystyle \left(\begin{array}{rrr}` etc., you can change the cell output presentation to LaTeX by clicking on the three `...`, then `Change Presentation`. LaTeX in markdown cells should work out of the box.
+
+
+If you prefer to use a JupyterNotebook in the browser, open the terminal (`Ctrl + J` in VSCode), activate sage via `mamba activate sage`, then run `sage -n jupyter`. Your browser will open with a Jupyter Notebook running SageMath and you will see your local files. But this shouldn't have any advantages over the Jupyter Notebook experience in VSCode.
