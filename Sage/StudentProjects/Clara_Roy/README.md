@@ -1,2 +1,1 @@
-Title: The Spectral Theorem
-Clara Vossbeck, Roy Steffen
+The Spectral Theorem by Clara Vossbeck & Roy Steffen
