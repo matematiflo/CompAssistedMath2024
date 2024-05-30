@@ -1,4 +1,0 @@
-[submodule "Sage/StudentProjects/the-synthies"]
-	path = Sage/StudentProjects/the-synthies
-	url = https://github.com/Splines/fourier-sage-playground.git
-	branch = main
