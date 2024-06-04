@@ -78,3 +78,9 @@ lake exe cache get
 ```
 
 If this does not work, you can always try to open the current repo in a Codespace!
+
+### Recommended VS Code extensions
+
+- [Lean 4](https://marketplace.visualstudio.com/items?itemName=leanprover.lean4)
+- [Error lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens)
+- [Markdown lint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint)
