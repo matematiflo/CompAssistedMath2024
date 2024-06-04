@@ -14,6 +14,7 @@ require mathlib from git
 
 require mdgen from git
   "https://github.com/Seasawher/mdgen" @ "main"
+    -- use it running `lake exe mdgen <input_dir> <output_dir>`
 
 @[default_target]
 lean_lib «Leanproject» where
