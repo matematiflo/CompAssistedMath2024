@@ -122,10 +122,10 @@ To get more information about a given structure, you can use the `#print` comman
 structure And : Prop → Prop → Prop
 number of parameters: 2
 constructor:
-And.intro : ∀ {a b : Prop}, a → b → a ∧ b
+And.intro : ∀ {P Q : Prop}, P → Q → P ∧ Q
 fields:
-left : a
-right : b
+left : P
+right : Q
 ```
 
 It is recommended, after applying the tactic `constructor`, to separate each subgoal by a dot of the form `·` (obtained by typing `\.`) and  indent the lines consistenly under each dot).
@@ -136,7 +136,7 @@ example {P Q : Prop} (p : P) (q : Q) : P ∧ Q := by
   · exact p
   · sorry
 
-example {P Q : Prop} : P → Q → P ∧ Q := by
+example {P Q : Prop} : P → Q → (P ∧ Q) := by
   -- can you use `constructor` to solve this?
   sorry
 
@@ -151,10 +151,10 @@ Propositional equivalence `P ↔ Q` is another example of a type (a proposition,
 structure Iff : Prop → Prop → Prop
 number of parameters: 2
 constructor:
-Iff.intro : ∀ {a b : Prop}, (a → b) → (b → a) → (a ↔ b)
+Iff.intro : ∀ {P Q : Prop}, (P → Q) → (Q → P) → (P ↔ Q)
 fields:
-mp : a → b
-mpr : b → a
+mp : P → Q
+mpr : Q → P
 ````
 
 This means two things:
@@ -165,10 +165,13 @@ This means two things:
 So, as a structure, `P ↔ Q` (which is notation for `Iff P Q`) has fields `mp : P → Q` and `mpr : Q → P`. Therefore, if the `constructor` tactic is applied to a goal of the form `P ↔ Q`, it will produce two subgoals, one called `mp` and one called `mpr`.
 -/
 
-example {P Q : Prop} (hPQ : P → Q) (hQP : Q → P): P ↔ Q := by
+def test {P Q : Prop} (hPQ : P → Q) (hQP : Q → P): P ↔ Q := by
   constructor
   · sorry
   · sorry
+
+#print test
+#print axioms test
 
 /-
 If one knows the name of the (unique) constructor of a structure, one can also replace the `constructor` tactic by `apply constructor_name`, possibly with `?term` or `_` as parameters. For the structure `P ∧ Q` (which is notation for `And P Q`), the name of the constructor is `And.intro`.
@@ -196,7 +199,7 @@ To be able to access the terms thus introduced in the local context (one for eac
 
 example {P Q : Prop} : P ∧ Q → P := by
   intro t
-  rcases t -- with ⟨p, q⟩
+  rcases t with ⟨p, q⟩
   sorry
 
 /-
