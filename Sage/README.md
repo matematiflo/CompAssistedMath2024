@@ -27,7 +27,7 @@ bash Miniforge3-$(uname)-$(uname -m).sh
 
 After that, create a new conda environment containing SageMath. (Note that [mamba](https://mamba.readthedocs.io/en/latest/index.html) is a package manager that serves as a faster drop-in replacement for `conda`. It comes pre-installed with Miniforge.)
 
-```
+```script
 mamba create -n sage sage python=3.11
 ```
 
