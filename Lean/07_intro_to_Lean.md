@@ -1,7 +1,7 @@
 # Introduction to Lean
 
-By Judith Ludwig and Florent Schaffhauser  
-Proseminar on Computer-assisted mathematics, Heidelberg  
+By Judith Ludwig and Florent Schaffhauser
+Proseminar on Computer-assisted mathematics, Heidelberg
 Summer Semester 2024
 
 Lean is a *programming language* that can be used as a *proof assistant* (also called an *interactive theorem prover*). This means that Lean can be used to check and certify the correctness of certain computer programmes and formalised mathematical proofs.

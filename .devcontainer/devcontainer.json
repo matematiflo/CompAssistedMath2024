@@ -1,0 +1,16 @@
+{
+    "name": "MathlibDependency dev container",
+
+    "build": {
+      "dockerfile": "Dockerfile"
+    },
+
+    "onCreateCommand": "echo \"Installing Lean 4 and setting up a project with Mathlib dependency. Please be patient, as this takes several minutes!\" && lake exe cache get! && echo \"Just a few more minutes!\"",
+
+    "customizations": {
+      "vscode" : {
+        "extensions" : [ "leanprover.lean4", "usernamehw.errorlens", "DavidAnson.vscode-markdownlint", "GitHub.copilot", "GitHub.copilot-chat" ],
+        "settings": { "github.copilot.editor.enableAutoCompletions": false }
+      }
+    }
+  }
