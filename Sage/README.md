@@ -9,8 +9,6 @@
 - Eigenvalues and the characteristic polynomial. Diagonalisation.
 - The Gram-Schmidt process. Least-square approximation.
 
-
-
 ## Installation of Sage via conda-forge
 
 SageMath offers a [great installation guide](https://doc.sagemath.org/html/en/installation/) for different OS. SageMath bundles a huge amount of different packages under one umbrella. This can make it a bit tricky to install. Luckily, for macOS and Linux (including WSL, the Windows Subsystem for Linux), we have Conda. [Conda](https://conda.org/) is a multi-platform package management ecosystem. Community-led distributions are available via [conda-forge](https://conda-forge.org/), including SageMath.
@@ -22,11 +20,13 @@ curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Mi
 ```
 
 Then, run the script to install it:
+
 ```bash
 bash Miniforge3-$(uname)-$(uname -m).sh
 ```
 
 After that, create a new conda environment containing SageMath. (Note that [mamba](https://mamba.readthedocs.io/en/latest/index.html) is a package manager that serves as a faster drop-in replacement for `conda`. It comes pre-installed with Miniforge.)
+
 ```
 mamba create -n sage sage python=3.11
 ```
@@ -34,13 +34,12 @@ mamba create -n sage sage python=3.11
 This will download many packages, so it might take a while. It's also very big (it will install ~350 packages corresponding to ~1GB in size). Also feel free to use another Python version if you prefer.
 
 After that, activate the new environment:
+
 ```bash
 mamba activate sage
 ```
 
 Now you can run `sage` to access the SageMath REPL that you can interact with in the terminal. But your commands won't get persisted, so a Jupyter Notebook might be a better choice. Read on if you want to use SageMath in Jupyter Notebooks inside VSCode.
-
-
 
 ### Usage of Sage in Jupyter Notebooks in VSCode
 
@@ -50,10 +49,10 @@ The Jupyter extension itself does _not_ provide a kernel for SageMath, but if yo
 
 If SageMath does not appear in the kernel list, try to restart VSCode (`Ctrl + Shift + P` to open the command palette, then type in "Reload" and click on "Reload Window"). You may also want to refer to [the official guide](https://doc.sagemath.org/html/en/installation/launching.html#using-jupyter-notebook-through-visual-studio-code-vs-code-in-wsl). Rebooting your computer might also help.
 
-
 #### Tips to get the most out of SageMath in Jupyter Notebooks in VSCode
 
 You might want to add
+
 ```py
 from sage.all import *
 ```
