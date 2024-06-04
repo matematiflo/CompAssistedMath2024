@@ -111,6 +111,22 @@ example {P Q R : Prop} (f : P → Q → R) (q : Q) : P → R := by
 
 When your goal is a *structure* (for instance `P ∧ Q`), in order to close the goal you need to introduce a term for each *field* of the structure (for instance a term of type `P` and a term of type `Q` if your structure is `P ∧ Q`). This can be achieved by using the tactic `constructor`, which replaces the structure in the goal by as many subgoals as there are fields in that structure.
 
+To get more information about a given structure, you can use the `#print` command.
+
+```lean
+#print And
+```
+
+```lean
+structure And : Prop → Prop → Prop
+number of parameters: 2
+constructor:
+And.intro : ∀ {a b : Prop}, a → b → a ∧ b
+fields:
+left : a
+right : b
+```
+
 It is recommended, after applying the tactic `constructor`, to separate each subgoal by a dot of the form `·` (obtained by typing `\.`) and  indent the lines consistenly under each dot).
 
 ```lean
@@ -125,6 +141,20 @@ example {P Q : Prop} : P → Q → P ∧ Q := by
 ```
 
 Propositional equivalence `P ↔ Q` is another example of a type (a proposition, in this case) which is defined as a structure. The constructor is named `Iff.intro` and it takes two parameters: one called called `mp` which is a proof of `P → Q`, and one called `mpr` which is a proof of `Q → P`.
+
+```lean
+#print Iff
+```
+
+```lean
+structure Iff : Prop → Prop → Prop
+number of parameters: 2
+constructor:
+Iff.intro : ∀ {a b : Prop}, (a → b) → (b → a) → (a ↔ b)
+fields:
+mp : a → b
+mpr : b → a
+````
 
 This means two things:
 
@@ -165,7 +195,7 @@ To be able to access the terms thus introduced in the local context (one for eac
 ```lean
 example {P Q : Prop} : P ∧ Q → P := by
   intro t
-  rcases t with ⟨p, q⟩
+  rcases t -- with ⟨p, q⟩
   sorry
 ```
 
@@ -193,6 +223,16 @@ example {P Q R : Prop} : (P ∧ Q) ∧ R → Q ∧ P ∧ R := by
 ```
 
 The `rcases` tactic also works with inductive types that have various contructors. Take for instance a term `t : P ∨ Q`. Then `t` is either of  the form `Or.inl p` or of the form `Or.inr q`, where `Or.inl` and `Or.inr` are the two constructors of the inductive type `Or P Q`, also denoted by `P ∨ Q`. The command `rcases t with p | q` will extract `p` and `q` out of `t` (and `t` will disappear from the local context after this). Note that the syntax is different from the cases of a structure, for which it was `rcases t with ⟨p, q⟩`.
+
+```lean
+#print Or
+```
+
+inductive Or : Prop → Prop → Prop
+number of parameters: 2
+constructors:
+Or.inl : ∀ {a b : Prop}, a → a ∨ b
+Or.inr : ∀ {a b : Prop}, b → a ∨ b
 
 ```lean
 example {P Q : Prop} : P ∨ (P ∧ Q) → P := by
