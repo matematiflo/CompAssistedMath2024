@@ -328,13 +328,20 @@ example : 1 + (1 + 1) = 4 - 1  := by
 
 ## The `exists` tactic
 
-The case of an existential statement is similar to the `apply Or.inl` and `apply Eq.refl` situations that we have encountered before. A goal of the form `∃ n : Nat, 42 = 2 * n` is again an inductive type (or inductively defined proposition). Its only constructor is `Exists.intro`, which takes two parameters: a natural number `n` and a proof that `42 = 2 * n`.
+The case of an existential statement is similar to the `apply Or.inl` and `apply Eq.refl` situations that we have encountered before. A goal of the form `∃ n : Nat, 42 = 2 * n` is again an inductive type (or inductively defined proposition). Its only constructor is `Exists.intro`, which takes two parameters: a natural number `n` and a proof that `42 = 2 * n`. You can check this with the `#print Exists` command.
 
 ```lean
 example : ∃ n : Nat, 42 = 2 * n := by
   apply Exists.intro 21
   exact Eq.refl _
+
+#print Exists
 ```
+
+inductive Exists.{u} : {α : Sort u} → (α → Prop) → Prop
+number of parameters: 2
+constructors:
+Exists.intro : ∀ {α : Sort u} {p : α → Prop} (w : α), p w → Exists p
 
 As we have said, terms of type `∃ n : Nat, 42 = 2 * n` are pairs of the form `⟨n, hn⟩` where `n` is a natural number and `hn` is a proof of the proposition `42 = 2 * n`. Such pairs are called *dependent pairs* (because the type of the second term `hn` depends on the term `n`). This is sometimes convenient to use as concise notation.
 
