@@ -71,13 +71,13 @@ The second command updates your Lean installation and adds a Mathlib dependency.
 lake update
 ```
 
-The final (optional) command downloads Mathlib's pre-compiled files, so you do not have to compile them when you need to import them.
+The final command below is optional: it downloads Mathlib's pre-compiled files, so you do not have to compile them when you need to import them. It is useful to run it periodically (every day or so!).
 
 ```script
 lake exe cache get
 ```
 
-If this does not work, you can always try to open the current repo in a Codespace!
+If this does not work, you can always try to open the current repo in a Codespace :blush:
 
 ### Recommended VS Code extensions
 
