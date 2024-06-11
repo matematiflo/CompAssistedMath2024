@@ -24,7 +24,7 @@
 elan toolchain install stable
 ```
 
-This will download and intall Lean on your computer. You can check that Lean has been installed using the following command.
+This will download and install Lean on your computer. You can check that Lean has been installed using the following command.
 
 ```script
 elan toolchain list
