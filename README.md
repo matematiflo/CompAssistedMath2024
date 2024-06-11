@@ -65,7 +65,7 @@ The first one updates the Lean version used in your repo to match Mathlib's curr
 curl https://raw.githubusercontent.com/leanprover-community/mathlib4/master/lean-toolchain -o lean-toolchain
 ```
 
-The second command updates your Lean installation and adds a Mathlib dependency.
+The second command updates your Lean installation and Mathlib dependency.
 
 ```script
 lake update
