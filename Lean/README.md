@@ -22,7 +22,7 @@ Here are some Lean project suggestions (in format **Title** *(prerequisites)*: G
 1. [The Schröder-Bernstein Theorem][SB] *(Set theory)*: Prove the Schröder-Bernstein Theorem: If two sets $X$ and $Y$ have injections $X \rightarrow Y$ and $Y \rightarrow X$, there exists a bijection $X \rightarrow Y$.
 
 [conv]: Lean/Projects/01_Convergence_of_sequences_(Analysis_1)/Convergence.md
-[cont]: Projects/02.%20Continuity%20of%20real%20functions%20%20(Analysis%201)/Continuity.md
+[cont]: Lean/Projects/02.%20Continuity%20of%20real%20functions%20%20(Analysis%201)/Continuity.md
 [isom]: Projects/03.%20Affine%20isometries%20(Linear%20algebra%201)/AffineIsometries.md
 [inner]: Projects/04.%20Inner%20automorphisms%20(group%20theory)/InnerAutomorphisms.md
 [inv]: Projects/05.%20Involutions%20(group%20theory)/Involutions.md
