@@ -21,15 +21,13 @@ Here are some Lean project suggestions (in format **Title** *(prerequisites)*: G
 1. [Lagrange Polynomials][Lag] *(Linear Algebra 1)*: Define Lagrange polynomials and show that they form a basis of the vector space of bounded polynomials.
 1. [The Schröder-Bernstein Theorem][SB] *(Set theory)*: Prove the Schröder-Bernstein Theorem: If two sets $X$ and $Y$ have injections $X \rightarrow Y$ and $Y \rightarrow X$, there exists a bijection $X \rightarrow Y$.
 
-[conv]: Lean/Projects/01_Convergence_of_sequences_(Analysis_1)/Convergence.md
-[cont]: Lean/Projects/02.%20Continuity%20of%20real%20functions%20%20(Analysis%201)/Continuity.md
-[isom]: Projects/03.%20Affine%20isometries%20(Linear%20algebra%201)/AffineIsometries.md
-[inner]: Projects/04.%20Inner%20automorphisms%20(group%20theory)/InnerAutomorphisms.md
-[inv]: Projects/05.%20Involutions%20(group%20theory)/Involutions.md
-[div]: Projects/06.%20Divisibility%20in%20rings%20(algebra%201)/Divisibility.md
-[Euc]: Projects/07.%20Euclidean%20domains%20(Linear%20algebra%202,%20Algebra%201)/Euclidean.md
-[Noeth]: Projects/08.%20Noetherian%20rings%20(Algebra%201)/Noetherian.md
-[Lag]: Projects/09.%20Lagrange%20polynomials%20(Linear%20Algebra%201)/Lagrange.md
-[SB]: Projects/10.%20Schroeder-Bernstein%20theorem%20(Set%20theory)/SchroederBernstein.md
-
-1.%20Convergence%20of%20sequences%20(Analysis%201)/Convergence.md
+[conv]: Projects/01.%20Convergence%20of%20sequences%20(Analysis%201)/Convergence.md
+[cont]: Lean/Projects/02.%20Continuity%20of%20real%20functions%20(Analysis%201)/Continuity.md
+[isom]: Lean/Projects/03.%20Affine%20isometries%20(Linear%20algebra%201)/AffineIsometries.md
+[inner]: Lean/Projects/04.%20Inner%20automorphisms%20(Group%20theory)/InnerAutomorphisms.md
+[inv]: Lean/Projects/05.%20Involutions%20(Group%20theory)/Involutions.md
+[div]: Lean/Projects/06.%20Divisibility%20in%20rings%20(Algebra%201)/Divisibility.md
+[Euc]: Lean/Projects/07.%20Euclidean%20domains%20(Linear%20algebra%202,%20Algebra%201)/Euclidean.md
+[Noeth]: Lean/Projects/08.%20Noetherian%20rings%20(Algebra%201)/Noetherian.md
+[Lag]: Lean/Projects/09.%20Lagrange%20polynomials%20(Linear%20Algebra%201)/Lagrange.md
+[SB]: Lean/Projects/10.%20Schroeder-Bernstein%20theorem%20(Set%20theory)/SchroederBernstein.md
