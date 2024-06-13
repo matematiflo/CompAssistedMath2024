@@ -21,7 +21,7 @@ Here are some Lean project suggestions (in format **Title** *(prerequisites)*: G
 1. [Lagrange Polynomials][Lag] *(Linear Algebra 1)*: Define Lagrange polynomials and show that they form a basis of the vector space of bounded polynomials.
 1. [The Schröder-Bernstein Theorem][SB] *(Set theory)*: Prove the Schröder-Bernstein Theorem: If two sets $X$ and $Y$ have injections $X \rightarrow Y$ and $Y \rightarrow X$, there exists a bijection $X \rightarrow Y$.
 
-[conv]: Projects/01.%20Convergence%20of%20sequences%20(Analysis%201)/Convergence.md
+[conv]: Lean/Projects/01.%20Convergence%20of%20sequences%20(Analysis%201)/Convergence.md
 [cont]: Lean/Projects/02.%20Continuity%20of%20real%20functions%20(Analysis%201)/Continuity.md
 [isom]: Lean/Projects/03.%20Affine%20isometries%20(Linear%20algebra%201)/AffineIsometries.md
 [inner]: Lean/Projects/04.%20Inner%20automorphisms%20(Group%20theory)/InnerAutomorphisms.md
