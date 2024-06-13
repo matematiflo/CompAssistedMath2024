@@ -10,7 +10,7 @@
 
 Here are some Lean project suggestions (in format **Title** *(prerequisites)*: Goal).
 
-1. [Convergence of sequences](Projects/01.%20Convergence%20of%20sequences%20(Analysis%201)/Convergence.md) *(Analysis 1)*: Prove basic properties of convergent sequences. Show that the sequence of the $n$-th root of $n$ converges to one.
+1. [Convergence of sequences][conv] *(Analysis 1)*: Prove basic properties of convergent sequences. Show that the sequence of the $n$-th root of $n$ converges to one.
 1. [Continuity of real functions][cont] *(Analysis 1)*: Define the notion of a continuous function. Explore some examples. Show the equivalence of continuity and left- and right-continuity combined.
 1. [Affine isometries][isom] *(Linear algebra 1)*: Define affine isometries and show that they are always of the form $x \mapsto g*x + y$ for some orthogonal matrix $g$.
 1. [Inner automorphisms][inner] *(Group theory)*: Define the group of inner automorphisms of a group. Show that the group $\mathrm{GL}_n(ℝ)$ has an automorphism that is not inner.
@@ -21,7 +21,7 @@ Here are some Lean project suggestions (in format **Title** *(prerequisites)*: G
 1. [Lagrange Polynomials][Lag] *(Linear Algebra 1)*: Define Lagrange polynomials and show that they form a basis of the vector space of bounded polynomials.
 1. [The Schröder-Bernstein Theorem][SB] *(Set theory)*: Prove the Schröder-Bernstein Theorem: If two sets $X$ and $Y$ have injections $X \rightarrow Y$ and $Y \rightarrow X$, there exists a bijection $X \rightarrow Y$.
 
-[conv]: Projects/01.%20Convergence%20of%20sequences%20(Analysis%201)/Convergence.md
+[conv]: Projects/01_Convergence_of_sequences_(Analysis_1)/Convergence.md
 [cont]: Projects/02.%20Continuity%20of%20real%20functions%20%20(Analysis%201)/Continuity.md
 [isom]: Projects/03.%20Affine%20isometries%20(Linear%20algebra%201)/AffineIsometries.md
 [inner]: Projects/04.%20Inner%20automorphisms%20(group%20theory)/InnerAutomorphisms.md
