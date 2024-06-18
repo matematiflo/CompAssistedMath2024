@@ -4,7 +4,7 @@ By Judith Ludwig, Christian Merten and Florent Schaffhauser,
 Proseminar on computer-assisted mathematics,
 Heidelberg, Summer Semester 2024
 
-In this project sketch, we define Lagrange polynomials and show that they form a basis of the vector space of bounded polynomials. This is also called the 'Lagrange Interpolation Theorem'.
+In this project sketch, we define Lagrange polynomials and show that they form a basis of the vector space of polynomials $'P_n'$ of a finite degree $'n \in N_0'$. This is also called the 'Lagrange Interpolation Theorem'.
 
 ```lean
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
