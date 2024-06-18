@@ -94,7 +94,7 @@ open Set
 example : s ∩ t = t ∩ s := by
   ext x
   constructor
-  · rintro ⟨xs, xt⟩
+  · intro ⟨xs, xt⟩
     exact ⟨xt, xs⟩
   . sorry
 
@@ -131,7 +131,7 @@ example (a b : ℝ) : (a + b) * (a - b) = a * a - b * b := by
 If our goal is of the form `∃ ...` then the `use` tactic helps us make progress. For example, if our goal is to show that there exists a real number `x` with `x ≥ 0`, writing `use 1` will replace `x` with `1`
 
 ```lean
-example : ∃ (x : ℝ), x ≥ 0 := by
+example : ∃ (x : ℝ), x > 0 := by
   use 1
   sorry
 
@@ -149,7 +149,8 @@ The `simp` tactic is Lean's simplifier. It tries to apply lemmas that have a `si
 Theorems tagged with the simp attribute are used by the simplifier (i.e., the simp tactic, and its variants) to simplify expressions occurring in your goals. Theorems tagged with the simp attribute are called "simp theorems" or "simp lemmas". Here is an example.
 
 ```lean
-@[simp] theorem ne_eq' (a b : α) : (a ≠ b) = ¬ (a = b) := rfl
+@[simp]
+theorem ne_eq' (a b : α) : (a ≠ b) = ¬ (a = b) := rfl
 ```
 
 This simp theorem instructs the simplifier to replace instances of the term `a ≠ b` with `Not (a = b)`.
@@ -162,16 +163,16 @@ example (a : ℝ) : a + 0 = a  := by
 We can use simp at a local hypothesis `h`, by typing `simp at h`.
 
 ```lean
-example (a b : ℝ) (h: a = b + 0) : a = b := by
-   simp at h
-   exact h
+example (a b : ℝ) (h : a = b + 0) : a = b := by
+  simp at h
+  exact h
 ```
 
 We can add rules to the simplifier using `simp [h₁, h₂, ..., hₙ]`. This simplifies the goal using the lemmas tagged with the attribute [simp] and the given expressions hᵢ's.
 
 ```lean
-example (a b : G) (h: a * b = 1 ) : a * b * 1 = 1 := by
-   simp [h]
+example (a b : G) (h : a * b = 1 ) : a * b * 1 = 1 := by
+  simp [h]
 ```
 
 The variant `simp only [h₁, h₂, ..., hₙ]` simplifies the goal using only the given expressions `hᵢ`'s and not using the lemmas tagged with the attribute [simp].
@@ -181,9 +182,9 @@ Let's see an example. For that take a commutative group.
 ```lean
 variable {G : Type} [CommGroup G]
 
-example (a b c d : G) (h: a * b = 1 ) :  b * a * c * d = d * c := by
-   simp only [mul_comm b a]
-   sorry
+example (a b c d : G) (h : a * b = 1 ) :  b * a * c * d = d * c := by
+  simp only [mul_comm b a]
+  sorry
 ```
 
 ## The `congr` tactic
