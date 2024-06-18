@@ -133,6 +133,7 @@ If a proof is symmetric with respect to two variables, in informal maths we writ
 
 Hint: you need to use `sb_right_inv` in the proof.
 
+```lean
 theorem sb_injective (hf : Function.Injective f) : Function.Injective (sbFun f g) := by
   set A := sbSet f g with A_def
   set h := sbFun f g with h_def
@@ -143,10 +144,8 @@ theorem sb_injective (hf : Function.Injective f) : Function.Injective (sbFun f g
     · symm
       apply this hxeq.symm xA.symm (xA.resolve_left x₁A)
     have x₂A : x₂ ∈ A := by
-      /- Try to omit the `_root_` here, to understand why it is needed.
-
-```lean
-apply _root_.not_imp_self.mp
+      /- Try to omit the `_root_` here, to understand why it is needed. -/
+      apply _root_.not_imp_self.mp
       intro (x₂nA : x₂ ∉ A)
       rw [if_pos x₁A, if_neg x₂nA] at hxeq
       rw [A_def, sbSet, Set.mem_iUnion] at x₁A

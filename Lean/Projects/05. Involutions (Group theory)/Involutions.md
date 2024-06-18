@@ -55,11 +55,10 @@ attribute [simps?] realNeg
 
 The function `realNeg` is indeed an involution of the real numbers.
 
-lemma realNeg_is_involution (x : ℝ) : realNeg (realNeg x) = x := by
-  /- Add a `?` to see which lemmas were used.
-
 ```lean
-simp
+lemma realNeg_is_involution (x : ℝ) : realNeg (realNeg x) = x := by
+  /- Add a `?` to see which lemmas were used. -/
+  simp
 ```
 
 Since mathematically speaking there is no difference between multiplicatively and additively written groups, there is a meta program converting proofs for one version to the other to avoid code duplication.
@@ -88,15 +87,14 @@ lemma eq_inv (σ : G ≃* G) (hnofix : ∀ g, σ g = g → g = 1)
 
 If a finite group has an involutive automorphism with no non-trivial fixed points, it is commutative.
 
+```lean
 theorem isCommutative (σ : G ≃* G) (hnofix : ∀ g, σ g = g → g = 1)
     (hinv : ∀ x, σ (σ x) = x) : ∀ a b : G, a * b = b * a := by
   intro a b
   calc a * b = a⁻¹⁻¹ * b⁻¹⁻¹ := by simp
            _ = (b⁻¹ * a⁻¹)⁻¹ := by simp
-  /- continue calc block
-
-```lean
-sorry
+  /- continue calc block -/
+  sorry
 
 end
 ```

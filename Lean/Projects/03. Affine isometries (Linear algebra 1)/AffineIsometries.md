@@ -33,6 +33,7 @@ The first lemma gives (the formula, or better) the function for multiplying a ma
 
 The second lemma shows that giving a linear endomorphism of ℝ^n means giving a matrix.
 
+```lean
 @[simp]
 lemma Matrix.mulVec_euclideanSpace_single (g : Matrix (Fin n) (Fin n) ℝ) (i : Fin n) (a : ℝ) :
     g *ᵥ EuclideanSpace.single i a = fun j ↦ g j i * a := by
@@ -43,13 +44,10 @@ variable (f : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n))
 
 lemma eq_matrix (hf : IsLinearMap ℝ f) :
     ∃ g : Matrix (Fin n) (Fin n) ℝ, ∀ (x : EuclideanSpace ℝ (Fin n)), f x = g *ᵥ x := by
-  /- First reflex when proving something on vector spaces: pick a basis!
-
-let b : Basis (Fin n) ℝ (EuclideanSpace ℝ (Fin n)) := PiLp.basisFun 2 ℝ (Fin n)
-  /- Try to understand what this means.
-
-```lean
-let g : Matrix (Fin n) (Fin n) ℝ := fun i j ↦ f (b j) i
+  /- First reflex when proving something on vector spaces: pick a basis! -/
+  let b : Basis (Fin n) ℝ (EuclideanSpace ℝ (Fin n)) := PiLp.basisFun 2 ℝ (Fin n)
+  /- Try to understand what this means. -/
+  let g : Matrix (Fin n) (Fin n) ℝ := fun i j ↦ f (b j) i
   use g
   intro x
   have hx : x ∈ Submodule.span ℝ (Set.range b) := by simp

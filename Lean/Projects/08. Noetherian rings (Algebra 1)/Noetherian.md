@@ -53,16 +53,15 @@ To define a term of a type defined by a structure, you can use the `def foo : ba
 
 The union over all ideals in an ascending chain is an ideal.
 
+```lean
 def ChainLimit (I : ℕ → Ideal R) (hI : IsAscendingChain I) : Ideal R where
   carrier := Set.iUnion (fun n : ℕ ↦ I n)
   add_mem' {x y} hx hy := by
     simp at hx hy
     obtain ⟨i, hi⟩ := hx
     obtain ⟨j, hj⟩ := hy
-    /- Found using `simp?`
-
-```lean
-simp only [Set.mem_iUnion, SetLike.mem_coe]
+    /- Found using `simp?` -/
+    simp only [Set.mem_iUnion, SetLike.mem_coe]
     use i ⊔ j
     apply Ideal.add_mem
     · apply le_of_le_of_isAscendingChain hI le_sup_left hi

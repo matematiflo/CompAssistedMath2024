@@ -78,6 +78,7 @@ def conjugateHom : G →* (G ≃* G) :=
 
 As an example we show that the kernel of the conjugation is the center of the group.
 
+```lean
 theorem conjugateHom_ker : (conjugateHom G).ker = Subgroup.center G := by
   ext x
   constructor
@@ -87,19 +88,15 @@ theorem conjugateHom_ker : (conjugateHom G).ker = Subgroup.center G := by
     have : y = x * y * x⁻¹ := by
       rw [← conjugateHom_apply_apply, h]
       simp
-    /- `rw` at first occurence
-
-nth_rw 1 [this]
-    /- finish of with `group`
-
-group
+    /- `rw` at first occurence -/
+    nth_rw 1 [this]
+    /- finish of with `group` -/
+    group
   · intro h
     rw [Subgroup.mem_center_iff] at h
     ext y
-    /- found with `simp?`
-
-```lean
-simp only [conjugateHom_apply_apply, MulAut.one_apply]
+    /- found with `simp?` -/
+    simp only [conjugateHom_apply_apply, MulAut.one_apply]
     rw [← h]
     group
 ```

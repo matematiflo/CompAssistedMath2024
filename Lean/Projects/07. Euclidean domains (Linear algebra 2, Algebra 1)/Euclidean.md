@@ -41,12 +41,11 @@ For more information about structures, see https://lean-lang.org/theorem_proving
 
 Next we prove that a field is a principal ideal domain.
 
+```lean
 lemma isPID_of_field (k : Type) [Field k] : IsPID k where
   /- `IsDomain` is a so-called 'typeclass'. We don't get into the details here, but this means that we can use `inferInstance` to ask Lean to automatically fill in a proof.
-  In this case `IsDomain` is already proven for any field.
-
-```lean
-isDomain := inferInstance
+  In this case `IsDomain` is already proven for any field. -/
+  isDomain := inferInstance
   ideal_principal := by
     intro I
     by_cases h : I = 0
@@ -63,15 +62,13 @@ A *Euclidean function* on a commutative ring is a height function `R → ℕ` an
 
 Note: This is not merely a proposition, but contains the data of a height function. This height function is not unique, so the datum of a ring `R` with a term `h : Euclidean R` is not equivalent to the notion of a Euclidean domain (see `IsEuclideanDomain`).
 
-structure EuclideanFunction (R : Type) [CommRing R] where
-  /-- Height function.
-
-height : R → WithBot ℕ
-  zero_of_bot (x : R) : height x = ⊥ → x = 0
-  /-- Division by zero
-
 ```lean
-division (a b : R) (hb : b ≠ 0) : ∃ q r, a = b * q + r ∧ (r = 0 ∨ height r < height b)
+structure EuclideanFunction (R : Type) [CommRing R] where
+  /-- Height function. -/
+  height : R → WithBot ℕ
+  zero_of_bot (x : R) : height x = ⊥ → x = 0
+  /-- Division by zero -/
+  division (a b : R) (hb : b ≠ 0) : ∃ q r, a = b * q + r ∧ (r = 0 ∨ height r < height b)
 ```
 
 An integral domain is called a Euclidean domain if it admits a Euclidean function.
@@ -87,16 +84,15 @@ A Euclidean structure on a field `k`.
 Note 1: Observe that we can change the `42` in the proof below to an arbitrary value. In particular, the height function is not unique!
 Note 2: This is a `def` and not a `theorem`, because it contains data. Try to see what happens if you replace `def` by `theorem`!
 
+```lean
 def euclideanOfField (k : Type) [Field k] : EuclideanFunction k where
   height _ := 42
   zero_of_bot x h := by simp_all; absurd h; decide
   division a b hb := by
     use a / b
     use 0
-    /- found by `simp?`
-
-```lean
-simp only [add_zero, lt_self_iff_false, or_false, and_true]
+    /- found by `simp?` -/
+    simp only [add_zero, lt_self_iff_false, or_false, and_true]
     field_simp
 
 theorem isEuclidean_of_field (k : Type) [Field k] : IsEuclideanDomain k where
