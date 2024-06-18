@@ -4,6 +4,8 @@
 
 - An [introduction](07_intro_to_Lean.md) to Lean as a programming language.
 - Some [basic tactics](08_basic_tactics.md) in Lean.
+- A homework assignement about [logic in Lean](Assignment/LeanAssignment.md).
+- Some [advanced tactics](09_advanced_tactics.md).
 
 ## Projects
 
