@@ -18,6 +18,7 @@ In this file, we explain the `calc` environment and introduce the following tact
 - `ring`
 - `use`
 - `simp`
+- `congr`
 
 ## The `calc` environment
 
