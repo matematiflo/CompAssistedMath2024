@@ -1,6 +1,6 @@
 # Divisibility
-
-By Judith Ludwig, Christian Merten and Florent Schaffhauser,
+# Another change so you definitely see I've changed it!
+By Petr Samodelkin, Elias Köhnlein,
 Proseminar on computer-assisted mathematics,
 Heidelberg, Summer Semester 2024
 
