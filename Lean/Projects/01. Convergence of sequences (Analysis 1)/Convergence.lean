@@ -15,7 +15,7 @@ We can find lemma names by using the library search tactic `exact?`.
 -/
 
 example (x y : ℝ) : |x + y| ≤ |x| + |y| := by
-  exact?
+  exact abs_add x y
 
 /-
 Definition of a convergent sequence `a : ℕ → ℝ`.
@@ -58,7 +58,7 @@ lemma iff' (a : ℕ → ℝ) (x : ℝ) :
 Constant sequences converge to the constant value.
 -/
 
-theorem of_constant (x : ℝ) : ConvergesTo (fun _ ↦ x) x := by
+theorem of_constant (x : ℝ) : ConvergesTo (fun _ ↦ x)  x := by
   dsimp [ConvergesTo]
   intro ε hε
   use 0
@@ -86,8 +86,8 @@ example : ConvergesTo (fun n ↦ 1 / n) 0 := by
   calc
     |(1 / m : ℝ) - 0| = (1 / m : ℝ) := by simp
                     _ ≤ (1 / ⌈1 / ε⌉₊ : ℝ) := hle₁
-                    _ ≤ 1 / (1 / ε) := sorry
-                    _ = ε := sorry
+                    _ ≤ 1 / (1 / ε) := hle₂
+                    _ = ε := one_div_one_div ε
 
 /-
 The sum of two convergent sequences is convergent and the limit is the sum of the limits. There is one `sorry` left to fill, though!
@@ -104,7 +104,9 @@ theorem add (a₁ a₂ : ℕ → ℝ) (x₁ x₂ : ℝ) (h₁ : ConvergesTo a₁
     apply hn₁
     exact le_of_max_le_left hmn
   have hlt₂ : |a₂ m - x₂| < ε / 2 := by
-    sorry
+    apply hn₂
+    exact le_of_max_le_right hmn
+
   calc
     |a₁ m + a₂ m - (x₁ + x₂)| = |(a₁ m - x₁) + (a₂ m - x₂)| := by abel_nf
                             _ ≤ |a₁ m - x₁| + |a₂ m - x₂| := abs_add _ _
@@ -168,8 +170,8 @@ theorem of_convergesTo (a : ℕ → ℝ) (x : ℝ) (h : ConvergesTo a x) :
   intro m nm
   calc
     |a m| = |a m - x + x| := by ring_nf
-        _ ≤ |a m - x| + |x| := sorry --abs_add (a m - x) x
-        _ ≤ 1 + |x| := sorry -- add_le_add_right (le_of_lt (hn m nm)) |x|
+        _ ≤ |a m - x| + |x| := abs_add (a m - x) x
+        _ ≤ 1 + |x| := add_le_add_right (le_of_lt (hn m nm)) |x|
 
 end IsBounded
 
@@ -182,8 +184,37 @@ Hint for the proof: use that convergent sequences are bounded!
 -/
 
 theorem mul (a₁ a₂ : ℕ → ℝ) (x₁ x₂ : ℝ) (h₁ : ConvergesTo a₁ x₁)
-    (h₂ : ConvergesTo a₂ x₂) : ConvergesTo (a₁ * a₂) (x₁ * x₂) :=
-  sorry
+    (h₂ : ConvergesTo a₂ x₂) : ConvergesTo (a₁ * a₂) (x₁ * x₂) := by
+  rw [iff']
+
+  have hb₁ : IsBounded a₁ := by simp only[IsBounded.of_convergesTo a₁ x₁ h₁]
+  have hb₂ : IsBounded a₂ := by simp only[IsBounded.of_convergesTo a₂ x₂ h₂]
+  obtain ⟨C₁, hC₁⟩ := hb₁
+  obtain ⟨C₂, hC₂⟩ := hb₂
+  intro ε hε
+  obtain ⟨n₁, hn₁⟩ := h₁ (ε / (|C₂| * 2)) (by simpa)
+  obtain ⟨n₂, hn₂⟩ := h₂ (ε / (|x₁| * 2)) (by simpa)
+  use (max n₁ n₂)
+  intro m hmn
+  have hlt₁ : |a₁ m - x₁| < ε / (|C₂| * 2):= by
+    apply hn₁
+    exact le_of_max_le_left hmn
+  have hlt₂ : |a₂ m - x₂| < ε / (|x₁| * 2) := by
+    apply hn₂
+    exact le_of_max_le_right hmn
+  calc
+    |a₁ m * a₂ m - x₁ * x₂| = |a₁ m * a₂ m - x₁ * a₂ m + x₁ * a₂ m - x₁ * x₂| := by ring_nf
+    _ = |a₁ m * a₂ m - x₁ * a₂ m + (x₁ * a₂ m - x₁ * x₂)| := by abel_nf
+    _ ≤ |a₁ m * a₂ m - x₁ * a₂ m| + |x₁ * a₂ m - x₁ * x₂| := abs_add _ _
+    _ = |(a₁ m - x₁) * a₂ m| + |x₁ * (a₂ m - x₂)| := by ring_nf
+    _ = |(a₁ m - x₁)| * |a₂ m| + |x₁| * |(a₂ m - x₂)| := sorry
+    _ ≤ |(a₁ m - x₁)| * |C₂| + |x₁| * |(a₂ m - x₂)| := sorry
+    _ ≤ ε / (|C₂| * 2) * |C₂| + |x₁| * ε / (|x₁| * 2) := sorry
+    _ = ε := by ring_nf;
+
+
+
+
 
 /-
 The sandwich lemma: Given three sequences `a`, `b` and `c` such that
