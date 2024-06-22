@@ -84,10 +84,15 @@
 
 \begin{frame}{Proofs 6}
 	\begin{theorem}
-		Let $V$ be a vectorspace, $\#\{v_1, \ldots, v_n\} = dim(V)$  $\{v_1, \ldots, v_n\}\subset V$ and $\{v_1, \ldots, v_n\}$ are linearly indipendant, then $\{v_1, \ldots, v_n\}$ is a basis von V 
+		Let $V$ be a vectorspace,$M = \{v_1, \ldots, v_n\}$ $\# M = dim(V)$  $M\subset V$ and $\{v_1, \ldots, v_n\}$ are linearly indipendant, then $M$ is a basis von V 
 	\end{theorem}
 	\begin{proof}
-		
+		let there be one more vector in $V$ that is linearly independant to vectors in $M$ then $dim(V) \geq n+1$ due to how the dimension is defined. Which is a contradiction. \\ 
+		we now know that $\forall u \in V$ $\{v_1, \ldots, v_n, u\}$ will be linearly dipendant.
+		\begin{align*}
+			 &\Rightarrow \forall u \in V \exists \alpha_i \in K \forall i \in 1, \ldots, n: u = \sum_{i = 1}^{n}\alpha_i v_i 
+		\end{align*}
+		and, because vecotrs in M are linearly indipendant M must be the basis of V, because of how the basis is defined
 	\end{proof}
 	
 \end{frame}
@@ -97,7 +102,7 @@
 		lagrange polynomials $\{\ell_0,\ldots, \ell_n\}$ construct a basis of $P_n$ for a $n\in \mathbb{N}_0: n <\infty$
 	\end{theorem}
 	\begin{proof}
-		we know that $\#\{\ell_0,\ldots, \ell_n\} = n+1 = dim(P_n)$. The Lagrange polynomials are linearly indipendant and $\{\ell_0,\ldots, \ell_n\} \subset P_n$ and according to one of our previous theorems $\{\ell_0,\ldots, \ell_n\}$ is a basis of $P_n$
+		we know that $\#\{\ell_0,\ldots, \ell_n\} = n+1 = dim(P_n)$. The Lagrange polynomials are linearly indipendant and $\{\ell_0,\ldots, \ell_n\} \subset P_n$ and according to our previous theorem $\{\ell_0,\ldots, \ell_n\}$ is a basis of $P_n$
 	\end{proof}
 	
 \end{frame}
