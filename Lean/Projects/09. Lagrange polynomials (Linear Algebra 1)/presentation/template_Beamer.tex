@@ -1,6 +1,7 @@
 \documentclass[8pt]{beamer}
 \usetheme{Copenhagen}
-
+\usepackage[fleqn]{mathtools}
+\usepackage{ stmaryrd }
 
 
 \title{Lagrange Polynomials}
@@ -62,17 +63,42 @@
 	\begin{theorem}
 		for the set of values $\{x_0, \ldots x_n \}$ the according lagrange polynomials $\{\ell_0, \ldots \ell_n \}$ will be linearly indipendant in $P_n$
 	\end{theorem}
+\end{frame}
+
+\begin{frame}{Proofs 4}
 	 \begin{proof}
 		\begin{itemize}
 			\item 
 				proof that $\ell_j \in P_n$:\\
 				$\displaystyle \ell_j = \prod_{\substack{k= 0 \\ k \neq j }}^{n}\frac{x - x_k}{x_j - x_k}$ hence the polynomial is defined by some constant $\displaystyle \prod_{\substack{k= 0 \\ k \neq j }}^{n}\frac{1}{x_j - x_k}$ and $ n$ linear factors $(x-x_k)$ each multiplication of a linear factor with another raises the degree by one $\Rightarrow deg(\ell_j(x)) = n \Rightarrow \ell_j \in P_n$
 			 \item proof linear indipendance:\\
-			 lets assume $\{\ell_0, \ldots \ell_n \}$ are linearly dipendant. 
-			 \begin{align*}
-			 	&\exists j \in \{1, \ldots ,n \} \forall i \in \{1, \ldots ,n \}: i \neq j: \ell_j(x) = \sum_{\substack{k= 0 \\ k \neq j }}^{n} \alpha_i\ell_i(x)
-			 \end{align*}
+			 lets assume $\{\ell_0, \ldots \ell_n \}$ are linearly dipendant. and use the $\delta_{ij}$ propertly of $\ell_j$
+			 \begin{flalign*}
+			 	&\exists j \in \{1, \ldots ,n \} : \ell_j(x) = \sum_{\substack{i= 0 \\ i \neq j }}^{n} \alpha_i\ell_i(x)
+			 	\Rightarrow  \ell_j(x_j) = \sum_{\substack{i= 0 \\ i \neq j }}^{n} \alpha_i\ell_i(x_j)\\
+			 	 &\Rightarrow 1 = \ell_j(x_j) = \sum_{\substack{i= 0 \\ i \neq j }}^{n} \alpha_i\underbrace{\ell_i(x_j)}_{=0} = 0 \lightning\\& \Rightarrow \text{lagrange polynomials are linearly indepandant}
+			 \end{flalign*}
 		\end{itemize}
 	 \end{proof}
+\end{frame}
+
+\begin{frame}{Proofs 6}
+	\begin{theorem}
+		Let $V$ be a vectorspace, $\#\{v_1, \ldots, v_n\} = dim(V)$  $\{v_1, \ldots, v_n\}\subset V$ and $\{v_1, \ldots, v_n\}$ are linearly indipendant, then $\{v_1, \ldots, v_n\}$ is a basis von V 
+	\end{theorem}
+	\begin{proof}
+		
+	\end{proof}
+	
+\end{frame}
+
+\begin{frame}{Proofs 6}
+	\begin{theorem}{Lagrange polynomials construct a basis of $P_n$}
+		lagrange polynomials $\{\ell_0,\ldots, \ell_n\}$ construct a basis of $P_n$ for a $n\in \mathbb{N}_0: n <\infty$
+	\end{theorem}
+	\begin{proof}
+		we know that $\#\{\ell_0,\ldots, \ell_n\} = n+1 = dim(P_n)$. The Lagrange polynomials are linearly indipendant and $\{\ell_0,\ldots, \ell_n\} \subset P_n$ and according to one of our previous theorems $\{\ell_0,\ldots, \ell_n\}$ is a basis of $P_n$
+	\end{proof}
+	
 \end{frame}
 \end{document}
