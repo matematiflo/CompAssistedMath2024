@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2024.5.5)  22 JUN 2024 16:11
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2024.5.5)  22 JUN 2024 16:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -733,24 +733,24 @@ File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
 (template_Beamer.aux)
 \openout1 = `template_Beamer.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -807,64 +807,64 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 (D:\installs\latex\mikTex2\tex/latex/00miktex\epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-Package hyperref Info: Link coloring OFF on input line 10.
+Package hyperref Info: Link coloring OFF on input line 9.
 
 (template_Beamer.out) (template_Beamer.out)
 \@outlinefile=\write5
 \openout5 = `template_Beamer.out'.
 
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmr/m/n --> OT1/cmss/m/n on input line 10.
+(Font)                  OT1/cmr/m/n --> OT1/cmss/m/n on input line 9.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 10.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 9.
 \symnumbers=\mathgroup7
 \sympureletters=\mathgroup8
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `normal'
-(Font)                  OT1/cmss/m/n --> OT1/cmr/m/n on input line 10.
-LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 10.
+(Font)                  OT1/cmss/m/n --> OT1/cmr/m/n on input line 9.
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 9.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 10.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 9.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 10.
-LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 10.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 9.
+LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 9.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/m/n on input line 10.
+(Font)                  OT1/cmss/m/n --> OT1/cmss/m/n on input line 9.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/bx/n --> OT1/cmss/m/n on input line 10.
-LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 10.
+(Font)                  OT1/cmss/bx/n --> OT1/cmss/m/n on input line 9.
+LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 9.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/cmr/m/it --> OT1/cmss/m/it on input line 10.
+(Font)                  OT1/cmr/m/it --> OT1/cmss/m/it on input line 9.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmr/bx/it --> OT1/cmss/m/it on input line 10.
-LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 10.
+(Font)                  OT1/cmr/bx/it --> OT1/cmss/m/it on input line 9.
+LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 9.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 10.
+(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 9.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 10.
+(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 9.
 LaTeX Font Info:    Overwriting symbol font `numbers' in version `bold'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/b/n on input line 10.
+(Font)                  OT1/cmss/m/n --> OT1/cmss/b/n on input line 9.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `bold'
-(Font)                  OT1/cmss/m/it --> OT1/cmss/b/it on input line 10.
+(Font)                  OT1/cmss/m/it --> OT1/cmss/b/it on input line 9.
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `bold'
-(Font)                  OT1/cmss/b/n --> OT1/cmr/b/n on input line 10.
+(Font)                  OT1/cmss/b/n --> OT1/cmr/b/n on input line 9.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/cmss/b/n --> OT1/cmss/b/n on input line 10.
+(Font)                  OT1/cmss/b/n --> OT1/cmss/b/n on input line 9.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/b/n on input line 10.
+(Font)                  OT1/cmss/m/n --> OT1/cmss/b/n on input line 9.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmss/m/it --> OT1/cmss/b/it on input line 10.
+(Font)                  OT1/cmss/m/it --> OT1/cmss/b/it on input line 9.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/b/n on input line 10.
-LaTeX Font Info:    Redeclaring symbol font `pureletters' on input line 10.
+(Font)                  OT1/cmtt/m/n --> OT1/cmtt/b/n on input line 9.
+LaTeX Font Info:    Redeclaring symbol font `pureletters' on input line 9.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `normal'
-(Font)                  OT1/cmss/m/it --> OT1/mathkerncmss/m/sl on input line 1
-0.
+(Font)                  OT1/cmss/m/it --> OT1/mathkerncmss/m/sl on input line 9
+.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `bold'
-(Font)                  OT1/cmss/b/it --> OT1/mathkerncmss/m/sl on input line 1
-0.
+(Font)                  OT1/cmss/b/it --> OT1/mathkerncmss/m/sl on input line 9
+.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `bold'
 (Font)                  OT1/mathkerncmss/m/sl --> OT1/mathkerncmss/bx/sl on inp
-ut line 10.
+ut line 9.
 
 (D:\installs\latex\mikTex2\tex/latex/translator\translator-basic-dictionary-Eng
 lish.dict
@@ -948,13 +948,13 @@ Package rerunfilecheck Info: File `template_Beamer.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 22534 strings out of 474486
- 433523 string characters out of 5752667
+ 22532 strings out of 474486
+ 433463 string characters out of 5752667
  1944542 words of memory out of 5000000
- 44326 multiletter control sequences out of 15000+600000
+ 44324 multiletter control sequences out of 15000+600000
  565166 words of font info for 62 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 128i,19n,123p,414b,727s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 128i,19n,123p,419b,727s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\muluc\AppData\Local\MiKTeX\fonts/pk/ljfour/public/stmaryrd/dpi600\
 stmary8.pk><D:/installs/latex/mikTex2/fonts/type1/public/amsfonts/cmextra/cmex8
 .pfb><D:/installs/latex/mikTex2/fonts/type1/public/amsfonts/cm/cmmi8.pfb><D:/in
@@ -964,7 +964,7 @@ fonts/type1/public/amsfonts/cm/cmssi8.pfb><D:/installs/latex/mikTex2/fonts/type
 1/public/amsfonts/cm/cmsy6.pfb><D:/installs/latex/mikTex2/fonts/type1/public/am
 sfonts/cm/cmsy8.pfb><D:/installs/latex/mikTex2/fonts/type1/public/amsfonts/symb
 ols/msbm10.pfb>
-Output written on template_Beamer.pdf (9 pages, 145999 bytes).
+Output written on template_Beamer.pdf (9 pages, 146481 bytes).
 PDF statistics:
  317 PDF objects out of 1000 (max. 8388607)
  19 named destinations out of 1000 (max. 500000)
