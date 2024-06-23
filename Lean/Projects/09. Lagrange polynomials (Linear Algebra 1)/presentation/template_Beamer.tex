@@ -14,10 +14,15 @@
 	
 	\begin{frame}{Definitions 1}
 		\begin{block}{Basis}
-			Let $V$ be a vector space over a field $K$ and $v_1, \ldots, v_n \in V$. $\{ v_1, \ldots, v_n\} $ are a basis of $V$ iff $\forall v \in V: v = \sum_{i=1}^{n}\alpha_i v_i$ and $\{ v_1, \ldots, v_n\}$ are linearly independent. With $\forall i \in 1 \ldots n: \alpha_i \in K$. \cite{basis}
+			Let $V$ be a vector space over a field $K$ $B :=\{ v_1, \ldots, v_n\}\subset V $ is a basis of $V$ if and only if:
+			\begin{itemize}
+				\item vectors in B are linearly independent
+				\item
+				 $\forall v \in V: \exists\alpha_i \in K:\forall i\in 1,\ldots,n:  v = \sum_{i=1}^{n}\alpha_i v_i$ 
+			\end{itemize}\cite{basis}
 		\end{block}
 		\begin{block}{Lagrange Polynomials}
-			Let $\{x_0, \ldots, x_n \}$ be a set of values with $x_i \neq x_j$ if $i \neq j$. For this set of values, we can define Lagrange polynomials: $\{\ell_0(x), \ldots, \ell_n(x)\}$ with \\ $\ell_j(x) = 
+			Let $\{x_0, \ldots, x_n \} \subset \mathbb{R}: \forall i,j \in 0, \ldots ,n: x_i \neq x_j \text{ if } i \neq j$. For this set of values, we can define Lagrange polynomials: $\{\ell_0(x), \ldots, \ell_n(x)\}$ with \\ $\ell_j(x) = 
 			\displaystyle \prod_{\substack{i= 0 \\ i \neq j }}^{n}\frac{x - x_i}{x_j - x_i}$. \cite{lagrange}
 		\end{block}
 	\end{frame}
@@ -36,7 +41,7 @@
 			$\ell_j(x_i) = \delta_{ij}$
 		\end{block}
 		\begin{proof}
-			Let $x_i \in \{x_0, \ldots, x_n \}$ and $j \neq i$ then we conclude: 
+			Let $x_i, x_j \in \{x_0, \ldots, x_n \}$ and $j \neq i$ then we conclude: 
 			\begin{align*}
 				\ell_j(x_i) &= \prod_{\substack{k= 0 \\ k \neq j }}^{n}\frac{x_i - x_k}{x_j - x_k} = \prod_{\substack{k= 0 \\ k \neq j}}^{i-1}\frac{x_i - x_k}{x_j - x_k} \cdot 0 \cdot \prod_{\substack{k= i+1 \\ k \neq j}}^{n}\frac{x_i - x_k}{x_j - x_k} = 0 \\
 				\ell_j(x_j) &= \prod_{\substack{k= 0 \\ k \neq j }}^{n}\frac{x_j - x_k}{x_j - x_k} =  \prod_{\substack{k= 0 \\ k \neq j }}^{n} 1 = 1
@@ -46,46 +51,62 @@
 			
 	\begin{frame}{Proofs 2}
 		\begin{block}{Theorem 2}
-			Monomials from degree $0$ to $n$ make up the basis of the vector space of polynomials of degree $x \leq n$, also called $P_n$, with $n \in \mathbb{N}_0$.
+			Monomials of degree $0$ to $n$ form a basis of $P_n$. with $n \in \mathbb{N}_0: n\leq \infty$.
 		\end{block}
 		\begin{proof}
-			Because monomials have different degrees, and hence can't cancel each other out. Therefore: 
+ 			we can evalueate the polynomial at $x = 0$ for the polynomial and all of its derivitives
 			\begin{align*}
-				0 &= \sum_{i=0}^{n}\alpha_i x^i \Leftrightarrow \alpha_i = 0 \text{   } i \in 0 \ldots n \\
+				0 &= \sum_{i=0}^{n}\alpha_i x^i \Rightarrow 0  =\sum_{i=1}^{n}\alpha_i \cdot 0 + \alpha_0 \Rightarrow \alpha_0 = 0\\
+				\Rightarrow \frac{d}{dx} 0 = 0 &=\sum_{i=1}^{n}i\alpha_i x^{i-1} \Rightarrow 0  =\sum_{i=2}^{n}i\alpha_i \cdot 0 + \alpha_1 \Rightarrow \alpha_1 = 0\\
 			\end{align*}
-			Using monomials, we can also construct any polynomial up to the degree of $n$ because
-			\begin{align*}
-				\forall p \in P_n : p = \sum_{i=0}^{n}\alpha_i x^i 
-			\end{align*}
-			because of how polynomials are defined. Hence, the monomials form a basis of $P_n$.
+			repeat the argument till all of $\alpha_i$ are evaluated $\Rightarrow \forall i \in 0, \ldots, n: \alpha_i = 0\Rightarrow$ the polynomials are linearly independant\\
 		\end{proof}
-		Because we require $n+1$ monomials, we can say that $\dim(P_n) = n+1$.
+
 		\end{frame}
-					
+			
 		\begin{frame}{Proofs 3}
-			\begin{theorem}
-				For the set of values $\{x_0, \ldots x_n \}$, the corresponding Lagrange polynomials $\{\ell_0, \ldots \ell_n \}$ will be linearly independent in $P_n$.
-			\end{theorem}
+			\begin{proof}
+				Using monomials, we can also construct any polynomial up to the degree of $n$ because
+				\begin{align*}
+					\forall p \in P_n : p = \sum_{i=1}^{n}\alpha_i x^i 
+				\end{align*}
+				because of how polynomials are defined. Hence, the monomials form a basis of $P_n$\\
+			\end{proof}
+			Because we require $n+1$ monomials to construct any polynomial in $P_n$, we can say that $\dim(P_n) = n+1$.
+			
 		\end{frame}
 							
 		\begin{frame}{Proofs 4}
+			\begin{theorem}
+				For $\{x_0, \ldots x_n \}\subset \mathbb{R}$, the corresponding Lagrange polynomials $\{\ell_0, \ldots \ell_n \}$ will be linearly independent in $P_n$.
+			\end{theorem}
 			\begin{proof}
 				\begin{itemize}
 					\item 
-					Proof that $\ell_j \in P_n$:\\
-					$\displaystyle \ell_j = \prod_{\substack{k= 0 \\ k \neq j }}^{n}\frac{x - x_k}{x_j - x_k}$ hence the polynomial is defined by some constant $\displaystyle \prod_{\substack{k= 0 \\ k \neq j }}^{n}\frac{1}{x_j - x_k}$ and $n$ linear factors $(x-x_k)$ each multiplication of a linear factor with another raises the degree by one $\Rightarrow \deg(\ell_j(x)) = n \Rightarrow \ell_j \in P_n$
+					Proof that $\forall j \in 0\ldots n: \ell_j \in P_n$\\
+					\begin{align*}
+						\displaystyle deg(\ell_j) =& deg\bigg(\prod_{\substack{k= 0 \\ k \neq j }}^{n}\frac{x - x_k}{x_j - x_k}\bigg) =deg\bigg( \prod_{\substack{k= 0 \\ k \neq j }}^{n}(x-x_k)\bigg) \\=& \sum_{\substack{k= 0 \\ k \neq j }}^{n} deg(x-x_k) = \sum_{\substack{k= 0 \\ k \neq j }}^{n} 1 = n\\
+						\Rightarrow& \ell_j \in P_n
+					\end{align*}
+				
+				\end{itemize}
+			\end{proof}
+		\end{frame}
+		\begin{frame}{Proofs 5}
+			\begin{proof}
+				\begin{itemize}
 					\item Proof of linear independence:\\
-					Let's assume $\{\ell_0, \ldots \ell_n \}$ are linearly dependent and use the $\delta_{ij}$ property of $\ell_j$
+					Let's assume $\{\ell_0, \ldots \ell_n \}$ is linearly dependent and use the $\delta_{ij}$ property of $\ell_j$
 					\begin{align*}
 						&\exists j \in \{1, \ldots ,n \} : \ell_j(x) = \sum_{\substack{i= 0 \\ i \neq j }}^{n} \alpha_i \ell_i(x)
-						\Rightarrow  \ell_j(x_j) = \sum{\substack{i= 0 \\ i \neq j }}^{n} \alpha_i \ell_i(x_j)\\
-						&\Rightarrow 1 = \ell_j(x_j) = \sum{\substack{i= 0 \\ i \neq j }}^{n} \alpha_i \underbrace{\ell_i(x_j)}_{=0} = 0 \lightning\\& \Rightarrow \text{Lagrange polynomials are linearly independent}
+						\Rightarrow  \ell_j(x_j) = \sum_{\substack{i= 0 \\ i \neq j }}^{n} \alpha_i \ell_i(x_j)\\
+						&\Rightarrow 1 = \ell_j(x_j) = \sum_{\substack{i= 0 \\ i \neq j }}^{n} \alpha_i \underbrace{\ell_i(x_j)}_{=0} = 0 \lightning\\& \Rightarrow \text{Lagrange polynomials are linearly independent}
 					\end{align*}
 				\end{itemize}
 			\end{proof}
 		\end{frame}
 									
-		\begin{frame}{Proofs 5}
+		\begin{frame}{Proofs 6}
 			\begin{theorem}
 				Let $V$ be a vector space, $M = \{v_1, \ldots, v_n\}$, $\# M = \dim(V)$, $M \subset V$ and $\{v_1, \ldots, v_n\}$ are linearly independent, then $M$ is a basis of $V$.
 			\end{theorem}
@@ -93,18 +114,18 @@
 				Let there be one more vector in $V$ that is linearly independent of vectors in $M$, then $\dim(V) \geq n+1$ due to how the dimension is defined, which is a contradiction.\\ 
 				We now know that $\forall u \in V$ $\{v_1, \ldots, v_n, u\}$ will be linearly dependent.
 				\begin{align*}
-					&\Rightarrow \forall u \in V \exists \alpha_i \in K \forall i \in 1, \ldots, n: u = \sum_{i = 1}^{n}\alpha_i v_i 
+					&\Rightarrow \forall u \in V: \forall i \in 1, \ldots, n: \exists \alpha_i \in K : u = \sum_{i = 1}^{n}\alpha_i v_i 
 				\end{align*}
 				And, because vectors in $M$ are linearly independent, $M$ must be the basis of $V$, because of how the basis is defined.
 			\end{proof}
 		\end{frame}
 											
-		\begin{frame}{Proofs 6}
+		\begin{frame}{Proofs 7}
 			\begin{theorem}
-				Lagrange polynomials $\{\ell_0,\ldots, \ell_n\}$ construct a basis of $P_n$ for $n \in \mathbb{N}_0: n < \infty$.
+				Lagrange polynomials $\{\ell_0,\ldots, \ell_n\}$ are a basis of $P_n$ for $n \in \mathbb{N}_0$.
 			\end{theorem}
 			\begin{proof}
-				We know that $\#\{\ell_0,\ldots, \ell_n\} = n+1 = \dim(P_n)$. The Lagrange polynomials are linearly independent and $\{\ell_0,\ldots, \ell_n\} \subset P_n$ and according to our previous theorem, $\{\ell_0,\ldots, \ell_n\}$ is a basis of $P_n$.
+				We know that $\#\{\ell_0,\ldots, \ell_n\} = n+1 = \dim(P_n)$. The Lagrange polynomials are linearly independent and $\{\ell_0,\ldots, \ell_n\} \subset P_n$. according to our previous theorem, $\{\ell_0,\ldots, \ell_n\}$ is a basis of $P_n$.
 			\end{proof}
 		\end{frame}
 		\begin{frame}{Sources}

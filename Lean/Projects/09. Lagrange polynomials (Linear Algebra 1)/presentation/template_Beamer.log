@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2024.5.5)  22 JUN 2024 17:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2024.5.5)  23 JUN 2024 20:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -907,22 +907,22 @@ Dictionary: translator-theorem-dictionary, Language: English
 ) (template_Beamer.nav) [1
 
 {C:/Users/muluc/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 23.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 28.
 
  (D:\installs\latex\mikTex2\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 23.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 28.
 
 (D:\installs\latex\mikTex2\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Trying to load font information for U+stmry on input line 2
-3.
+8.
 
 (D:\installs\latex\mikTex2\tex/latex/stmaryrd\ustmry.fd)
 LaTeX Font Info:    Trying to load font information for OT1+mathkerncmss on inp
-ut line 23.
+ut line 28.
 
 (D:\installs\latex\mikTex2\tex/latex/sansmathaccent\ot1mathkerncmss.fd
 File: ot1mathkerncmss.fd 2020/01/31 Fontinst v1.933 font definitions for OT1/ma
@@ -944,12 +944,14 @@ thkerncmss.
 
 ] [9
 
+] [10
+
 ]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\translate ' on input line 118.
+(hyperref)                removing `\translate ' on input line 139.
 
-[10
+[11
 
 ]
 \tf@nav=\write6
@@ -970,13 +972,13 @@ Package rerunfilecheck Info: File `template_Beamer.out' has not changed.
 (rerunfilecheck)             Checksum: AEA4B6A8AE45636C75679C2F0DFA4493;93.
  ) 
 Here is how much of TeX's memory you used:
- 22949 strings out of 474486
- 439354 string characters out of 5752667
+ 22953 strings out of 474486
+ 439389 string characters out of 5752667
  1945542 words of memory out of 5000000
- 44728 multiletter control sequences out of 15000+600000
+ 44730 multiletter control sequences out of 15000+600000
  565166 words of font info for 62 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 128i,19n,123p,415b,729s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 128i,19n,123p,413b,707s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\muluc\AppData\Local\MiKTeX\fonts/pk/ljfour/public/stmaryrd/dpi600\
 stmary8.pk><D:/installs/latex/mikTex2/fonts/type1/public/amsfonts/cmextra/cmex8
 .pfb><D:/installs/latex/mikTex2/fonts/type1/public/amsfonts/cm/cmmi8.pfb><D:/in
@@ -986,9 +988,9 @@ fonts/type1/public/amsfonts/cm/cmssi8.pfb><D:/installs/latex/mikTex2/fonts/type
 1/public/amsfonts/cm/cmsy6.pfb><D:/installs/latex/mikTex2/fonts/type1/public/am
 sfonts/cm/cmsy8.pfb><D:/installs/latex/mikTex2/fonts/type1/public/amsfonts/symb
 ols/msbm10.pfb>
-Output written on template_Beamer.pdf (10 pages, 157502 bytes).
+Output written on template_Beamer.pdf (11 pages, 165247 bytes).
 PDF statistics:
- 375 PDF objects out of 1000 (max. 8388607)
- 24 named destinations out of 1000 (max. 500000)
+ 405 PDF objects out of 1000 (max. 8388607)
+ 26 named destinations out of 1000 (max. 500000)
  63 words of extra memory for PDF output out of 10000 (max. 10000000)
 
