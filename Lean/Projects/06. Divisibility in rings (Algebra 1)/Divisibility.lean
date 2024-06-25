@@ -13,7 +13,7 @@ We can find lemma names by using the library search tactic `exact?`.
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 example {R : Type} [CommRing R] [IsDomain R] (x y : R) (hx : x ≠ 0) (h : x * y = x) : y = 1 := by
-  exact?
+  exact (mul_eq_left₀ hx).mp h
 
 variable {R : Type} [CommRing R]
 
