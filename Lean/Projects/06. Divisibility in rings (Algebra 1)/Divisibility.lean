@@ -108,12 +108,13 @@ lemma isAssociated_of_divides_divides_of_domain [IsDomain R] (x y : R) (hxy : x 
       rw [ha, ← mul_assoc] at hb
       exact (mul_eq_right₀ hx).mp hb.symm
     have hab : a * b = 1 := by
-      sorry
+      rw [mul_comm a b]
+      exact hba
     let a' : Rˣ := {
-      val := a
-      inv := sorry
-      val_inv := sorry
-      inv_val := sorry
+      val := a,
+      inv := b,
+      val_inv := hab,
+      inv_val := hba
     }
     use a'
 
