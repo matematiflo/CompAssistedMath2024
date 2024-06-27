@@ -127,7 +127,8 @@ lemma isAssociated_iff_divides_divides_of_domain [IsDomain R] (x y : R) :
   constructor
   · exact divides_divides_of_isAssociated x y
   · intro ⟨hxy, hyx⟩
-    sorry
+    /- sorry replaced by -/
+    exact isAssociated_of_divides_divides_of_domain x y hxy hyx
 
 /-
 We say an element `x : R` is non-trivial, if it is neither zero nor a unit.
