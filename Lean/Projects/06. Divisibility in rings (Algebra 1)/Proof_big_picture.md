@@ -6,7 +6,7 @@ Heidelberg, Summer Semester 2024
 
 ## Introduction
 
-In this project sketch, we define irreducible and prime elements of a commutative ring. The goal is to define factorable rings and show that in a factorable ring every irreducible element is prime.
+In this project, we define irreducible and prime elements of a commutative ring. The goal is to define factorable rings and show that in a factorable ring every irreducible element is prime.
 
 ## Basics
 
