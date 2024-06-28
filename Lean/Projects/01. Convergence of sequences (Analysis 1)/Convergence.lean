@@ -15,7 +15,7 @@ We can find lemma names by using the library search tactic `exact?`.
 -/
 
 example (x y : ℝ) : |x + y| ≤ |x| + |y| := by
-  exact?
+  exact abs_add x y
 
 /-
 Definition of a convergent sequence `a : ℕ → ℝ`.
@@ -86,8 +86,8 @@ example : ConvergesTo (fun n ↦ 1 / n) 0 := by
   calc
     |(1 / m : ℝ) - 0| = (1 / m : ℝ) := by simp
                     _ ≤ (1 / ⌈1 / ε⌉₊ : ℝ) := hle₁
-                    _ ≤ 1 / (1 / ε) := sorry
-                    _ = ε := sorry
+                    _ ≤ 1 / (1 / ε) := hle₂
+                    _ = ε := one_div_one_div ε
 
 /-
 The sum of two convergent sequences is convergent and the limit is the sum of the limits. There is one `sorry` left to fill, though!
@@ -104,7 +104,8 @@ theorem add (a₁ a₂ : ℕ → ℝ) (x₁ x₂ : ℝ) (h₁ : ConvergesTo a₁
     apply hn₁
     exact le_of_max_le_left hmn
   have hlt₂ : |a₂ m - x₂| < ε / 2 := by
-    sorry
+    apply hn₂
+    exact le_of_max_le_right hmn
   calc
     |a₁ m + a₂ m - (x₁ + x₂)| = |(a₁ m - x₁) + (a₂ m - x₂)| := by abel_nf
                             _ ≤ |a₁ m - x₁| + |a₂ m - x₂| := abs_add _ _
@@ -168,8 +169,8 @@ theorem of_convergesTo (a : ℕ → ℝ) (x : ℝ) (h : ConvergesTo a x) :
   intro m nm
   calc
     |a m| = |a m - x + x| := by ring_nf
-        _ ≤ |a m - x| + |x| := sorry --abs_add (a m - x) x
-        _ ≤ 1 + |x| := sorry -- add_le_add_right (le_of_lt (hn m nm)) |x|
+        _ ≤ |a m - x| + |x| := abs_add (a m - x) x
+        _ ≤ 1 + |x| := add_le_add_right (le_of_lt (hn m nm)) |x|
 
 end IsBounded
 
@@ -182,8 +183,75 @@ Hint for the proof: use that convergent sequences are bounded!
 -/
 
 theorem mul (a₁ a₂ : ℕ → ℝ) (x₁ x₂ : ℝ) (h₁ : ConvergesTo a₁ x₁)
-    (h₂ : ConvergesTo a₂ x₂) : ConvergesTo (a₁ * a₂) (x₁ * x₂) :=
-  sorry
+    (h₂ : ConvergesTo a₂ x₂) : ConvergesTo (a₁ * a₂) (x₁ * x₂) := by
+
+    have hb₁ := IsBounded.of_convergesTo a₁ x₁ h₁
+    have hb₂ := IsBounded.of_convergesTo a₂ x₂ h₂
+
+    obtain ⟨C₁, hC₁⟩ := hb₁
+    obtain ⟨C₂, hC₂⟩ := hb₂
+
+    have hC₁_nonneg : 0 ≤ C₁ := by
+      trans
+      · exact abs_nonneg (a₁ 0)
+      · exact hC₁ 0
+
+    have hC₂_nonneg : 0 ≤ C₂ := by
+      trans
+      · exact abs_nonneg (a₂ 0)
+      · exact hC₂ 0
+
+    have hCmax_nonneg : 0 ≤ (max C₁ C₂) := by
+      exact le_max_of_le_left hC₁_nonneg
+
+    intro ε hε
+
+    let K := max C₁ C₂ + ε
+    --have hK_pos : 0 < max C₁ C₂ + ε := by
+    --  apply lt_of_lt_of_le
+    --  · exact hε
+    --  · exact le_add_of_nonneg_left hCmax_nonneg
+    have hK_pos : 0 < K := by
+      apply lt_of_lt_of_le
+      · exact hε
+      · exact le_add_of_nonneg_left hCmax_nonneg
+
+    obtain ⟨n₁, hn₁⟩ := h₁ (ε / (2 * K)) (div_pos hε (by linarith))
+    obtain ⟨n₂, hn₂⟩ := h₂ (ε / (2 * K)) (div_pos hε (by linarith))
+
+    use (max n₁ n₂)
+    intro m hmn
+
+    have hlt₁ : |a₁ m - x₁| <  ε / (2 * K) := by
+      apply hn₁
+      exact le_of_max_le_left hmn
+
+    have hlt₂ : |a₂ m - x₂| <  ε / (2 * K) := by
+      apply hn₂
+      exact le_of_max_le_right hmn
+
+    have hlt₁' : |a₁ m| ≤ K := by
+      trans
+      · exact hC₁ m
+      · apply le_trans
+        · exact le_max_left C₁ C₂
+        · simp [K]; linarith
+
+    have hlt₂' : |x₂| ≤ K := by sorry
+
+
+
+
+    calc
+      |a₁ m * a₂ m - (x₁ * x₂)| = |(a₁ m * a₂ m) - (a₁ m * x₁) + (a₁ m * x₁) - (x₁ * x₂)| := by ring_nf
+                              _ = |a₁ m * (a₂ m - x₂) + (a₁ m - x₁) * x₂| := by ring_nf
+                              _ ≤ |a₁ m * (a₂ m - x₂)| + |(a₁ m - x₁) * x₂| := abs_add _ _
+                              _ = |a₁ m| * |a₂ m - x₂| + |a₁ m - x₁| * |x₂| := by simp [abs_mul]
+                              _ ≤ K * |a₂ m - x₂| + |a₁ m - x₁| * |x₂| := add_le_add (mul_le_mul_of_nonneg_right hlt₁' (abs_nonneg _)) (le_refl _)
+                              _ ≤ K * |a₂ m - x₂| + |a₁ m - x₁| * K := add_le_add (le_refl _) (mul_le_mul_of_nonneg_left hlt₂' (abs_nonneg _))
+                              _ < K * (ε / (2 * K)) + (ε / (2 * K)) * K := add_lt_add (mul_lt_mul_of_pos_left hlt₂ hK_pos) (mul_lt_mul_of_pos_right hlt₁ hK_pos)
+                              _ = ε / 2 + ε / 2 := by field_simp; ring
+                              _ = ε := by ring
 
 /-
 The sandwich lemma: Given three sequences `a`, `b` and `c` such that
