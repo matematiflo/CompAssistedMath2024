@@ -222,9 +222,35 @@ The sandwich lemma: Given three sequences `a`, `b` and `c` such that
 `b` converges to `x`.
 -/
 
-theorem sandwich (a b c : ℕ → ℝ) (h : ∀ n, a n ≤ b n ∧ b n ≤ c n) (x : ℝ)
-    (ha : ConvergesTo a x) (hb : ConvergesTo c x) : ConvergesTo b x :=
-  sorry
+
+  theorem sandwich (a b c : ℕ → ℝ) (h : ∀ n, a n ≤ b n ∧ b n ≤ c n) (x : ℝ)
+    (ha : ConvergesTo a x) (hb : ConvergesTo c x) : ConvergesTo b x := by
+  intro ε hε
+  obtain ⟨n₁, hn₁⟩ := ha ε hε
+  obtain ⟨n₂, hn₂⟩ := hb ε hε
+  let N := max n₁ n₂
+  use N
+  intro m hmn
+  have hn₁n : n₁ ≤ N := le_max_left n₁ n₂
+  have hn₂n : n₂ ≤ N := le_max_right n₁ n₂
+
+  have hmn₁ : n₁ ≤ m := le_trans hn₁n hmn
+  have hmn₂ : n₂ ≤ m := le_trans hn₂n hmn
+
+  have h₁ : |a m - x| < ε := hn₁ m hmn₁
+  have h₂ : |c m - x| < ε := hn₂ m hmn₂
+
+  have h₃ : a m ≤ b m := (h m).left
+  have h₄ : b m ≤ c m := (h m).right
+
+  rw [abs_sub_lt_iff] at h₁ h₂
+  rw [abs_sub_lt_iff]
+  rcases h₁ with ⟨_, h₁r⟩
+  rcases h₂ with ⟨h₂l, _⟩
+  constructor
+  · linarith
+  · linarith
+
 
 end ConvergesTo
 
