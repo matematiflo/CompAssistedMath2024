@@ -31,8 +31,8 @@ In this project, we define irreducible and prime elements of a commutative ring.
     2. Since $ x $ is prime, from $ x \mid a \cdot b $, it follows that $ x \mid a $ or $ x \mid b $.
     3. Assume $ x \mid a $. Then there exists $ c \in R $ with $ a = c \cdot x $.
     4. Set $ x = a \cdot b = (c \cdot x) \cdot b = c \cdot (x \cdot b) $.
-    5. Since $ R $ is an integral domain and $ x \neq 0 $, it follows $ c \cdot b = 1 $. Thus, $ c $ is a unit.
-    6. Similarly, $ b $ is a unit if $ x \mid b $.
+    5. Since $ R $ is an integral domain and $ x \neq 0 $, it follows $ c \cdot b = 1 $. Thus, $ b $ is a unit.
+    6. Similarly, $ a $ is a unit if $ x \mid b $.
     7. Therefore, $ x $ is irreducible.
 
     **Example:**
@@ -43,7 +43,7 @@ In this project, we define irreducible and prime elements of a commutative ring.
 
     **Definition:**
 
-    A ring $ R $ is factorable if every non-zero and non-unit element can be written as a product of irreducible elements, and this factorization is unique up to order and association.
+    An integral domain $D$ is called a unique factorization domain (UFD) if for every nonzero non-unit element $a$ of $D$, $a$ can be factored into irreducible elements, $a=p_1 p_2 \cdots p_m$ and if there $a=p_1 p_2 \cdots p_m=q_1 q_2 \cdots q_n$ are two irreducible factorizations of $a$, then $m=n$ and there is a permutation $\sigma$ such that each $p_i$ is an associate of $q_{\sigma(i)}$.
 
     **Proof:**
 
