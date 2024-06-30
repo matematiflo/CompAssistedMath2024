@@ -153,6 +153,14 @@ def IsPrime (x : R) : Prop :=
 In an integral domain, every prime element is irreducible.
 -/
 
+lemma  is_unit_of_mul_eq_one [IsDomain R] {a b x: R} (h_mul : x = a * b) (hnontrivial: IsNontrivial x) (hxa: Divides x a) : IsUnit b := by
+  obtain ⟨c, hxa⟩ := hxa -- a = c * x
+  rw [hxa, mul_comm, ←mul_assoc] at h_mul -- rewrite to x = a * b = b * a = b * c * x
+  have hbc1 : b * c = 1 := by -- proof that b * c = 1
+        apply (mul_eq_right₀ hnontrivial.left).mp
+        rw[←h_mul]
+  exact isUnit_of_mul_eq_one b c hbc1
+
 theorem isIrreducible_of_isPrime [IsDomain R] (x : R) (h : IsPrime x) : IsIrreducible x := by
   obtain ⟨hnontrivial, hdiv⟩ := h
   constructor
@@ -165,24 +173,11 @@ theorem isIrreducible_of_isPrime [IsDomain R] (x : R) (h : IsPrime x) : IsIrredu
     have hxa_or_xb := hdiv a b hx_divides_ab
     -- x divides either a or b because it's prime
     rcases hxa_or_xb with hxa | hxb
-    · obtain ⟨c, hxa⟩ := hxa -- suppose x | a
-      rw [hxa, mul_comm, ←mul_assoc] at h_mul
-      -- x = b * c * x
-      have hbc1 : b * c = 1 := by -- proof that b * c = 1
-        apply (mul_eq_right₀ hnontrivial.left).mp
-        rw[←h_mul]
-      have hbc : IsUnit b := by -- proof that b is therefore a unit
-        exact isUnit_of_mul_eq_one b c hbc1
-      exact Or.inr hbc
-    · obtain ⟨c, hxb⟩ := hxb -- suppose x | b, so b = x * c
-      rw [hxb, ←mul_assoc] at h_mul
-      -- x = a * b = a * c * x
-      have hac1 : a * c = 1 := by -- proof that a * c = 1
-        apply (mul_eq_right₀ hnontrivial.left).mp -- there's a lemma a*x=x<->a=1, we take -> direction
-        rw[←h_mul]
-      have hbc : IsUnit a := by -- proof that b is therefore a unit
-        exact isUnit_of_mul_eq_one a c hac1
-      exact Or.inl hbc
+    · exact Or.inr (is_unit_of_mul_eq_one h_mul hnontrivial hxa)
+    · have h_mul1 : x = b * a := by
+        rw[mul_comm]
+        exact h_mul
+      exact Or.inl (is_unit_of_mul_eq_one h_mul1 hnontrivial hxb)
 
 
 
