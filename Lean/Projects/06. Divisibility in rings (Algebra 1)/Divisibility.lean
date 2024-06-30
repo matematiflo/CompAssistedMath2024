@@ -106,7 +106,7 @@ lemma isAssociated_of_divides_divides_of_domain [IsDomain R] (x y : R) (hxy : x 
     obtain ⟨b, hb⟩ := hyx
     have hba : b * a = 1 := by
       rw [ha, ← mul_assoc] at hb
-      exact (mul_eq_right₀ hx).mp hb.symm
+      exact (mul_eq_right₀ hx).mp (id (Eq.symm hb))
     have hab : a * b = 1 := by
       rw [mul_comm a b]
       exact hba
@@ -127,7 +127,6 @@ lemma isAssociated_iff_divides_divides_of_domain [IsDomain R] (x y : R) :
   constructor
   · exact divides_divides_of_isAssociated x y
   · intro ⟨hxy, hyx⟩
-    /- sorry replaced by -/
     exact isAssociated_of_divides_divides_of_domain x y hxy hyx
 
 /-
@@ -156,7 +155,40 @@ In an integral domain, every prime element is irreducible.
 
 theorem isIrreducible_of_isPrime [IsDomain R] (x : R) (h : IsPrime x) : IsIrreducible x := by
   obtain ⟨hnontrivial, hdiv⟩ := h
-  sorry
+  constructor
+  · exact hnontrivial
+  · intros a b h_mul
+    have hx_divides_ab : x | a*b := by
+      use 1
+      rw[h_mul]
+      simp
+    have hxa_or_xb := hdiv a b hx_divides_ab
+    -- x divides either a or b because it's prime
+    rcases hxa_or_xb with hxa | hxb
+    · obtain ⟨c, hxa⟩ := hxa -- suppose x | a
+      rw [hxa, mul_comm, ←mul_assoc] at h_mul
+      -- x = b * c * x
+      have hbc1 : b * c = 1 := by -- proof that b * c = 1
+        apply (mul_eq_right₀ hnontrivial.left).mp
+        rw[←h_mul]
+      have hbc : IsUnit b := by -- proof that b is therefore a unit
+        exact isUnit_of_mul_eq_one b c hbc1
+      exact Or.inr hbc
+    · obtain ⟨c, hxb⟩ := hxb -- suppose x | b, so b = x * c
+      rw [hxb, ←mul_assoc] at h_mul
+      -- x = a * b = a * c * x
+      have hac1 : a * c = 1 := by -- proof that a * c = 1
+        apply (mul_eq_right₀ hnontrivial.left).mp -- there's a lemma a*x=x<->a=1, we take -> direction
+        rw[←h_mul]
+      have hbc : IsUnit a := by -- proof that b is therefore a unit
+        exact isUnit_of_mul_eq_one a c hac1
+      exact Or.inl hbc
+
+
+
+
+
+
 
 /-
 Now define factorial rings (also called unique factorization domains) and show that in any factorial ring,
