@@ -48,7 +48,6 @@ lemma zero_of_zero_divides (x : R) (hx : 0 | x) : x = 0 := by
 Hint: If you want to know what a specific tactic does, use the `#help tactic` command. For example:
 -/
 
-#help tactic subst
 
 /-
 If `x` divides a non-zero element `y`, `x` is non-zero.
@@ -100,8 +99,6 @@ lemma isAssociated_of_divides_divides_of_domain [IsDomain R] (x y : R) (hxy : x 
     subst h1
     apply isAssociated_of_eq
   · simp at hx
-    have hy : (y ≠ 0) :=
-      ne_zero_of_divides_of_ne_zero y x hx hyx
     obtain ⟨a, ha⟩ := hxy
     obtain ⟨b, hb⟩ := hyx
     have hba : b * a = 1 := by
@@ -192,6 +189,6 @@ also the converse of `isIrreducible_of_isPrime` holds, i.e. every irreducible el
 
 
 def IsFactorialRing (R : Type) [CommRing R] [IsDomain R] : Prop :=
-  ∀ (x : R), x ≠ 0 → x ≠ 1 → ∃ (factors : Multiset R), (∀ y ∈ factors, IsIrreducible y) ∧ Associated x factors.prod
+  ∀ (x : R), x ≠ 0 → ¬IsUnit x → ∃ (factors : Multiset R), (∀ y ∈ factors, IsIrreducible y) ∧ x=factors.prod
 
 end Algebra'
