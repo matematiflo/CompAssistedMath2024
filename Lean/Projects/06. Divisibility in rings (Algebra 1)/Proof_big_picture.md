@@ -57,7 +57,7 @@ In this project, we define irreducible and prime elements of a commutative ring.
 
     **Example:**
 
-    Consider the ring of integers $\mathbb{Z}$. In $\mathbb{Z}$, every integer is either a unit, zero, or can be represented as a product of prime numbers (which are irreducible). If an irreducible number like 3 divides a product $a \cdot b$, then it divides either $a$ or $b$. Thus, 3 is also prime.
+    Consider the ring of integers $\mathbb{Z}$. In $\mathbb{Z}$, every integer is either a unit, zero, or can be represented as a product of irreducible numbers (which are commonly called prime). Euclid's lemma applies there: if an irreducible (prime in the ordinary sense) number like 3 divides a product $a \cdot b$, then it divides either $a$ or $b$. Thus, 3 is also prime in the algebraic definition.
 
 ## Proof Details from Lean Code
 
