@@ -190,4 +190,5 @@ Now define factorial rings (also called unique factorization domains) and show t
 also the converse of `isIrreducible_of_isPrime` holds, i.e. every irreducible element is prime.
 -/
 
+
 end Algebra'
