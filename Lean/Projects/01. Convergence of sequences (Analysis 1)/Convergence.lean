@@ -207,10 +207,11 @@ theorem mul (a₁ a₂ : ℕ → ℝ) (x₁ x₂ : ℝ) (h₁ : ConvergesTo a₁
     intro ε hε
 
     let K := max C₁ C₂ + ε
-    --have hK_pos : 0 < max C₁ C₂ + ε := by
-    --  apply lt_of_lt_of_le
-    --  · exact hε
-    --  · exact le_add_of_nonneg_left hCmax_nonneg
+
+    have hεK : (ε / (2 * K)) ≤ ε := by
+      simp [K]
+      sorry
+
     have hK_pos : 0 < K := by
       apply lt_of_lt_of_le
       · exact hε
@@ -237,10 +238,17 @@ theorem mul (a₁ a₂ : ℕ → ℝ) (x₁ x₂ : ℝ) (h₁ : ConvergesTo a₁
         · exact le_max_left C₁ C₂
         · simp [K]; linarith
 
-    have hlt₂' : |x₂| ≤ K := by sorry
-
-
-
+    have hlt₂' : |x₂| ≤ K := by
+      simp[K]
+      calc
+        |x₂| = |x₂ - a₂ m + a₂ m|       := by ring_nf
+           _ ≤ |x₂ - a₂ m| + |a₂ m|     := abs_add _ _
+           _ = |a₂ m - x₂| + |a₂ m|     := by simp; apply abs_sub_comm _ _
+           _ ≤ ε / (2 * K) + |a₂ m|     := add_le_add_right (le_of_lt hlt₂) (|a₂ m|)
+           _ ≤ ε / (2 * K) + C₂         := add_le_add_left (hC₂ m) (ε / (2 * K))
+           _ ≤ ε / (2 * K) + max C₁ C₂  := add_le_add_left (le_max_right C₁ C₂) (ε / (2 * K))
+           _ ≤ ε + max C₁ C₂            := by simp[K]; linarith
+           _ = K                        := by simp[K]; linarith
 
     calc
       |a₁ m * a₂ m - (x₁ * x₂)| = |(a₁ m * a₂ m) - (a₁ m * x₁) + (a₁ m * x₁) - (x₁ * x₂)| := by ring_nf
@@ -259,11 +267,37 @@ The sandwich lemma: Given three sequences `a`, `b` and `c` such that
 `b` converges to `x`.
 -/
 
-theorem sandwich (a b c : ℕ → ℝ) (h : ∀ n, a n ≤ b n ∧ b n ≤ c n) (x : ℝ)
-    (ha : ConvergesTo a x) (hb : ConvergesTo c x) : ConvergesTo b x :=
-  sorry
+theorem sandwich (a b c : ℕ → ℝ) (h : ∃ (n : ℕ), ∀ m ≥ n , a m ≤ b m ∧ b m ≤ c m) (x : ℝ)
+    (ha : ConvergesTo a x) (hb : ConvergesTo c x) : ConvergesTo b x := by
+  intro ε hε
+  obtain ⟨n₁, hn₁⟩ := ha ε hε
+  obtain ⟨n₂, hn₂⟩ := hb ε hε
+  let N := max n₁ n₂
+  use N
+  intro m hmn
+  have hn₁n : n₁ ≤ N := le_max_left n₁ n₂
+  have hn₂n : n₂ ≤ N := le_max_right n₁ n₂
 
+  have hmn₁ : n₁ ≤ m := le_trans hn₁n hmn
+  have hmn₂ : n₂ ≤ m := le_trans hn₂n hmn
+
+  have h₁ : |a m - x| < ε := hn₁ m hmn₁
+  have h₂ : |c m - x| < ε := hn₂ m hmn₂
+
+  obtain ⟨n₀, h₀⟩ := h
+
+  have h₃ : a m ≤ b m := sorry
+  have h₄ : b m ≤ c m := sorry
+
+  rw [abs_sub_lt_iff] at h₁ h₂
+  rw [abs_sub_lt_iff]
+  rcases h₁ with ⟨_, h₁r⟩
+  rcases h₂ with ⟨h₂l, _⟩
+  constructor
+  · linarith
+  · linarith
 end ConvergesTo
+
 
 /-
 To reference the sandwich lemma, use the term `ConvergesTo.sandwich`, which is a function.
@@ -282,6 +316,7 @@ The `n`-th root of `n` to the power of `n` is `n`.
 -/
 
 lemma nthRoot_pow (n : ℕ) (h : n ≥ 1) : (n.root n) ^ n = n := by
+--lemma nthRoot_pow (n : ℕ) : (n.root n) ^ n = n := by
   simp [Nat.root]
   convert_to Real.rpow (Real.rpow n (1 / n)) n = n
   · simp
@@ -293,4 +328,62 @@ lemma nthRoot_pow (n : ℕ) (h : n ≥ 1) : (n.root n) ^ n = n := by
 The sequence of the `n`-th root of `n` converges to `1`.
 -/
 
-example : ConvergesTo (fun n ↦ n.root n) 1 := sorry
+example : ConvergesTo (fun n ↦ n.root n) 1 := by
+  have h₁ (n : ℕ) (h : n ≥ 1) : n.root n ≥ 1 := by
+    simp [Nat.root]
+    --convert_to 1 ≤ Real.rpow n (1 / n)
+    have h_pow: (n.root n) ^ n = n := by simp [nthRoot_pow n h]
+    simp [Nat.root] at h_pow
+    have h_1 : 1 ^ n = 1 := by simp
+    -- rw[← h_pow] at h
+    rw[← h_1] at h
+    --rw[← h_1] at h
+    sorry
+
+    --have h_pos: 0 < n := by linarith
+    --apply Real.rpow_le_rpow_iff
+
+  have h₂ (n : ℕ) (h : n ≥ 1) : n.root n ≤ 1 + (2 / (Real.sqrt n)) := by sorry
+
+  have h₃ (h : ∃ (n : ℕ), ∀ m ≥ n, 1 ≤ n.root n ∧ n.root n ≤ 1 + (2 / (Real.sqrt n))) := by
+    --constructor
+    --· apply h₁ n; exact h
+    --· apply h₂ n; exact h
+    sorry
+
+  have h₄ : ConvergesTo (fun n ↦ 1) 1 := by
+    apply ConvergesTo.of_constant
+
+  have h₅ : ConvergesTo (fun n ↦ 1 + (2 / (Real.sqrt n))) 1 := by
+    rw[ConvergesTo.iff']
+    intro ε hε
+    use ⌈4 / ε^2⌉₊
+    intro m hm
+    have hle₁ : (2 / (Real.sqrt m)) ≤ (2 / (Real.sqrt ⌈4 / ε^2⌉₊)) := by
+      apply div_le_div_of_nonneg_left
+      · simp
+      · simp [Real.sqrt_pos]; field_simp
+      · simpa using hm
+    have hle₂ : (2 / (Real.sqrt ⌈4 / ε^2⌉₊)) ≤ 2 / (Real.sqrt (4 / ε^2)) := by
+      apply div_le_div_of_nonneg_left
+      · simp
+      · simp [Real.sqrt_pos]; field_simp
+      · apply Real.sqrt_le_sqrt (Nat.le_ceil (4 / ε^2))
+    have h_abs (n : ℕ) : |2 / (Real.sqrt m)| = 2 / (Real.sqrt m) := by
+      apply abs_of_pos
+      apply div_pos
+      · linarith
+      · simp [Real.sqrt_pos];
+        calc
+          0 < ⌈4 / ε^2⌉₊ := by field_simp
+          _ ≤ m := by apply hm
+    simp
+    have h_sqrt4 : Real.sqrt 4 = 2 := by sorry
+    calc
+      |2 / (Real.sqrt m)| = 2 / (Real.sqrt m) := by apply h_abs m
+                      _ ≤ 2 / (Real.sqrt ⌈4 / ε^2⌉₊) := hle₁
+                      _ ≤ 2 / (Real.sqrt (4 / ε^2)) := hle₂
+                      _ = 2 / (2 / ε) := by field_simp; simp [mul_comm]; constructor; linarith
+                      _ = ε := by field_simp
+
+  exact ConvergesTo.sandwich (fun n ↦ 1) (fun n ↦ n.root n) (fun n ↦ 1 + (2 / (Real.sqrt n))) h₃ 1 h₄ h₅
