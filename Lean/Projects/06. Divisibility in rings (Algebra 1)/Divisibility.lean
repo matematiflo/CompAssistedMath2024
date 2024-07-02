@@ -188,7 +188,25 @@ also the converse of `isIrreducible_of_isPrime` holds, i.e. every irreducible el
 -/
 
 
-def IsFactorialRing (R : Type) [CommRing R] [IsDomain R] : Prop :=
-  ∀ (x : R), x ≠ 0 → ¬IsUnit x → ∃ (factors : Multiset R), (∀ y ∈ factors, IsIrreducible y) ∧ x=factors.prod
+structure FactorialRing where -- Multiset (1, 1, 2, 3) = (1, 2, 1, 3)
+  R : Type
+  commRing : CommRing R
+  isDomain : IsDomain R
+  isNonEmpty : Inhabited R -- Ring has a 0 by default, only done for Lean
+  isFactorisationDomain: ∀ (x : R), x ≠ 0 → ¬IsUnit x → ∃ (factors :List R), ((∀ y ∈ factors, IsIrreducible y) ∧ x=List.prod factors)
+  isUniqueFactorisationDomain: ∀ (x : R) (factors1 factors2 : List R),
+  x ≠ 0 → (¬IsUnit x) →
+  (∀ y ∈ factors1, IsIrreducible y) → (∀ y ∈ factors2, IsIrreducible y) →
+  (x = List.prod factors1) → (x = List.prod factors2) →
+  ((factors1.length=factors2.length) ∧ ∃ σ ∈ factors1.permutations,
+  (∀ i : Fin σ.length,  (IsAssociated (σ.get i) (factors2.get! i )))) -- using get! because we know that the lengths are equal
 
-end Algebra'
+def IsFactorialRing (R : Type) [CommRing R] [IsDomain R] : Prop :=
+  -- ∀ (x : R), x ≠ 0 → ¬IsUnit x → ∃ (factors : Multiset R), (∀ y ∈ factors, IsIrreducible y) ∧ x=factors.prod
+
+  -- a+0 = a
+  -- a * 1 = 1
+  -- Z_7 = {0, 1, 2, 3, 4, 5, 6} 2*4 = 1 mod 7
+
+
+? List.nth_le
