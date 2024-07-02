@@ -44,7 +44,6 @@ If `x` divides a non-zero element `y`, `x` is non-zero.
 lemma ne_zero_of_divides_of_ne_zero (x y : R) (hy : y ≠ 0) (hxy : x | y) : x ≠ 0 := by
   intro hx
   subst hx
-  -- Try to understand what's going on here!
   exact hy (zero_of_zero_divides y hxy)
 
 /-
