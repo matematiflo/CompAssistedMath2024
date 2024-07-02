@@ -191,4 +191,7 @@ also the converse of `isIrreducible_of_isPrime` holds, i.e. every irreducible el
 -/
 
 
+def IsFactorialRing (R : Type) [CommRing R] [IsDomain R] : Prop :=
+  ∀ (x : R), x ≠ 0 → x ≠ 1 → ∃ (factors : Multiset R), (∀ y ∈ factors, IsIrreducible y) ∧ Associated x factors.prod
+
 end Algebra'
