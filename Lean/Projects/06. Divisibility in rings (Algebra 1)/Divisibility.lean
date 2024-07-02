@@ -1,15 +1,3 @@
-/-
-# Divisibility
-
-By Judith Ludwig, Christian Merten and Florent Schaffhauser,
-Proseminar on computer-assisted mathematics,
-Heidelberg, Summer Semester 2024
-
-In this project sketch we define irreducible and prime elements of a commutative ring. The goal is to define factorial rings and to show that in a factorial ring, every irreducible element is prime.
-
-We can find lemma names by using the library search tactic `exact?`.
--/
-
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 example {R : Type} [CommRing R] [IsDomain R] (x y : R) (hx : x ≠ 0) (h : x * y = x) : y = 1 := by
@@ -56,7 +44,6 @@ If `x` divides a non-zero element `y`, `x` is non-zero.
 lemma ne_zero_of_divides_of_ne_zero (x y : R) (hy : y ≠ 0) (hxy : x | y) : x ≠ 0 := by
   intro hx
   subst hx
-  -- Try to understand what's going on here!
   exact hy (zero_of_zero_divides y hxy)
 
 /-
@@ -203,10 +190,11 @@ structure FactorialRing where -- Multiset (1, 1, 2, 3) = (1, 2, 1, 3)
 
 def IsFactorialRing (R : Type) [CommRing R] [IsDomain R] : Prop :=
   -- ∀ (x : R), x ≠ 0 → ¬IsUnit x → ∃ (factors : Multiset R), (∀ y ∈ factors, IsIrreducible y) ∧ x=factors.prod
-
-  -- a+0 = a
-  -- a * 1 = 1
-  -- Z_7 = {0, 1, 2, 3, 4, 5, 6} 2*4 = 1 mod 7
+  sorry
 
 
-? List.nth_le
+theorem isPrime_of_isIrreducible [IsDomain R] (x: R) (h : IsPrime x) : IsPrime x := by
+  sorry
+
+
+end Algebra'
