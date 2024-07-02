@@ -1,15 +1,3 @@
-/-
-# Divisibility
-
-By Judith Ludwig, Christian Merten and Florent Schaffhauser,
-Proseminar on computer-assisted mathematics,
-Heidelberg, Summer Semester 2024
-
-In this project sketch we define irreducible and prime elements of a commutative ring. The goal is to define factorial rings and to show that in a factorial ring, every irreducible element is prime.
-
-We can find lemma names by using the library search tactic `exact?`.
--/
-
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 example {R : Type} [CommRing R] [IsDomain R] (x y : R) (hx : x ≠ 0) (h : x * y = x) : y = 1 := by
