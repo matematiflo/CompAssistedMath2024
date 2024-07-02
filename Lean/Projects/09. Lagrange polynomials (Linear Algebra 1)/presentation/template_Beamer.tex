@@ -12,6 +12,23 @@
 		\maketitle
 	\end{frame}
 	
+	\begin{frame}{Intruduction}
+		\begin{block}{What is the presentaiton about ?}
+			\begin{itemize}
+				\item
+				Lagrange polynomials are used for polynom interpolation:\\
+				you can interpolate any polynomial of degree $n$ exactly knowing only $n+1$ of its points
+				\item
+				very useful in numreical analysis
+				\item
+				We will define lagrange polynomails and show why they form a basis of $P_n$
+				\item
+				Our References: Rannacher R: introduction to numerics script \\ Brown Wiliam A: Matricies and vectorspaces
+			
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
 	\begin{frame}{Definitions 1}
 		\begin{block}{Basis}
 			Let $V$ be a vector space over a field $K$. $B :=\{ v_1, \ldots, v_n\}\subset V $ is a basis of $V$ if and only if:
@@ -30,6 +47,13 @@
 	\begin{frame}{Definitions 2}
 		\begin{block}{Dimension}
 			The cardinality of a basis. \cite{basis}
+		\end{block}
+		\begin{block}{Polynomials}
+			A polynomial of a degree $n\in \mathbb{N}$ is defined as: 
+			\begin{align*}
+				p = \sum_{i = 0}^{n} \alpha_i X^i\qquad \alpha_i \in \mathbb{R}
+			\end{align*}
+			with $p\in \mathbb{R}[X]$ where $X$ is the indeterminante 
 		\end{block}
 		\begin{block}{$P_n$}
 			$P_n$ is a vector space of polynomials of bounded degree, defined as $P_n = \{p \in R[X] : \deg(p) \leq n \}$ with $n \in \mathbb{N}_0$ where $R[X]$ is the ring of polynomials.\cite{lagrange}
