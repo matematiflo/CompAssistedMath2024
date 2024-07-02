@@ -345,11 +345,12 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
 
   have h₂ (n : ℕ) (h : n ≥ 1) : n.root n ≤ 1 + (2 / (Real.sqrt n)) := by sorry
 
-  have h₃ (h : ∃ (n : ℕ), ∀ m ≥ n, 1 ≤ n.root n ∧ n.root n ≤ 1 + (2 / (Real.sqrt n))) := by
-    --constructor
-    --· apply h₁ n; exact h
-    --· apply h₂ n; exact h
-    sorry
+  have h₃ : ∃ (n : ℕ), ∀ m ≥ n, 1 ≤ m.root m ∧ m.root m ≤ 1 + (2 / (Real.sqrt m)) := by
+    use 1
+    intro m hm
+    constructor
+    · apply h₁ m; exact hm
+    · apply h₂ m; exact hm
 
   have h₄ : ConvergesTo (fun n ↦ 1) 1 := by
     apply ConvergesTo.of_constant
