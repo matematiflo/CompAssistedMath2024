@@ -276,8 +276,8 @@ theorem sandwich (a b c : ℕ → ℝ) (h : ∃ (n : ℕ), ∀ m ≥ n , a m ≤
   let N := n₁ + n₂ + n₀
   use N
   intro m hmn
-  have hn₁n : n₁ ≤ N := le_max_left n₁ n₂
-  have hn₂n : n₂ ≤ N := le_max_right n₁ n₂
+  have hn₁n : n₁ ≤ N := by simp[N]; linarith
+  have hn₂n : n₂ ≤ N := by simp[N]; linarith
 
   have hmn₁ : n₁ ≤ m := le_trans hn₁n hmn
   have hmn₂ : n₂ ≤ m := le_trans hn₂n hmn
@@ -285,9 +285,16 @@ theorem sandwich (a b c : ℕ → ℝ) (h : ∃ (n : ℕ), ∀ m ≥ n , a m ≤
   have h₁ : |a m - x| < ε := hn₁ m hmn₁
   have h₂ : |c m - x| < ε := hn₂ m hmn₂
 
+  have hmn₀ : n₀ ≤ m := by
+    calc
+      n₀ ≤ n₀ + n₁ := by linarith
+      _ ≤ n₀ + n₁ + n₂ := by linarith
+      _= N := by simp[N]; ring
+    simp [hmn]
 
-  have h₃ : a m ≤ b m := sorry
-  have h₄ : b m ≤ c m := sorry
+
+  have h₃ : a m ≤ b m := (h₀ m hmn₀).left
+  have h₄ : b m ≤ c m := (h₀ m hmn₀).right
 
   rw [abs_sub_lt_iff] at h₁ h₂
   rw [abs_sub_lt_iff]
@@ -329,10 +336,10 @@ noncomputable section
 
 def aux (n : ℕ) : ℝ := n.root n - 1
 
-lemma n_root_n_eq_one_add_aux (n : ℕ) : n.root n = 1 + aux n := by
+lemma n_root_n_eq_one_add_aux (n : ℕ) : n.root n = aux n + 1 := by
   simp [aux]
 
-lemma one_add_aux_pow_n_eq_n (n : ℕ) (hn : n ≥ 1) : (1 + aux n) ^ n = n := by
+lemma one_add_aux_pow_n_eq_n (n : ℕ) (hn : n ≥ 1) : (aux n + 1) ^ n = n := by
   rw [← n_root_n_eq_one_add_aux]
   rw [nthRoot_pow]
   exact hn
@@ -386,10 +393,11 @@ lemma foo' (n : ℕ) (h : 1 ≤ n) : ((n * (n - 1)) / 2 : ℕ) = (n * (n - 1 : �
 
 example (n : ℕ) (hn : n ≥ 2) : 1 / (n : ℝ) ≤ 1 / 2 := by
   apply one_div_le_one_div_of_le
-  sorry
-  sorry
+  linarith
+  exact Nat.ofNat_le_cast.mpr hn
 
-example (n : ℕ) (hn : n ≥ 2) : (aux n + 1) ^ n ≥ (n * (n - 1 : ℝ)) / 2 * (aux n) ^ 2 := by
+
+lemma one_an_le_x (n : ℕ) (hn : n ≥ 2) : (aux n + 1) ^ n ≥ (n * (n - 1 : ℝ)) / 2 * (aux n) ^ 2 := by
   rw [add_pow]
   simp
   calc
@@ -418,29 +426,32 @@ The sequence of the `n`-th root of `n` converges to `1`.
 
 example : ConvergesTo (fun n ↦ n.root n) 1 := by
   have h₁ (n : ℕ) (h : 1 ≤ n) : 1 ≤ n.root n := by
-    have h_pow: n = (n.root n) ^ n := by simp [nthRoot_pow n h]
-    have h_1 : (1 : ℕ) ^ n = ((1 : ℕ) : ℝ) := by simp
-    have h' := h
-    apply Nat.mono_cast (α := ℝ) at h
-    rw [← h_1] at h
-    rw [h_pow] at h
-    rw [pow_le_pow_iff_left] at h
-    simp at h
-    exact h
-    · simp
-    · apply Real.rpow_nonneg
-      simp
-    · exact Nat.not_eq_zero_of_lt h'
+    exact one_le_nrootn n h
 
-  have h₂ (n : ℕ) (h : n ≥ 1) : n.root n ≤ 1 + (2 / (Real.sqrt n)) := by
-    let a (n : ℕ) : ℝ := n.root n - 1
+  have h₂ (n : ℕ) (h : n ≥ 2) : n.root n ≤ 1 + (2 / (Real.sqrt n)) := by
 
-    have h₂ (n : ℕ) (a : ℕ → ℝ) (h : n ≥ 1) : n ≥ (n * (n - 1)) * Real.rpow (a n) 2 := by
+    have h₂1 (n : ℕ) (a : ℕ → ℝ) (h : n ≥ 2) : n ≥ (n * (n - 1 : ℝ)) / 2 * (aux n) ^ 2 := by
       calc
-        n = (n.root n) ^ n := by simp [nthRoot_pow n h]
-        _ = (1 + a n) ^ n := by rw [h₁]; apply h
-        _ ≥ (n * (n - 1)) * Real.rpow (a n) 2 := by sorry
+        n = (n.root n) ^ n := by simp [nthRoot_pow n (Nat.one_le_of_lt h)]
+        _ = (aux n + 1) ^ n := by rw [n_root_n_eq_one_add_aux]
+        _ ≥ (n * (n - 1 : ℝ)) / 2 * (aux n) ^ 2 := by
+          exact one_an_le_x n h
 
+    have h₂2 (n : ℕ) (h : n ≥ 2) : (aux n) ≤ Real.sqrt (2 / (n-1)) := by
+      sorry
+
+    have h₂3 (n : ℕ) (h : n ≥ 2) : Real.sqrt (2 / (n-1)) ≤ 2 / Real.sqrt n := by
+      sorry
+
+    calc
+      n.root n = aux n + 1 := by rw [n_root_n_eq_one_add_aux]
+           _ ≤ 1 + Real.sqrt (2 / (n-1)) := by
+            rw[add_comm]
+            rw[add_le_add_iff_left]
+            exact h₂2 n h
+           _ ≤ 1 + 2 / Real.sqrt n := by
+            rw[add_le_add_iff_left]
+            exact h₂3 n h
 
 
   have h₃ : ∃ (n : ℕ), ∀ m ≥ n, 1 ≤ m.root m ∧ m.root m ≤ 1 + (2 / (Real.sqrt m)) := by
