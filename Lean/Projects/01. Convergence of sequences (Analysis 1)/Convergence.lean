@@ -329,6 +329,7 @@ The sequence of the `n`-th root of `n` converges to `1`.
 noncomputable def a (n : ℕ) : ℝ := n.root n - 1
 
 example : ConvergesTo (fun n ↦ n.root n) 1 := by
+
   have h₁ (n : ℕ) (h : 1 ≤ n) : 1 ≤ n.root n := by
     have h_pow: n = (n.root n) ^ n := by simp [nthRoot_pow n h]
     have h_1 : (1 : ℕ) ^ n = ((1 : ℕ) : ℝ) := by simp
@@ -345,6 +346,7 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
     · exact Nat.not_eq_zero_of_lt h'
 
   have h₂ (n : ℕ) (h : n ≥ 2) : n.root n ≤ 1 + (2 / (Real.sqrt n)) := by
+
     have ha (n : ℕ) : n.root n = 1 + a n  := by simp [a]
 
     have hb (n : ℕ) (hn : n ≥ 1) : (1 + a n) ^ n = n := by
@@ -399,26 +401,39 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
 
     have hg (n : ℕ) (hn : n ≥ 2) : n ≥ (n * (n - 1 : ℝ)) / 2 * (a n) ^ 2 := by
       calc
-      n = (n.root n) ^ n := by simp [nthRoot_pow n (Nat.one_le_of_lt hn)]
+        n = (n.root n) ^ n := by simp [nthRoot_pow n (Nat.one_le_of_lt hn)]
         _ = (a n + 1) ^ n := by simp [a]
-        _ ≥ (n * (n - 1 : ℝ)) / 2 * (a n) ^ 2 := by
-          exact hf n hn
+        _ ≥ (n * (n - 1 : ℝ)) / 2 * (a n) ^ 2 := by exact hf n hn
 
     have hh (n : ℕ) (h : n ≥ 2) : (a n) ≤ Real.sqrt (2 / (n-1)) := by
+      have : (a n) ^ 2 ≤ (2 / (n - 1)) := Real.le_sqrt
+      have : (n - 1) * (a n) ^ 2 ≤ 2 := sorry --le_div_iff' at this; simp; linarith
+
       sorry
+      /-
+      rw [Real.le_sqrt]
+      · rw [le_div_iff']
+        · rw [← div_le_one]
+          · sorry --rw [mul_le_mul_of_nonneg_right n ]
+          · simp
+        · simp; linarith
+      · apply hc; linarith
+      · apply div_nonneg; linarith; simp; linarith
+      -/
+
 
     have hi (n : ℕ) (h : n ≥ 2) : Real.sqrt (2 / (n-1)) ≤ 2 / Real.sqrt n := by
       sorry
 
     calc
       n.root n = a n + 1 := by simp [a]
-           _ ≤ 1 + Real.sqrt (2 / (n-1)) := by
-            rw[add_comm]
-            rw[add_le_add_iff_left]
-            exact hh n h
-           _ ≤ 1 + 2 / Real.sqrt n := by
-            rw[add_le_add_iff_left]
-            exact hi n h
+             _ ≤ 1 + Real.sqrt (2 / (n-1)) := by
+              rw[add_comm]
+              rw[add_le_add_iff_left]
+              exact hh n h
+             _ ≤ 1 + 2 / Real.sqrt n := by
+              rw[add_le_add_iff_left]
+              exact hi n h
 
 
 
@@ -426,10 +441,10 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
 
 
   have h₃ : ∃ (n : ℕ), ∀ m ≥ n, 1 ≤ m.root m ∧ m.root m ≤ 1 + (2 / (Real.sqrt m)) := by
-    use 1
+    use 2
     intro m hm
     constructor
-    · apply h₁ m; exact hm
+    · apply h₁ m; linarith
     · apply h₂ m; exact hm
 
   have h₄ : ConvergesTo (fun n ↦ 1) 1 := by
