@@ -272,11 +272,12 @@ theorem sandwich (a b c : ℕ → ℝ) (h : ∃ (n : ℕ), ∀ m ≥ n , a m ≤
   intro ε hε
   obtain ⟨n₁, hn₁⟩ := ha ε hε
   obtain ⟨n₂, hn₂⟩ := hb ε hε
-  let N := max n₁ n₂
+  obtain ⟨n₀, h₀⟩ := h
+  let N := n₁ + n₂ + n₀
   use N
   intro m hmn
-  have hn₁n : n₁ ≤ N := le_max_left n₁ n₂
-  have hn₂n : n₂ ≤ N := le_max_right n₁ n₂
+  have hn₁n : n₁ ≤ N := by simp[N]; linarith
+  have hn₂n : n₂ ≤ N := by simp[N]; linarith
 
   have hmn₁ : n₁ ≤ m := le_trans hn₁n hmn
   have hmn₂ : n₂ ≤ m := le_trans hn₂n hmn
@@ -284,10 +285,16 @@ theorem sandwich (a b c : ℕ → ℝ) (h : ∃ (n : ℕ), ∀ m ≥ n , a m ≤
   have h₁ : |a m - x| < ε := hn₁ m hmn₁
   have h₂ : |c m - x| < ε := hn₂ m hmn₂
 
-  obtain ⟨n₀, h₀⟩ := h
+  have hmn₀ : n₀ ≤ m := by
+    calc
+      n₀ ≤ n₀ + n₁ := by linarith
+      _ ≤ n₀ + n₁ + n₂ := by linarith
+      _= N := by simp[N]; ring
+    simp [hmn]
 
-  have h₃ : a m ≤ b m := sorry
-  have h₄ : b m ≤ c m := sorry
+
+  have h₃ : a m ≤ b m := (h₀ m hmn₀).left
+  have h₄ : b m ≤ c m := (h₀ m hmn₀).right
 
   rw [abs_sub_lt_iff] at h₁ h₂
   rw [abs_sub_lt_iff]
@@ -328,20 +335,23 @@ lemma nthRoot_pow (n : ℕ) (h : n ≥ 1) : (n.root n) ^ n = n := by
 The sequence of the `n`-th root of `n` converges to `1`.
 -/
 
-example : ConvergesTo (fun n ↦ n.root n) 1 := by
-  have h₁ (n : ℕ) (h : n ≥ 1) : n.root n ≥ 1 := by
-    simp [Nat.root]
-    --convert_to 1 ≤ Real.rpow n (1 / n)
-    have h_pow: (n.root n) ^ n = n := by simp [nthRoot_pow n h]
-    simp [Nat.root] at h_pow
-    have h_1 : 1 ^ n = 1 := by simp
-    -- rw[← h_pow] at h
-    rw[← h_1] at h
-    --rw[← h_1] at h
-    sorry
+noncomputable def a (n : ℕ) : ℝ := n.root n - 1
 
-    --have h_pos: 0 < n := by linarith
-    --apply Real.rpow_le_rpow_iff
+example : ConvergesTo (fun n ↦ n.root n) 1 := by
+  have h₁ (n : ℕ) (h : 1 ≤ n) : 1 ≤ n.root n := by
+    have h_pow: n = (n.root n) ^ n := by simp [nthRoot_pow n h]
+    have h_1 : (1 : ℕ) ^ n = ((1 : ℕ) : ℝ) := by simp
+    have h' := h
+    apply Nat.mono_cast (α := ℝ) at h
+    rw [← h_1] at h
+    rw [h_pow] at h
+    rw [pow_le_pow_iff_left] at h
+    simp at h
+    exact h
+    · simp
+    · apply Real.rpow_nonneg
+      simp
+    · exact Nat.not_eq_zero_of_lt h'
 
   have h₂ (n : ℕ) (h : n ≥ 1) : n.root n ≤ 1 + (2 / (Real.sqrt n)) := by sorry
 
@@ -379,12 +389,20 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
           0 < ⌈4 / ε^2⌉₊ := by field_simp
           _ ≤ m := by apply hm
     simp
-    have h_sqrt4 : Real.sqrt 4 = 2 := by sorry
     calc
       |2 / (Real.sqrt m)| = 2 / (Real.sqrt m) := by apply h_abs m
                       _ ≤ 2 / (Real.sqrt ⌈4 / ε^2⌉₊) := hle₁
                       _ ≤ 2 / (Real.sqrt (4 / ε^2)) := hle₂
-                      _ = 2 / (2 / ε) := by field_simp; simp [mul_comm]; constructor; linarith
+                      _ = 2 / (2 / ε) := by
+                        field_simp
+                        simp [mul_comm]
+                        constructor
+                        have h_sqrt4 : Real.sqrt 4 = 2 := by
+                          rw [Real.sqrt_eq_iff_sq_eq]
+                          ring
+                          exact zero_le_four
+                          exact zero_le_two
+                        simp [h_sqrt4]
                       _ = ε := by field_simp
 
   exact ConvergesTo.sandwich (fun n ↦ 1) (fun n ↦ n.root n) (fun n ↦ 1 + (2 / (Real.sqrt n))) h₃ 1 h₄ h₅
