@@ -2,7 +2,7 @@
 
 There are many ways to search Lean's mathematics library `mathlib` for theorems, and not all of these are obvious to new users. Here we demonstrate some techniques. But before we start, a word of warning.
 
-The binomial theorem in Lean will not be called `binomial_theorem`, it will be called `add_pow`, because this is Lean's [naming convention](add link). However, the phrase "binomial theorem" will occur in mathlib, in the *docstring* of the theorem, and possibly also in *module docstring* at the top of the file.
+The binomial theorem in Lean will not be called `binomial_theorem`, it will be called `add_pow`, because this is Lean's [naming convention]([add link](https://leanprover-community.github.io/contribute/naming.html)). However, the phrase "binomial theorem" will occur in mathlib, in the *docstring* of the theorem, and possibly also in *module docstring* at the top of the file.
 
 Here are some possibilities for searching.
 
