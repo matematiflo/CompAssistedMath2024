@@ -209,8 +209,17 @@ theorem mul (a₁ a₂ : ℕ → ℝ) (x₁ x₂ : ℝ) (h₁ : ConvergesTo a₁
     let K := max C₁ C₂ + ε
 
     have hεK : (ε / (2 * K)) ≤ ε := by
-      simp [K]
-      sorry
+      have : ε = ε / 1 :=by ring
+      conv =>
+        rhs
+        rw[this]
+      apply div_le_div
+      · linarith
+      · linarith
+      · linarith
+      · simp [K]
+        sorry
+
 
     have hK_pos : 0 < K := by
       apply lt_of_lt_of_le
