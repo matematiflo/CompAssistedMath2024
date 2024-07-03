@@ -344,7 +344,7 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
       simp
     · exact Nat.not_eq_zero_of_lt h'
 
-  have h₂ (n : ℕ) (h : n ≥ 1) : n.root n ≤ 1 + (2 / (Real.sqrt n)) := by
+  have h₂ (n : ℕ) (h : n ≥ 2) : n.root n ≤ 1 + (2 / (Real.sqrt n)) := by
     have ha (n : ℕ) : n.root n = 1 + a n  := by simp [a]
 
     have hb (n : ℕ) (hn : n ≥ 1) : (1 + a n) ^ n = n := by
@@ -404,12 +404,22 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
         _ ≥ (n * (n - 1 : ℝ)) / 2 * (a n) ^ 2 := by
           exact hf n hn
 
+    have hh (n : ℕ) (h : n ≥ 2) : (a n) ≤ Real.sqrt (2 / (n-1)) := by
+      sorry
 
-      --rw [← hb] at hf
+    have hi (n : ℕ) (h : n ≥ 2) : Real.sqrt (2 / (n-1)) ≤ 2 / Real.sqrt n := by
+      sorry
 
+    calc
+      n.root n = a n + 1 := by simp [a]
+           _ ≤ 1 + Real.sqrt (2 / (n-1)) := by
+            rw[add_comm]
+            rw[add_le_add_iff_left]
+            exact hh n h
+           _ ≤ 1 + 2 / Real.sqrt n := by
+            rw[add_le_add_iff_left]
+            exact hi n h
 
-
-    --have hg (n : ℕ) (hn : n ≥ 2) : (a n) ^ 2 ≤ 2 / (n - 1) := by
 
 
 
