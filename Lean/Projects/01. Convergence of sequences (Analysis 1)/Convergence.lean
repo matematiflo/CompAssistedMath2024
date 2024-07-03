@@ -196,11 +196,6 @@ theorem mul (a₁ a₂ : ℕ → ℝ) (x₁ x₂ : ℝ) (h₁ : ConvergesTo a₁
       · exact abs_nonneg (a₁ 0)
       · exact hC₁ 0
 
-    have hC₂_nonneg : 0 ≤ C₂ := by
-      trans
-      · exact abs_nonneg (a₂ 0)
-      · exact hC₂ 0
-
     have hCmax_nonneg : 0 ≤ (max C₁ C₂) := by
       exact le_max_of_le_left hC₁_nonneg
 
@@ -208,14 +203,7 @@ theorem mul (a₁ a₂ : ℕ → ℝ) (x₁ x₂ : ℝ) (h₁ : ConvergesTo a₁
 
     let K := max C₁ C₂ + ε
 
-    have hεK : (ε / (2 * K)) ≤ ε := by
-      simp [K]
-      sorry
-
-    have hK_pos : 0 < K := by
-      apply lt_of_lt_of_le
-      · exact hε
-      · exact le_add_of_nonneg_left hCmax_nonneg
+    have hK_pos : 0 < K := by simp [K]; linarith
 
     obtain ⟨n₁, hn₁⟩ := h₁ (ε / (2 * K)) (div_pos hε (by linarith))
     obtain ⟨n₂, hn₂⟩ := h₂ (ε / (2 * K)) (div_pos hε (by linarith))
@@ -240,14 +228,18 @@ theorem mul (a₁ a₂ : ℕ → ℝ) (x₁ x₂ : ℝ) (h₁ : ConvergesTo a₁
 
     have hlt₂' : |x₂| ≤ K := by
       simp[K]
+      obtain ⟨n, hn⟩ := h₂ ε hε
       calc
-        |x₂| = |x₂ - a₂ m + a₂ m|       := by ring_nf
-           _ ≤ |x₂ - a₂ m| + |a₂ m|     := abs_add _ _
-           _ = |a₂ m - x₂| + |a₂ m|     := by simp; apply abs_sub_comm _ _
-           _ ≤ ε / (2 * K) + |a₂ m|     := add_le_add_right (le_of_lt hlt₂) (|a₂ m|)
-           _ ≤ ε / (2 * K) + C₂         := add_le_add_left (hC₂ m) (ε / (2 * K))
-           _ ≤ ε / (2 * K) + max C₁ C₂  := add_le_add_left (le_max_right C₁ C₂) (ε / (2 * K))
-           _ ≤ ε + max C₁ C₂            := by simp[K]; linarith
+        |x₂| = |x₂ - a₂ n + a₂ n|       := by ring_nf
+           _ ≤ |x₂ - a₂ n| + |a₂ n|     := abs_add _ _
+           _ = |a₂ n - x₂| + |a₂ n|     := by simp; apply abs_sub_comm _ _
+           _ ≤ ε + |a₂ n|               := by
+              apply add_le_add_right
+              apply le_of_lt
+              apply hn n
+              field_simp
+           _ ≤ ε + C₂                   := add_le_add_left (hC₂ n) ε
+           _ ≤ ε + max C₁ C₂            := add_le_add_left (le_max_right C₁ C₂) ε
            _ = K                        := by simp[K]; linarith
 
     calc
@@ -288,10 +280,9 @@ theorem sandwich (a b c : ℕ → ℝ) (h : ∃ (n : ℕ), ∀ m ≥ n , a m ≤
   have hmn₀ : n₀ ≤ m := by
     calc
       n₀ ≤ n₀ + n₁ := by linarith
-      _ ≤ n₀ + n₁ + n₂ := by linarith
-      _= N := by simp[N]; ring
+       _ ≤ n₀ + n₁ + n₂ := by linarith
+       _ = N := by simp[N]; ring
     simp [hmn]
-
 
   have h₃ : a m ≤ b m := (h₀ m hmn₀).left
   have h₄ : b m ≤ c m := (h₀ m hmn₀).right
@@ -355,10 +346,67 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
 
   have h₂ (n : ℕ) (h : n ≥ 1) : n.root n ≤ 1 + (2 / (Real.sqrt n)) := by
     have ha (n : ℕ) : n.root n = 1 + a n := by simp [a]
+
     have hb (n : ℕ) (hn : n ≥ 1) : (1 + a n) ^ n = n := by
       rw [← ha n]
       rw [nthRoot_pow]
       exact hn
+
+    have hc (n : ℕ) (h : 1 ≤ n) : 0 ≤ a n := by
+      simp [a]
+      exact h₁ n h
+
+    have hd (n : ℕ) (h : 1 ≤ n) : ((n * (n - 1)) / 2 : ℕ) = (n * (n - 1 : ℝ)) / 2 := by
+      rw [Nat.cast_div]
+      · simp
+        rw [Nat.cast_sub]
+        simp
+        exact h
+      · have := Nat.even_mul_pred_self n
+        rw [even_iff_exists_two_nsmul] at this
+        simp at this
+        obtain ⟨c, hc⟩ := this
+        use c
+      · simp
+
+    have he (n : ℕ) (hn : n ≥ 2) : 1 / (n : ℝ) ≤ 1 / 2 := by
+      apply one_div_le_one_div_of_le
+      · simp
+      · simp; linarith
+
+    have hf (n : ℕ) (hn : n ≥ 2) : (a n + 1) ^ n ≥ (n * (n - 1 : ℝ)) / 2 * (a n) ^ 2 := by
+      rw [add_pow]
+      simp
+      calc
+        _ ≥ a n ^ 2 * Nat.choose n 2 := by
+            show _ ≤ _
+            apply Finset.single_le_sum (f := fun k ↦ a n ^ k * n.choose k)
+            · intro i hi
+              have h1 : 0 ≤ a n ^ i := by
+                apply pow_nonneg
+                apply hc
+                exact Nat.one_le_of_lt hn
+              have h2 : 0 ≤ (n.choose i : ℝ) := by
+                simp
+              exact Left.mul_nonneg h1 h2
+            · simp
+              exact Nat.succ_lt_succ hn
+        _ = (n * (n - 1 : ℝ)) / 2 * (a n) ^ 2 := by
+          rw [Nat.choose_two_right]
+          rw [mul_comm]
+          rw [hd n]
+          exact Nat.one_le_of_lt hn
+
+    have hg (n : ℕ) (hn : n ≥ 2) : n ≥ (n * (n - 1 : ℝ)) / 2 * (a n) ^ 2 := by sorry
+      --rw [← hb] at hf
+
+
+
+    --have hg (n : ℕ) (hn : n ≥ 2) : (a n) ^ 2 ≤ 2 / (n - 1) := by
+
+
+
+
 
   have h₃ : ∃ (n : ℕ), ∀ m ≥ n, 1 ≤ m.root m ∧ m.root m ≤ 1 + (2 / (Real.sqrt m)) := by
     use 1
