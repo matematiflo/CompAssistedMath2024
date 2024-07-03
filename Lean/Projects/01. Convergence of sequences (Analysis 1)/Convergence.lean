@@ -203,7 +203,6 @@ theorem mul (a₁ a₂ : ℕ → ℝ) (x₁ x₂ : ℝ) (h₁ : ConvergesTo a₁
 
     let K := max C₁ C₂ + ε
 
-
     have hK_pos : 0 < K := by
       apply lt_of_lt_of_le
       · exact hε
@@ -233,15 +232,12 @@ theorem mul (a₁ a₂ : ℕ → ℝ) (x₁ x₂ : ℝ) (h₁ : ConvergesTo a₁
     have hlt₂' : |x₂| ≤ K := by
       simp[K]
       obtain ⟨n, hn⟩ := h₂ ε hε
+      have hlt : |a₂ n - x₂| < ε := hn n (le_refl n)
       calc
         |x₂| = |x₂ - a₂ n + a₂ n|       := by ring_nf
            _ ≤ |x₂ - a₂ n| + |a₂ n|     := abs_add _ _
            _ = |a₂ n - x₂| + |a₂ n|     := by simp; apply abs_sub_comm _ _
-           _ ≤ ε + |a₂ n|               := by
-              apply add_le_add_right
-              apply le_of_lt
-              apply hn n
-              field_simp
+           _ ≤ ε + |a₂ n|               := by linarith
            _ ≤ ε + C₂                   := add_le_add_left (hC₂ n) ε
            _ ≤ ε + max C₁ C₂            := add_le_add_left (le_max_right C₁ C₂) ε
            _ = K                        := by simp[K]; linarith
