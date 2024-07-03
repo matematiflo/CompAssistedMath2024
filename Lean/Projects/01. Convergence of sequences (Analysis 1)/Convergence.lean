@@ -203,7 +203,11 @@ theorem mul (a₁ a₂ : ℕ → ℝ) (x₁ x₂ : ℝ) (h₁ : ConvergesTo a₁
 
     let K := max C₁ C₂ + ε
 
-    have hK_pos : 0 < K := by simp [K]; linarith
+
+    have hK_pos : 0 < K := by
+      apply lt_of_lt_of_le
+      · exact hε
+      · exact le_add_of_nonneg_left hCmax_nonneg
 
     obtain ⟨n₁, hn₁⟩ := h₁ (ε / (2 * K)) (div_pos hε (by linarith))
     obtain ⟨n₂, hn₂⟩ := h₂ (ε / (2 * K)) (div_pos hε (by linarith))
