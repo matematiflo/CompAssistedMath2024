@@ -1,20 +1,20 @@
 # Searching mathlib
 
-There are many ways to search Lean's mathematics library `mathlib` for theorems, and not all of these are obvious to new users. Here we demonstrate some techniques. But before we start, a word of warning.
+There are many ways to search Lean's mathematics library `mathlib` for theorems, and not all of these are obvious to new users. Here we give an overview of some techniques. But before we start, a word of warning.
 
-The binomial theorem in Lean will not be called `binomial_theorem`, it will be called `add_pow`, because this is Lean's [naming convention]([add link](https://leanprover-community.github.io/contribute/naming.html)). However, the phrase "binomial theorem" will occur in mathlib, in the *docstring* of the theorem, and possibly also in *module docstring* at the top of the file.
+The binomial theorem in Lean will not be called `binomial_theorem`, it will be called `add_pow`, because this is Lean's [naming convention](https://leanprover-community.github.io/contribute/naming.html). However, the phrase "binomial theorem" will occur in mathlib, in the *docstring* of the theorem, and possibly also in *module docstring* at the top of the file.
 
-Here are some possibilities for searching.
+If you want to search for a theorem or a definition in `mathlib` here are some possibilities.
 
 ## Moogle
 
-[Moogle](https://www.moogle.ai/) is an AI-based search algorithm, where you can just type in a text string and it will do its best to point you to relevant mathematics lemmas. Moogle searches everything in mathlib, from the code to the docstrings, and is very easy to use. Note that, like all AI resources, 
+[Moogle](https://www.moogle.ai/) is an AI-based search algorithm, where you can just type in a text string and it will do its best to point you to relevant mathematics lemmas. Moogle searches everything in mathlib, from the code to the docstrings, and is very easy to use. 
 
 For example, if you want to find the cosine rule in mathlib, you can just type "cosine rule" into the search bar in Moogle and it will find it, and even tell you mathlib's rather wacky name for it.
 
 ### Good examples
 
-Try searching for the cosine rule! Search for the fact that tensor product is commutative. 
+Try searching for the cosine rule! Search for the fact that the tensor product is commutative. 
 
 
 ## The API docs
