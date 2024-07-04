@@ -435,7 +435,7 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
           simp
           rw [← le_sub_iff_add_le]
           ring_nf
-          
+          --rw [← div_le_iff_le_mul]
 
 
 
