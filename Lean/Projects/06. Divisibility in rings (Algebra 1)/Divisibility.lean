@@ -194,7 +194,37 @@ def IsFactorialRing (R : Type) [CommRing R] [IsDomain R] : Prop :=
 
 
 theorem isPrime_of_isIrreducible [IsDomain R] (x: R) (h : IsPrime x) : IsPrime x := by
-  sorry
+  obtain ⟨hnontrivial, hirr⟩ := h
+  constructor
+  · exact hnontrivial
+  · intros a b hdiv
+    by_cases ha : a = 0
+    · left
+      rw [ha]
+      exact dvd_zero p
+    by_cases hb : b = 0
+    · right
+      rw [hb]
+      exact dvd_zero p
+    by_cases hunit_a : IsUnit a
+    · right
+      obtain ⟨u, hu⟩ := hunit_a
+      rw [hu]
+      exact dvd_mul_of_dvd_right (dvd_refl p) b
+    by_cases hunit_b : IsUnit b
+    · left
+      obtain ⟨u, hu⟩ := hunit_b
+      rw [hu]
+      exact dvd_mul_of_dvd_left (dvd_refl p) a
+    obtain ⟨c, hc⟩ := hdiv
+    rw [hc] at hirr
+    specialize hirr a b hc
+    cases hirr with hunit_a hunit_b
+    · left
+      exact is_unit_of_mul_eq_one hc.symm hnontrivial ⟨c, hc⟩
+    · right
+      exact is_unit_of_mul_eq_one (mul_comm b a ▸ hc) hnontrivial ⟨c, hc⟩
+
 
 
 end Algebra'
