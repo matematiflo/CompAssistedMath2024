@@ -347,13 +347,6 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
 
   have h₂ (n : ℕ) (h : n ≥ 2) : n.root n ≤ 1 + (2 / (Real.sqrt n)) := by
 
-    have ha (n : ℕ) : n.root n = 1 + a n  := by simp [a]
-
-    have hb (n : ℕ) (hn : n ≥ 1) : (1 + a n) ^ n = n := by
-      rw [← ha n]
-      rw [nthRoot_pow]
-      exact hn
-
     have hc (n : ℕ) (h : 1 ≤ n) : 0 ≤ a n := by
       simp [a]
       exact h₁ n h
@@ -371,11 +364,6 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
         use c
       · simp
 
-    have he (n : ℕ) (hn : n ≥ 2) : 1 / (n : ℝ) ≤ 1 / 2 := by
-      apply one_div_le_one_div_of_le
-      · simp
-      · simp; linarith
-
     have hf (n : ℕ) (hn : n ≥ 2) : (a n + 1) ^ n ≥ (n * (n - 1 : ℝ)) / 2 * (a n) ^ 2 := by
       rw [add_pow]
       simp
@@ -383,7 +371,7 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
         _ ≥ a n ^ 2 * Nat.choose n 2 := by
             show _ ≤ _
             apply Finset.single_le_sum (f := fun k ↦ a n ^ k * n.choose k)
-            · intro i hi
+            · intro i _
               have h1 : 0 ≤ a n ^ i := by
                 apply pow_nonneg
                 apply hc
@@ -419,7 +407,11 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
         apply le_of_mul_le_mul_left _ hh2
         simp
         show _ ≥ _
-        sorry
+        rw [mul_comm ((a n) ^ 2) ((n - 1 : ℝ))]
+        rw [mul_div_right_comm]
+        rw [← mul_assoc]
+        rw [← mul_div_assoc]
+        apply hg n h
       · linarith
 
     have hi (n : ℕ) (h : n ≥ 2) : Real.sqrt (2 / (n - 1 : ℝ)) ≤ 2 / Real.sqrt n := by
@@ -461,8 +453,7 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
     · apply h₁ m; linarith
     · apply h₂ m; exact hm
 
-  have h₄ : ConvergesTo (fun n ↦ 1) 1 := by
-    apply ConvergesTo.of_constant
+  have h₄ : ConvergesTo (fun _ ↦ 1) 1 := by apply ConvergesTo.of_constant
 
   have h₅ : ConvergesTo (fun n ↦ 1 + (2 / (Real.sqrt n))) 1 := by
     rw[ConvergesTo.iff']
@@ -479,7 +470,7 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
       · simp
       · simp [Real.sqrt_pos]; field_simp
       · apply Real.sqrt_le_sqrt (Nat.le_ceil (4 / ε^2))
-    have h_abs (n : ℕ) : |2 / (Real.sqrt m)| = 2 / (Real.sqrt m) := by
+    have h_abs : |2 / (Real.sqrt m)| = 2 / (Real.sqrt m) := by
       apply abs_of_pos
       apply div_pos
       · linarith
@@ -489,7 +480,7 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
           _ ≤ m := by apply hm
     simp
     calc
-      |2 / (Real.sqrt m)| = 2 / (Real.sqrt m) := by apply h_abs m
+      |2 / (Real.sqrt m)| = 2 / (Real.sqrt m) := by apply h_abs
                       _ ≤ 2 / (Real.sqrt ⌈4 / ε^2⌉₊) := hle₁
                       _ ≤ 2 / (Real.sqrt (4 / ε^2)) := hle₂
                       _ = 2 / (2 / ε) := by
@@ -504,4 +495,4 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
                         simp [h_sqrt4]
                       _ = ε := by field_simp
 
-  exact ConvergesTo.sandwich (fun n ↦ 1) (fun n ↦ n.root n) (fun n ↦ 1 + (2 / (Real.sqrt n))) h₃ 1 h₄ h₅
+  exact ConvergesTo.sandwich (fun _ ↦ 1) (fun n ↦ n.root n) (fun n ↦ 1 + (2 / (Real.sqrt n))) h₃ 1 h₄ h₅
