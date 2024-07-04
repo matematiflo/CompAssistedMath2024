@@ -435,11 +435,11 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
           simp
           rw [← le_sub_iff_add_le]
           ring_nf
-          --rw [← div_le_iff_le_mul]
-
-
-
-
+          have hi3 : 0 < (1 / 2 : ℝ) := by linarith
+          rw [← mul_le_mul_right hi3]
+          field_simp
+          norm_num
+          linarith
         · simp; linarith
         · simp; linarith
       · simp; linarith
