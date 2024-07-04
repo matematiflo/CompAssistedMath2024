@@ -405,25 +405,38 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
         _ = (a n + 1) ^ n := by simp [a]
         _ ≥ (n * (n - 1 : ℝ)) / 2 * (a n) ^ 2 := by exact hf n hn
 
-    have hh (n : ℕ) (h : n ≥ 2) : (a n) ≤ Real.sqrt (2 / (n-1)) := by
-      have : (a n) ^ 2 ≤ (2 / (n - 1)) := Real.le_sqrt
-      have : (n - 1) * (a n) ^ 2 ≤ 2 := sorry --le_div_iff' at this; simp; linarith
-
-      sorry
-      /-
-      rw [Real.le_sqrt]
-      · rw [le_div_iff']
-        · rw [← div_le_one]
-          · sorry --rw [mul_le_mul_of_nonneg_right n ]
-          · simp
+    have hh (n : ℕ) (h : n ≥ 2) : (a n) ≤ Real.sqrt (2 / (n - 1 : ℝ)) := by
+      apply Real.le_sqrt_of_sq_le
+      have hh1 : 0 < (n - 1 : ℝ) / 2 := by
+        apply div_pos
         · simp; linarith
-      · apply hc; linarith
-      · apply div_nonneg; linarith; simp; linarith
-      -/
+        · linarith
+      apply le_of_mul_le_mul_left _ hh1
+      field_simp
+      simp [mul_comm]
+      rw [div_self]
+      · have hh2 : 0 < (n : ℝ) := by linarith
+        apply le_of_mul_le_mul_left _ hh2
+        simp
+        show _ ≥ _
+        sorry
+      · linarith
 
-
-    have hi (n : ℕ) (h : n ≥ 2) : Real.sqrt (2 / (n-1)) ≤ 2 / Real.sqrt n := by
-      sorry
+    have hi (n : ℕ) (h : n ≥ 2) : Real.sqrt (2 / (n - 1 : ℝ)) ≤ 2 / Real.sqrt n := by
+      have hi1 : 2 ≠ 0 := by norm_num
+      have hi2 : 0 ≤ 2 / Real.sqrt n := by apply div_nonneg; linarith; apply Real.sqrt_nonneg
+      apply le_of_pow_le_pow_left hi1 hi2
+      field_simp; norm_num
+      rw [Real.sq_sqrt]
+      · rw [div_le_div_iff]
+        · rw [mul_sub]
+          field_simp
+          have hi3 : 0 < (1 / (4 * n) : ℝ ):= by linarith
+          apply le_of_mul_le_mul_left _ hi3
+          field_simp
+        · simp; linarith
+        · simp; linarith
+      · simp; linarith
 
     calc
       n.root n = a n + 1 := by simp [a]
@@ -434,11 +447,6 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
              _ ≤ 1 + 2 / Real.sqrt n := by
               rw[add_le_add_iff_left]
               exact hi n h
-
-
-
-
-
 
   have h₃ : ∃ (n : ℕ), ∀ m ≥ n, 1 ≤ m.root m ∧ m.root m ≤ 1 + (2 / (Real.sqrt m)) := by
     use 2
