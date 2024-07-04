@@ -431,9 +431,15 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
       · rw [div_le_div_iff]
         · rw [mul_sub]
           field_simp
-          have hi3 : 0 < (1 / (4 * n) : ℝ ):= by linarith
-          apply le_of_mul_le_mul_left _ hi3
-          field_simp
+          rw [← sub_le_sub_iff_right (4 * n : ℝ)]
+          simp
+          rw [← le_sub_iff_add_le]
+          ring_nf
+          
+
+
+
+
         · simp; linarith
         · simp; linarith
       · simp; linarith
