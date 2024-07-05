@@ -32,6 +32,9 @@ lemma zero_of_zero_divides (x : R) (hx : 0 | x) : x = 0 := by
   obtain ⟨a, ha⟩ := hx
   simpa using ha
 
+lemma everything_divides_zero (x : R) : x | 0 := by
+  use 0
+  simp
 /-
 Hint: If you want to know what a specific tactic does, use the `#help tactic` command. For example:
 -/
@@ -188,12 +191,8 @@ structure FactorialRing where -- Multiset (1, 1, 2, 3) = (1, 2, 1, 3)
   ((factors1.length=factors2.length) ∧ ∃ σ ∈ factors1.permutations,
   (∀ i : Fin σ.length,  (IsAssociated (σ.get i) (factors2.get! i )))) -- using get! because we know that the lengths are equal
 
-def IsFactorialRing (R : Type) [CommRing R] [IsDomain R] : Prop :=
-  -- ∀ (x : R), x ≠ 0 → ¬IsUnit x → ∃ (factors : Multiset R), (∀ y ∈ factors, IsIrreducible y) ∧ x=factors.prod
-  sorry
 
-
-theorem isPrime_of_isIrreducible [IsDomain R] (x: R) (h : IsPrime x) : IsPrime x := by
+lemma isPrime_of_isIrreducible [IsDomain R] (p : R) (h : IsIrreducible p) : IsPrime p := by
   obtain ⟨hnontrivial, hirr⟩ := h
   constructor
   · exact hnontrivial
@@ -201,15 +200,38 @@ theorem isPrime_of_isIrreducible [IsDomain R] (x: R) (h : IsPrime x) : IsPrime x
     by_cases ha : a = 0
     · left
       rw [ha]
-      exact dvd_zero p
+      exact everything_divides_zero p
     by_cases hb : b = 0
     · right
       rw [hb]
-      exact dvd_zero p
+      exact everything_divides_zero p
     by_cases hunit_a : IsUnit a
     · right
+      obtain ⟨ c, hdiv ⟩ := hdiv  -- pc= a * b
       obtain ⟨u, hu⟩ := hunit_a
-      rw [hu]
+      have hmul :   ↑u⁻¹* (↑u * b) = ↑u⁻¹ * (↑u * ↑u⁻¹ * c * p) := by
+        apply mul_eq_mul_left_iff.mpr
+        apply Or.inl
+        simp
+        subst hu
+        exact hdiv
+      simp[<-mul_assoc] at hmul
+      use c * ↑u⁻¹
+      subst hmul
+      ring
+    by_cases hunit_b : IsUnit b
+    · left
+      sorry -- will make it a lemma later
+
+
+
+
+
+
+
+
+
+    /-
       exact dvd_mul_of_dvd_right (dvd_refl p) b
     by_cases hunit_b : IsUnit b
     · left
@@ -219,12 +241,6 @@ theorem isPrime_of_isIrreducible [IsDomain R] (x: R) (h : IsPrime x) : IsPrime x
     obtain ⟨c, hc⟩ := hdiv
     rw [hc] at hirr
     specialize hirr a b hc
-    cases hirr with hunit_a hunit_b
-    · left
-      exact is_unit_of_mul_eq_one hc.symm hnontrivial ⟨c, hc⟩
-    · right
-      exact is_unit_of_mul_eq_one (mul_comm b a ▸ hc) hnontrivial ⟨c, hc⟩
-
-
+    -/
 
 end Algebra'
