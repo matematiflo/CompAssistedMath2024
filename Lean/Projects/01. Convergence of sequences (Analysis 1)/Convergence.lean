@@ -439,12 +439,12 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
     calc
       n.root n = a n + 1 := by simp [a]
              _ ≤ 1 + Real.sqrt (2 / (n-1)) := by
-              rw[add_comm]
-              rw[add_le_add_iff_left]
-              exact hh n h
+                rw[add_comm]
+                rw[add_le_add_iff_left]
+                exact hh n h
              _ ≤ 1 + 2 / Real.sqrt n := by
-              rw[add_le_add_iff_left]
-              exact hi n h
+                rw[add_le_add_iff_left]
+                exact hi n h
 
   have h₃ : ∃ (n : ℕ), ∀ m ≥ n, 1 ≤ m.root m ∧ m.root m ≤ 1 + (2 / (Real.sqrt m)) := by
     use 2
