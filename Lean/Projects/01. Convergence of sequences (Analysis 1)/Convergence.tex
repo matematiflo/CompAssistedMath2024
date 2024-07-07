@@ -1,0 +1,76 @@
+\documentclass{beamer}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{amssymb}
+
+
+\def\lstlanguagefiles{lstlean.tex}
+\lstset{language=lean}
+
+\usepackage{color}
+\definecolor{keywordcolor}{rgb}{0.7, 0.1, 0.1}   % red
+\definecolor{tacticcolor}{rgb}{0.0, 0.1, 0.6}    % blue
+\definecolor{commentcolor}{rgb}{0.4, 0.4, 0.4}   % grey
+\definecolor{symbolcolor}{rgb}{0.0, 0.1, 0.6}    % blue
+\definecolor{sortcolor}{rgb}{0.1, 0.5, 0.1}      % green
+\definecolor{attributecolor}{rgb}{0.7, 0.1, 0.1} % red
+
+% Theme
+\usetheme{default}
+
+% Title page
+\title{Convergence of the nth Root of n}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}[fragile]{Definitions}
+    % Your content for the definitions section goes here
+    \begin{definition}[Convergence of a Sequence]
+    A sequence $(a_n)$ is said to converge to a limit $L$ if for every positive real number $\epsilon$, there exists a positive integer $N$ such that for all $n \geq N$, $|a_n - L| < \epsilon$.
+    \end{definition}
+
+    \begin{lstlisting}
+    import data.real.basic
+
+    def is_convergent (a : ℕ → ℝ) (L : ℝ) : Prop :=
+    ∀ ε > 0, ∃ N, ∀ n ≥ N, abs (a n - L) < ε
+    \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Lemmas}
+    % Your content for the lemmas section goes here
+    \begin{lemma}
+        Let $(a_n)$ be a convergent sequence with limit $L$. Then, for any constant $c$, the sequence $(c \cdot a_n)$ is also convergent with limit $c \cdot L$.
+    \end{lemma}
+
+    \begin{lstlisting}[language=lean]
+    lemma convergent_sequence_scalar_multiple {a : ℕ → ℝ} {L : ℝ} (h : is_convergent a L) (c : ℝ) :
+      is_convergent (λ n, c * a n) (c * L) :=
+    begin
+      intros ε hε,
+      obtain ⟨N, hN⟩ := h ε hε,
+      use N,
+      intros n hn,
+      rw [←mul_sub, abs_mul],
+      exact mul_lt_mul_of_pos_left (hN n hn) (abs_pos_of_pos (sub_pos.mpr hn)),
+    end
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Math Proof}
+    % Your content for the math proof section goes here
+\end{frame}
+
+\begin{frame}{Proof in Lean}
+    % Your content for the proof in Lean section goes here
+\end{frame}
+
+\end{document}

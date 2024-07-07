@@ -1,0 +1,17 @@
+\frametitle{Lemmas}
+\begin{lemma}
+        Let $(a_n)$ be a convergent sequence with limit $L$. Then, for any constant $c$, the sequence $(c \cdot a_n)$ is also convergent with limit $c \cdot L$.
+    \end{lemma}
+
+    \begin{lstlisting}[language=lean]
+    lemma convergent_sequence_scalar_multiple {a : ℕ → ℝ} {L : ℝ} (h : is_convergent a L) (c : ℝ) :
+      is_convergent (λ n, c * a n) (c * L) :=
+    begin
+      intros ε hε,
+      obtain ⟨N, hN⟩ := h ε hε,
+      use N,
+      intros n hn,
+      rw [←mul_sub, abs_mul],
+      exact mul_lt_mul_of_pos_left (hN n hn) (abs_pos_of_pos (sub_pos.mpr hn)),
+    end
+    \end{lstlisting}
