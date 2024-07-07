@@ -347,10 +347,6 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
 
   have h₂ (n : ℕ) (h : n ≥ 2) : n.root n ≤ 1 + (2 / (Real.sqrt n)) := by
 
-    have hc (n : ℕ) (h : 1 ≤ n) : 0 ≤ a n := by
-      simp [a]
-      exact h₁ n h
-
     have hd (n : ℕ) (h : 1 ≤ n) : ((n * (n - 1)) / 2 : ℕ) = (n * (n - 1 : ℝ)) / 2 := by
       rw [Nat.cast_div]
       · simp
@@ -374,8 +370,9 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
             · intro i _
               have h1 : 0 ≤ a n ^ i := by
                 apply pow_nonneg
-                apply hc
-                exact Nat.one_le_of_lt hn
+                simp[a]
+                apply h₁
+                linarith
               have h2 : 0 ≤ (n.choose i : ℝ) := by
                 simp
               exact Left.mul_nonneg h1 h2
