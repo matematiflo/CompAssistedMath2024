@@ -1,10 +1,10 @@
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
+
 example {R : Type} [CommRing R] [IsDomain R] (x y : R) (hx : x ≠ 0) (h : x * y = x) : y = 1 := by
   exact (mul_eq_left₀ hx).mp h
 
 variable {R : Type} [CommRing R]
-
 /-
 We put the following definitions in a namespace, to avoid naming clashes with the library.
 -/
@@ -129,6 +129,7 @@ An irreducible element `x : R` is a non-trivial element such that whenever `x = 
 def IsIrreducible (x : R) : Prop :=
   IsNontrivial x ∧ ∀ a b, x = a * b → IsUnit a ∨ IsUnit b
 
+
 /-
 An element `x` of a ring is prime, if it is non-trivial and whenever `x` divides a product, it divides one of the factors.
 -/
@@ -140,6 +141,15 @@ def IsPrime (x : R) : Prop :=
 In an integral domain, every prime element is irreducible.
 -/
 
+lemma ca_equals_ba [IsDomain R] {a b c: R} (h: a = b) : c*a = c*b := by
+  apply mul_eq_mul_left_iff.mpr
+  apply Or.inl
+  exact h
+
+lemma ac_equals_bc [IsDomain R] {a b c: R} (h: a = b) : a*c = b*c := by
+  apply mul_eq_mul_right_iff.mpr
+  apply Or.inl
+  exact h
 lemma  is_unit_of_mul_eq_one [IsDomain R] {a b x: R} (h_mul : x = a * b) (hnontrivial: IsNontrivial x) (hxa: Divides x a) : IsUnit b := by
   obtain ⟨c, hxa⟩ := hxa -- a = c * x
   rw [hxa, mul_comm, ←mul_assoc] at h_mul -- rewrite to x = a * b = b * a = b * c * x
@@ -178,10 +188,7 @@ also the converse of `isIrreducible_of_isPrime` holds, i.e. every irreducible el
 -/
 
 
-structure FactorialRing where -- Multiset (1, 1, 2, 3) = (1, 2, 1, 3)
-  R : Type
-  commRing : CommRing R
-  isDomain : IsDomain R
+class FactorialRing [IsDomain R] where -- Multiset (1, 1, 2, 3) = (1, 2, 1, 3)
   isNonEmpty : Inhabited R -- Ring has a 0 by default, only done for Lean
   isFactorisationDomain: ∀ (x : R), x ≠ 0 → ¬IsUnit x → ∃ (factors :List R), ((∀ y ∈ factors, IsIrreducible y) ∧ x=List.prod factors)
   isUniqueFactorisationDomain: ∀ (x : R) (factors1 factors2 : List R),
@@ -191,11 +198,16 @@ structure FactorialRing where -- Multiset (1, 1, 2, 3) = (1, 2, 1, 3)
   ((factors1.length=factors2.length) ∧ ∃ σ ∈ factors1.permutations,
   (∀ i : Fin σ.length,  (IsAssociated (σ.get i) (factors2.get! i )))) -- using get! because we know that the lengths are equal
 
+-- variable {K : Type*} [IsDomain K] [FactorialRing K]
 
-lemma isPrime_of_isIrreducible [IsDomain R] (p : R) (h : IsIrreducible p) : IsPrime p := by
+#check IsDomain
+#check FactorialRing
+
+lemma isPrime_of_isIrreducible [IsDomain R] (R: FactorialRing)  (p : R) (h : IsIrreducible p) : IsPrime p := by
   obtain ⟨hnontrivial, hirr⟩ := h
   constructor
   · exact hnontrivial
+  -- Step 2: a and b non-unit, non-zero
   · intros a b hdiv
     by_cases ha : a = 0
     · left
@@ -205,15 +217,13 @@ lemma isPrime_of_isIrreducible [IsDomain R] (p : R) (h : IsIrreducible p) : IsPr
     · right
       rw [hb]
       exact everything_divides_zero p
+    obtain ⟨ c, hdiv ⟩ := hdiv -- pc= a * b
     by_cases hunit_a : IsUnit a
     · right
-      obtain ⟨ c, hdiv ⟩ := hdiv  -- pc= a * b
       obtain ⟨u, hu⟩ := hunit_a
-      have hmul :   ↑u⁻¹* (↑u * b) = ↑u⁻¹ * (↑u * ↑u⁻¹ * c * p) := by
-        apply mul_eq_mul_left_iff.mpr
-        apply Or.inl
-        simp
+      have hmul :   b = ↑u⁻¹ * (c * p) := by
         subst hu
+        refine (Units.eq_inv_mul_iff_mul_eq u).mpr ?_ -- rewrite goal
         exact hdiv
       simp[<-mul_assoc] at hmul
       use c * ↑u⁻¹
@@ -221,26 +231,60 @@ lemma isPrime_of_isIrreducible [IsDomain R] (p : R) (h : IsIrreducible p) : IsPr
       ring
     by_cases hunit_b : IsUnit b
     · left
-      sorry -- will make it a lemma later
-
-
-
-
-
-
-
-
-
-    /-
-      exact dvd_mul_of_dvd_right (dvd_refl p) b
-    by_cases hunit_b : IsUnit b
-    · left
       obtain ⟨u, hu⟩ := hunit_b
-      rw [hu]
-      exact dvd_mul_of_dvd_left (dvd_refl p) a
-    obtain ⟨c, hc⟩ := hdiv
-    rw [hc] at hirr
-    specialize hirr a b hc
-    -/
+      rw[mul_comm] at hdiv
+      have hmul : a = u⁻¹ * (c * p) := by
+        subst hu
+        exact (Units.eq_inv_mul_iff_mul_eq u).mpr hdiv
+      rw[<-mul_assoc, mul_comm] at hmul
+      use (u⁻¹ * c)
+      subst hmul
+      ring
+    -- Step 3.1: c is non-zer0
+    by_cases hzero_c : c = 0
+    · subst hzero_c
+      simp at hdiv
+      rcases hdiv with ⟨u, hu⟩
+      · contradiction
+      · contradiction
+    -- Step 3.2: c is non-unit
+    by_cases hunit_c : IsUnit c
+    obtain ⟨u, hu⟩ := hunit_c
+    have hdiv' : u⁻¹ * (a * b) = u⁻¹ * (c * p) := by
+      subst hu
+      exact ca_equals_ba hdiv
+    subst hu
+    rw[<-mul_assoc, <-mul_assoc] at hdiv'
+    simp at hdiv'
+    rw[mul_comm ↑u⁻¹ a, mul_assoc] at hdiv'
+    have hdiv': p = a * (↑u⁻¹*b) := by subst hdiv'; rfl
+    have hunits: IsUnit a ∨ IsUnit (↑u⁻¹*b)  := by
+      apply hirr a (↑u⁻¹*b) hdiv'
+    rcases hunits with hunit_a | hunit_ub
+    · contradiction
+    · have hunit_b: IsUnit b := by
+        obtain ⟨v, hv⟩ := hunit_ub
+        have huv: u * v = b := by
+          exact (Units.eq_inv_mul_iff_mul_eq u).mp hv
+        have hunit_v: IsUnit v.val := by
+          use v
+        have hunit_u: IsUnit u.val := by
+          use u
+        have hunit_uv: IsUnit (u * v.val) := by
+          exact IsUnit.mul hunit_u hunit_v
+        rw[<-huv]
+        exact hunit_uv
+      contradiction
+    -- Step 4: Because we're in a UFD,factor a*b and p*c into irreducibles,
+    -- and show that the factorisations are the same
+
+
 
 end Algebra'
+
+
+structure Point (α : Type u) where
+  x : α
+  y : α
+
+#check Point
