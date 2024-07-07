@@ -4,10 +4,6 @@
 \usepackage{listings}
 \usepackage{amssymb}
 
-
-\def\lstlanguagefiles{lstlean.tex}
-\lstset{language=lean}
-
 \usepackage{fontspec}
 % switch to a monospace font supporting more Unicode characters
 \setmonofont{FreeMono}
@@ -55,9 +51,9 @@
     \end{lemma}
 
     \begin{definition}
-    \begin{lstlisting}
+    \begin{leancode}
     theorem of_constant (x : ℝ) : ConvergesTo (fun _ ↦ x) x
-    \end{lstlisting}
+    \end{leancode}
     \end{definition}
 \end{frame}
 
@@ -67,10 +63,10 @@
     \end{lemma}
 
     \begin{lemma}
-    \begin{lstlisting}
+    \begin{leancode}
     theorem of_convergesTo (a : ℕ → ℝ) (x : ℝ) 
     (h : ConvergesTo a x) : IsBounded a 
-    \end{lstlisting}
+    \end{leancode}
     \end{lemma}
 \end{frame}
 
@@ -80,12 +76,12 @@
     \end{lemma}
 
     \begin{lemma}
-    \begin{lstlisting}
+    \begin{leancode}
     theorem sandwich (a b c : ℕ → ℝ) 
     (h : ∃ (n : ℕ), ∀ m ≥ n , a m ≤ b m ∧ b m ≤ c m) (x : ℝ)
     (ha : ConvergesTo a x) (hb : ConvergesTo c x) :
     ConvergesTo b x
-    \end{lstlisting}
+    \end{leancode}
     \end{lemma}
 \end{frame}
 
