@@ -42,8 +42,49 @@
 
 \begin{frame}[fragile]{Lemmas}
     % Your content for the lemmas section goes here
+    \begin{lemma} 
+        Let $(a_n)$ be a constant sequence with $a_n = x$ for all $n$. Then $(a_n)$ converges to $x$.
+    \end{lemma}
+
+    \begin{block}{Lean Code}
+    \begin{leancode}
+    theorem of_constant (x : ℝ) : ConvergesTo (fun _ ↦ x) x
+    \end{leancode}
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Lemmas}
     \begin{lemma}
-        For any positive integer $n$, the $n$-th root of $n$ raised to the power of $n$ is equal to $n$, i.e. $(\sqrt[n]{n})^n = n$.
+        If a sequence $(a_n)$ converges to $x$, then $(a_n)$ is bounded.
+    \end{lemma}
+
+    \begin{block}{Lean code}
+    \begin{leancode}
+    theorem of_convergesTo (a : ℕ → ℝ) (x : ℝ) 
+    (h : ConvergesTo a x) : IsBounded a 
+    \end{leancode}
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Lemmas}
+    \begin{lemma}
+        If $(a_n)$, $(b_n)$ and $(c_n)$ are sequences and it exists an $N \in \mathbb{N}$ such that $a_m \leq b_m \leq c_m$ for all $m \geq N$, and both $(a_n)$ and $(c_n)$ converge to $x$, then $b_n$ converges to $x$.
+    \end{lemma}
+
+    \begin{block}{Lean Code}
+    \begin{leancode}
+    theorem sandwich (a b c : ℕ → ℝ) 
+    (h : ∃ (n : ℕ), ∀ m ≥ n , a m ≤ b m ∧ b m ≤ c m) (x : ℝ)
+    (ha : ConvergesTo a x) (hb : ConvergesTo c x) :
+    ConvergesTo b x
+    \end{leancode}
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Lemmas}
+    % Your content for the math proof section goes here
+    \begin{lemma}
+        
     \end{lemma}
 
     \begin{block}{Lean Code}
@@ -55,7 +96,6 @@
 
 \begin{frame}{Math Proof}
     % Your content for the math proof section goes here
-    Claim: The sequence of $n$-th roots of $n$ converges to 1.
     \begin{proof}
         Let $(a_n)$ be the sequence defined by $a_n = \sqrt[n]{n}$.
 
@@ -75,9 +115,10 @@
         Since $1 \leq \sqrt[n]{n} \leq 1 + 2 / \sqrt[2]{n}$ for all $n \in \mathbb{N}$, by the sandwich theorem, we conclude that $\lim_{n \to \infty} \sqrt[n]{n} = 1$.
 
         Therefore, the sequence of $n$-th roots of $n$ converges to 1.
+
     \end{proof}
 
-\end{frame} 
+\end{frame}
 
 \begin{frame}{Proof in Lean}
     % Your content for the proof in Lean section goes here
