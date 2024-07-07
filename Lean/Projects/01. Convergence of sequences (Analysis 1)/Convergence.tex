@@ -50,10 +50,50 @@
 
 \begin{frame}[fragile]{Lemmas}
     % Your content for the lemmas section goes here
-    \begin{lemma}
-        For any positive integer $n$, the $n$th root of $n$ to the power of $n$ is $n$ i.e. $\sqrt[n]{n}^n = n$.
+    \begin{lemma} 
+        Let $(a_n)$ be a constant sequence with $a_n = x$ for all $n$. Then $(a_n)$ converges to $x$.
     \end{lemma}
 
+    \begin{definition}
+    \begin{lstlisting}
+    theorem of_constant (x : ℝ) : ConvergesTo (fun _ ↦ x) x
+    \end{lstlisting}
+    \end{definition}
+\end{frame}
+
+\begin{frame}[fragile]{Lemmas}
+    \begin{lemma}
+        If a sequence $(a_n)$ converges to $x$, then $(a_n)$ is bounded.
+    \end{lemma}
+
+    \begin{lemma}
+    \begin{lstlisting}
+    theorem of_convergesTo (a : ℕ → ℝ) (x : ℝ) 
+    (h : ConvergesTo a x) : IsBounded a 
+    \end{lstlisting}
+    \end{lemma}
+\end{frame}
+
+\begin{frame}[fragile]{Lemmas}
+    \begin{lemma}
+        If $(a_n)$, $(b_n)$ and $(c_n)$ are sequences and it exists an $N \in \mathbb{N}$ such that $a_m \leq b_m \leq c_m$ for all $m \geq N$, and both $(a_n)$ and $(c_n)$ converge to $x$, then $b_n$ converges to $x$.
+    \end{lemma}
+
+    \begin{lemma}
+    \begin{lstlisting}
+    theorem sandwich (a b c : ℕ → ℝ) 
+    (h : ∃ (n : ℕ), ∀ m ≥ n , a m ≤ b m ∧ b m ≤ c m) (x : ℝ)
+    (ha : ConvergesTo a x) (hb : ConvergesTo c x) :
+    ConvergesTo b x
+    \end{lstlisting}
+    \end{lemma}
+\end{frame}
+
+\begin{frame}[fragile]{Lemmas}
+    % Your content for the math proof section goes here
+    \begin{lemma}
+        
+    \end{lemma}
     \begin{lemma}
     \begin{leancode}
     lemma nthRoot_pow (n : ℕ) (h : n ≥ 1) : (n.root n) ^ n = n
