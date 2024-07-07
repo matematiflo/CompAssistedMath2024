@@ -51,7 +51,13 @@
 \begin{frame}[fragile]{Lemmas}
     % Your content for the lemmas section goes here
     \begin{lemma}
-        Let $(a_n)$ be a convergent sequence with limit $L$. Then, for any constant $c$, the sequence $(c \cdot a_n)$ is also convergent with limit $c \cdot L$.
+        For any positive integer $n$, the $n$th root of $n$ to the power of $n$ is $n$ i.e. $\sqrt[n]{n}^n = n$.
+    \end{lemma}
+
+    \begin{lemma}
+    \begin{lstlisting}
+    lemma nthRoot_pow (n : ℕ) (h : n ≥ 1) : (n.root n) ^ n = n
+    \end{lstlisting}
     \end{lemma}
 \end{frame}
 
