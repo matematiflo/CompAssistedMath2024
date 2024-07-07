@@ -1,10 +1,11 @@
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
-
+set_option pp.all true
 
 example {R : Type} [CommRing R] [IsDomain R] (x y : R) (hx : x ≠ 0) (h : x * y = x) : y = 1 := by
   exact (mul_eq_left₀ hx).mp h
 
 variable {R : Type} [CommRing R]
+
 /-
 We put the following definitions in a namespace, to avoid naming clashes with the library.
 -/
@@ -188,22 +189,24 @@ also the converse of `isIrreducible_of_isPrime` holds, i.e. every irreducible el
 -/
 
 
-class FactorialRing [IsDomain R] where -- Multiset (1, 1, 2, 3) = (1, 2, 1, 3)
-  isNonEmpty : Inhabited R -- Ring has a 0 by default, only done for Lean
-  isFactorisationDomain: ∀ (x : R), x ≠ 0 → ¬IsUnit x → ∃ (factors :List R), ((∀ y ∈ factors, IsIrreducible y) ∧ x=List.prod factors)
-  isUniqueFactorisationDomain: ∀ (x : R) (factors1 factors2 : List R),
-  x ≠ 0 → (¬IsUnit x) →
-  (∀ y ∈ factors1, IsIrreducible y) → (∀ y ∈ factors2, IsIrreducible y) →
-  (x = List.prod factors1) → (x = List.prod factors2) →
-  ((factors1.length=factors2.length) ∧ ∃ σ ∈ factors1.permutations,
-  (∀ i : Fin σ.length,  (IsAssociated (σ.get i) (factors2.get! i )))) -- using get! because we know that the lengths are equal
+def IsFactorialRing (R: Type) [CommRing R] [IsDomain R] [Inhabited R]: Prop := -- Ring has a 0 by default, Inhabited R only done for Lean to stop complaining
+  -- It's based on a ring R
+  -- And every non-zero and non-unit element is factorable into irreducibles
+  (∀ (x : R), x ≠ 0 → ¬IsUnit x → ∃ (factors :List R), ((∀ y ∈ factors, IsIrreducible y) ∧ x=List.prod factors)) ∧
+  -- And such factorisation is unique up to associates and permutation:
+  (
+  ∀ (x : R) (factors1 factors2 : List R), -- there exist 2 lists
+  x ≠ 0 → (¬IsUnit x) → -- for any x in R that is non-zero and non-unit
+  (x = List.prod factors1) → (x = List.prod factors2) → -- such that x is the product of the factors in each list
+  (∀ y ∈ factors1, IsIrreducible y) → (∀ y ∈ factors2, IsIrreducible y) → -- and those lists are made up of irreducibles
+  ((factors1.length=factors2.length) ∧ -- then they are of equal length
+  ∃ σ ∈ factors1.permutations, -- and there exists a permutation of one of them, here called sigma
+  (∀ i : Fin σ.length,  (IsAssociated (σ.get i) (factors2.get! i )))) -- such that sigma_i is associated to factors2_i
+  )
 
--- variable {K : Type*} [IsDomain K] [FactorialRing K]
+variable {R : Type} [CommRing R] [IsDomain R] [Inhabited R]
 
-#check IsDomain
-#check FactorialRing
-
-lemma isPrime_of_isIrreducible [IsDomain R] (R: FactorialRing)  (p : R) (h : IsIrreducible p) : IsPrime p := by
+lemma isPrime_of_isIrreducible (p : R) (h : IsIrreducible p) (hUFD: IsFactorialRing R): IsPrime p := by
   obtain ⟨hnontrivial, hirr⟩ := h
   constructor
   · exact hnontrivial
@@ -281,10 +284,3 @@ lemma isPrime_of_isIrreducible [IsDomain R] (R: FactorialRing)  (p : R) (h : IsI
 
 
 end Algebra'
-
-
-structure Point (α : Type u) where
-  x : α
-  y : α
-
-#check Point
