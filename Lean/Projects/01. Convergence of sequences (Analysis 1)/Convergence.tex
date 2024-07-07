@@ -8,13 +8,13 @@
 \def\lstlanguagefiles{lstlean.tex}
 \lstset{language=lean}
 
-\usepackage{color}
-\definecolor{keywordcolor}{rgb}{0.7, 0.1, 0.1}   % red
-\definecolor{tacticcolor}{rgb}{0.0, 0.1, 0.6}    % blue
-\definecolor{commentcolor}{rgb}{0.4, 0.4, 0.4}   % grey
-\definecolor{symbolcolor}{rgb}{0.0, 0.1, 0.6}    % blue
-\definecolor{sortcolor}{rgb}{0.1, 0.5, 0.1}      % green
-\definecolor{attributecolor}{rgb}{0.7, 0.1, 0.1} % red
+\usepackage{fontspec}
+% switch to a monospace font supporting more Unicode characters
+\setmonofont{FreeMono}
+\usepackage{minted}
+\newmintinline[lean]{lean4}{bgcolor=white}
+\newminted[leancode]{lean4}{fontsize=\footnotesize}
+\usemintedstyle{tango}  % a nice, colorful theme
 
 % Theme
 \usetheme{Madrid}
@@ -32,16 +32,19 @@
 
 \begin{frame}[fragile]{Definitions}
     % Your content for the definitions section goes here
-    \begin{definition}[Convergence of a Sequence]
-    A sequence $(a_n)$ is said to converge to a limit $L$ if for every positive real number $\epsilon$, there exists a positive integer $N$ such that for all $n \geq N$, $|a_n - L| < \epsilon$.
+    \begin{definition}
+        A sequence $(a_n)$ is said to converge to a limit $x$ if for every $\epsilon > 0$, there exists an $N \in \mathbb{N}$ such that for all $n \geq N$, $|a_n - x| < \epsilon$.
+        \begin {align*}
+            \lim_{n \to \infty} a_n = x \iff \forall \epsilon > 0, \exists N \in \mathbb{N} \text{ such that } \forall n \geq N, |a_n - x| < \epsilon
+        \end {align*}
     \end{definition}
-
-    \begin{lstlisting}
-    import data.real.basic
-
-    def is_convergent (a : ℕ → ℝ) (L : ℝ) : Prop :=
-    ∀ ε > 0, ∃ N, ∀ n ≥ N, abs (a n - L) < ε
-    \end{lstlisting}
+    
+    \begin{block}{Lean Code}
+    \begin{leancode}
+        def ConvergesTo (a : ℕ → ℝ) (x : ℝ) : Prop := 
+            ∀ ε > 0, ∃ (n : ℕ), ∀ m ≥ n, |a m - x| < ε
+    \end{leancode}
+    \end{block}
 
 \end{frame}
 
