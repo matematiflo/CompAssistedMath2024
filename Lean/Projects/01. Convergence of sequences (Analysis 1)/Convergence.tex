@@ -29,77 +29,56 @@
 \begin{frame}[fragile]{Definitions}
     % Your content for the definitions section goes here
     \begin{definition}
-        A sequence $(a_n)$ is said to converge to a limit $x$ if for every $\epsilon > 0$, there exists an $N \in \mathbb{N}$ such that for all $n \geq N$, $|a_n - x| < \epsilon$.
-        \begin {align*}
-            \lim_{n \to \infty} a_n = x \iff \forall \epsilon > 0, \exists N \in \mathbb{N} \text{ such that } \forall n \geq N, |a_n - x| < \epsilon
-        \end {align*}
+        A sequence $(a_n)$ is said to be bounded if there exists a real number $C$ such that $|a_n| \leq C$ for all $n \in \mathbb{N}$.
     \end{definition}
-    
     \begin{block}{Lean Code}
-    \begin{leancode}
-        def ConvergesTo (a : ℕ → ℝ) (x : ℝ) : Prop := 
-            ∀ ε > 0, ∃ (n : ℕ), ∀ m ≥ n, |a m - x| < ε
-    \end{leancode}
+        \begin{leancode}
+        def IsBounded (a : ℕ → ℝ) : Prop :=
+        ∃ (C : ℝ), ∀ (n : ℕ), |a n| ≤ C
+        \end{leancode}
     \end{block}
 
 \end{frame}
 
 \begin{frame}[fragile]{Lemmas}
     % Your content for the lemmas section goes here
-    \begin{lemma} 
-        Let $(a_n)$ be a constant sequence with $a_n = x$ for all $n$. Then $(a_n)$ converges to $x$.
+    \begin{lemma}
+        For any positive integer $n$, the $n$-th root of $n$ raised to the power of $n$ is equal to $n$, i.e. $(\sqrt[n]{n})^n = n$.
     \end{lemma}
 
-    \begin{definition}
-    \begin{leancode}
-    theorem of_constant (x : ℝ) : ConvergesTo (fun _ ↦ x) x
-    \end{leancode}
-    \end{definition}
-\end{frame}
-
-\begin{frame}[fragile]{Lemmas}
-    \begin{lemma}
-        If a sequence $(a_n)$ converges to $x$, then $(a_n)$ is bounded.
-    \end{lemma}
-
-    \begin{lemma}
-    \begin{leancode}
-    theorem of_convergesTo (a : ℕ → ℝ) (x : ℝ) 
-    (h : ConvergesTo a x) : IsBounded a 
-    \end{leancode}
-    \end{lemma}
-\end{frame}
-
-\begin{frame}[fragile]{Lemmas}
-    \begin{lemma}
-        If $(a_n)$, $(b_n)$ and $(c_n)$ are sequences and it exists an $N \in \mathbb{N}$ such that $a_m \leq b_m \leq c_m$ for all $m \geq N$, and both $(a_n)$ and $(c_n)$ converge to $x$, then $b_n$ converges to $x$.
-    \end{lemma}
-
-    \begin{lemma}
-    \begin{leancode}
-    theorem sandwich (a b c : ℕ → ℝ) 
-    (h : ∃ (n : ℕ), ∀ m ≥ n , a m ≤ b m ∧ b m ≤ c m) (x : ℝ)
-    (ha : ConvergesTo a x) (hb : ConvergesTo c x) :
-    ConvergesTo b x
-    \end{leancode}
-    \end{lemma}
-\end{frame}
-
-\begin{frame}[fragile]{Lemmas}
-    % Your content for the math proof section goes here
-    \begin{lemma}
-        
-    \end{lemma}
-    \begin{lemma}
+    \begin{block}{Lean Code}
     \begin{leancode}
     lemma nthRoot_pow (n : ℕ) (h : n ≥ 1) : (n.root n) ^ n = n
     \end{leancode}
-    \end{lemma}
+    \end{block}
 \end{frame}
 
 \begin{frame}{Math Proof}
     % Your content for the math proof section goes here
-\end{frame}
+    Claim: The sequence of $n$-th roots of $n$ converges to 1.
+    \begin{proof}
+        Let $(a_n)$ be the sequence defined by $a_n = \sqrt[n]{n}$.
+
+        First, note that for any positive integer $n \geq 1$, we have $1 \leq \sqrt[n]{n}$. This is because $1^n = 1 \leq n = \sqrt[n]{n}^n$, and taking the $n$-th root preserves the inequality. Therefore applies $\sqrt[n]{n} = 1 + a_n$ for a suitbable sequence $(a_n)$.
+
+        Second, we have $ \sqrt[n]{n} \leq 1 + 2 / \sqrt[2]{n}$. This follows for $n \geq 2$ because $n = \sqrt[n]{n}^n = (1 + a_n)^n = \sum_{k=0}^{n} \binom{n}{k} * a_n ^k \geq \binom{n}{2} * a_n^2 = \frac{n!}{(n-2)! * 2!} * a_n^2 =\frac{n * (n-1)}{2} * a_n^2$ . 
+        We can conclude now $n \geq \frac{n * (n-1)}{2} * a_n^2
+        \Leftrightarrow a_n^2 \leq \frac{2}{n-1} \Leftrightarrow a_n \leq \sqrt[2]{\frac{2}{n-1}} \leq \frac{2}{\sqrt[2]{n-1}}$
+
+       We also know:
+        \[
+        \lim_{n \to \infty} 1 = 1
+        \]
+        \[
+        \lim_{n \to \infty} (1 + 2 / \sqrt[2]{n}) = 1
+        \]
+
+        Since $1 \leq \sqrt[n]{n} \leq 1 + 2 / \sqrt[2]{n}$ for all $n \in \mathbb{N}$, by the sandwich theorem, we conclude that $\lim_{n \to \infty} \sqrt[n]{n} = 1$.
+
+        Therefore, the sequence of $n$-th roots of $n$ converges to 1.
+    \end{proof}
+
+\end{frame} 
 
 \begin{frame}{Proof in Lean}
     % Your content for the proof in Lean section goes here
