@@ -1,33 +1,50 @@
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
-set_option pp.all true
+PLS DONT CHANGE IF NOT NECESSARY THIS IS FOR SCREENSHOTS IT DOENST NEED TO WORK
 
-example {R : Type} [CommRing R] [IsDomain R] (x y : R) (hx : x ≠ 0) (h : x * y = x) : y = 1 := by
-  exact (mul_eq_left₀ hx).mp h
 
-variable {R : Type} [CommRing R]
-
-/-
-We put the following definitions in a namespace, to avoid naming clashes with the library.
--/
 
 namespace Algebra'
-
-/-
-We say that `x` divides `y` if and only if `y` is a multiple of `x`.
--/
 
 def Divides (x y : R) : Prop :=
   ∃ a, y = a * x
 
-/-
-We introduce the notation `x | y` for `Divides x y`.
--/
-
 notation x " | " y => Divides x y
 
-/-
-If zero divides `x`, then `x` is zero.
--/
+def IsAssociated (x y : R) : Prop :=
+  ∃ (a : R), y = a * x
+
+def IsNontrivial (x : R) : Prop := x ≠ 0 ∧ ¬ (IsUnit x)
+
+def IsIrreducible (x : R) : Prop :=
+  IsNontrivial x ∧ ∀ a b, x = a * b → IsUnit a ∨ IsUnit b
+
+def IsPrime (x : R) : Prop :=
+  IsNontrivial x ∧ ∀ a b, (x | a * b) → (x | a) ∨ (x | b)
+
+def IsFactorialRing (R: Type) [CommRing R] [IsDomain R] [Inhabited R]: Prop := -- Ring has a 0 by default, Inhabited R only done for Lean to stop complaining
+  (∀ (x : R), x ≠ 0 → ¬IsUnit x → ∃ (factors :List R), ((∀ y ∈ factors, IsIrreducible y) ∧ x=List.prod factors)) ∧
+  (
+  ∀ (x : R) (factors1 factors2 : List R), -- there exist 2 lists
+  x ≠ 0 → (¬IsUnit x) → -- for any x in R that is non-zero and non-unit
+  (x = List.prod factors1) → (x = List.prod factors2) → -- such that x is the product of the factors in each list
+  (∀ y ∈ factors1, IsIrreducible y) → (∀ y ∈ factors2, IsIrreducible y) → -- and those lists are made up of irreducibles
+  ((factors1.length=factors2.length) ∧ -- then they are of equal length
+  ∃ σ ∈ factors1.permutations, -- and there exists a permutation of one of them, here called sigma
+  (∀ i : Fin σ.length,  (IsAssociated (σ.get i) (factors2.get! i )))) -- such that sigma_i is associated to factors2_i
+  )
+
+def IsFactorialRing (R: Type) [CommRing R] [IsDomain R] [Inhabited R]: Prop :=
+  (∀ (x : R), x ≠ 0 → ¬IsUnit x → ∃ (factors : List R),
+  (∀ y ∈ factors, IsIrreducible y) ∧ x = List.prod factors) ∧
+  (∀ (x : R) (factors1 factors2 : List R),
+    x ≠ 0 → ¬IsUnit x →
+    (x = List.prod factors1) → (x = List.prod factors2) →
+    (∀ y ∈ factors1, IsIrreducible y) → (∀ y ∈ factors2, IsIrreducible y) →
+    ((factors1.length = factors2.length) ∧
+    ∃ σ ∈ factors1.permutations,
+    (∀ i : Fin σ.length, IsAssociated (σ.get i) (factors2.get! i))))
+
+
+
 
 lemma zero_of_zero_divides (x : R) (hx : 0 | x) : x = 0 := by
   obtain ⟨a, ha⟩ := hx
@@ -36,38 +53,19 @@ lemma zero_of_zero_divides (x : R) (hx : 0 | x) : x = 0 := by
 lemma everything_divides_zero (x : R) : x | 0 := by
   use 0
   simp
-/-
-Hint: If you want to know what a specific tactic does, use the `#help tactic` command. For example:
--/
-
-
-/-
-If `x` divides a non-zero element `y`, `x` is non-zero.
--/
 
 lemma ne_zero_of_divides_of_ne_zero (x y : R) (hy : y ≠ 0) (hxy : x | y) : x ≠ 0 := by
   intro hx
   subst hx
   exact hy (zero_of_zero_divides y hxy)
 
-/-
-We say that `x` and `y` are associated if and only if `x` and `y` agree up to a unit.
--/
 
-def IsAssociated (x y : R) : Prop :=
-  ∃ (a : Rˣ), y = a * x
-
-/-
-Every element is associated to itself.
--/
 
 lemma isAssociated_of_eq (x : R) : IsAssociated x x := by
   use 1
   simp
 
-/-
-If two elements are associated, they divide each other.
--/
+
 
 lemma divides_divides_of_isAssociated (x y : R) (h : IsAssociated x y) :
     (x | y) ∧ (y | x) := by
@@ -78,37 +76,34 @@ lemma divides_divides_of_isAssociated (x y : R) (h : IsAssociated x y) :
     rw [ha]
     simp
 
-/-
-In a domain, two elements are associated if they divide each other.
--/
-
-lemma isAssociated_of_divides_divides_of_domain [IsDomain R] (x y : R) (hxy : x | y) (hyx : y | x) :
-    IsAssociated x y := by
-  by_cases hx : x = 0
-  · subst hx
-    have h1 : y = 0 := zero_of_zero_divides y hxy
-    subst h1
-    apply isAssociated_of_eq
-  · simp at hx
-    obtain ⟨a, ha⟩ := hxy
-    obtain ⟨b, hb⟩ := hyx
-    have hba : b * a = 1 := by
-      rw [ha, ← mul_assoc] at hb
-      exact (mul_eq_right₀ hx).mp (id (Eq.symm hb))
-    have hab : a * b = 1 := by
-      rw [mul_comm a b]
-      exact hba
-    let a' : Rˣ := {
-      val := a,
-      inv := b,
-      val_inv := hab,
-      inv_val := hba
+lemma isAssociated_of_divides_divides_of_domain /- Define a lemma named `isAssociated_of_divides_divides_of_domain` -/
+  [IsDomain R] /- Assume `R` is a domain (i.e., a commutative ring with no zero divisors) -/
+  (x y : R) /- Introduce elements `x` and `y` in `R` -/
+  (hxy : x | y) /- Assume `x` divides `y` -/
+  (hyx : y | x) /- Assume `y` divides `x` -/ :
+  IsAssociated x y := by /- We aim to prove `x` is associated with `y` -/
+  by_cases hx : x = 0 /- Consider the case whether `x = 0` -/
+  · subst hx /- If `x = 0`, substitute `x` with `0` in the goal -/
+    have h1 : y = 0 := zero_of_zero_divides y hxy /- Since `x = 0` divides `y`, `y` must be `0` by Lemma 1 -/
+    subst h1 /- Substitute `y` with `0` in the goal -/
+    apply isAssociated_of_eq /- Apply the lemma stating that zero is associated with zero -/
+  · simp at hx /- Simplify the negation `hx : x ≠ 0` -/
+    obtain ⟨a, ha⟩ := hxy /- Obtain an element `a` such that `y = a * x` from `x | y` -/
+    obtain ⟨b, hb⟩ := hyx /- Obtain an element `b` such that `x = b * y` from `y | x` -/
+    have hba : b * a = 1 := by /- Prove that `b * a = 1` -/
+      rw [ha, ← mul_assoc] at hb /- Rewrite `hb` using `ha` and associativity of multiplication -/
+      exact (mul_eq_right₀ hx).mp (id (Eq.symm hb)) /- Show `b * a = 1` using the property of no zero divisors -/
+    have hab : a * b = 1 := by /- Prove that `a * b = 1` -/
+      rw [mul_comm a b] /- Use commutativity of multiplication to rewrite `a * b` as `b * a` -/
+      exact hba /- Conclude that `a * b = 1` from `b * a = 1` -/
+    let a' : Rˣ := { /- Define `a'` as a unit in `R` -/
+      val := a, /- The value of `a'` is `a` -/
+      inv := b, /- The inverse of `a'` is `b` -/
+      val_inv := hab, /- The property that `val * inv = 1` -/
+      inv_val := hba /- The property that `inv * val = 1` -/
     }
-    use a'
+    use a' /- Use `a'` to show that `x` is associated with `y` -/
 
-/-
-In a domain, two elements are associated if and only if they divide each other.
--/
 
 lemma isAssociated_iff_divides_divides_of_domain [IsDomain R] (x y : R) :
     IsAssociated x y ↔ (x | y) ∧ (y | x) := by
@@ -117,30 +112,6 @@ lemma isAssociated_iff_divides_divides_of_domain [IsDomain R] (x y : R) :
   · intro ⟨hxy, hyx⟩
     exact isAssociated_of_divides_divides_of_domain x y hxy hyx
 
-/-
-We say an element `x : R` is non-trivial, if it is neither zero nor a unit.
--/
-
-def IsNontrivial (x : R) : Prop := x ≠ 0 ∧ ¬ (IsUnit x)
-
-/-
-An irreducible element `x : R` is a non-trivial element such that whenever `x = a * b`, either `a` is a unit or `b` is a unit.
--/
-
-def IsIrreducible (x : R) : Prop :=
-  IsNontrivial x ∧ ∀ a b, x = a * b → IsUnit a ∨ IsUnit b
-
-
-/-
-An element `x` of a ring is prime, if it is non-trivial and whenever `x` divides a product, it divides one of the factors.
--/
-
-def IsPrime (x : R) : Prop :=
-  IsNontrivial x ∧ ∀ a b, (x | a * b) → (x | a) ∨ (x | b)
-
-/-
-In an integral domain, every prime element is irreducible.
--/
 
 lemma ca_equals_ba [IsDomain R] {a b c: R} (h: a = b) : c*a = c*b := by
   apply mul_eq_mul_left_iff.mpr
@@ -151,6 +122,7 @@ lemma ac_equals_bc [IsDomain R] {a b c: R} (h: a = b) : a*c = b*c := by
   apply mul_eq_mul_right_iff.mpr
   apply Or.inl
   exact h
+
 lemma  is_unit_of_mul_eq_one [IsDomain R] {a b x: R} (h_mul : x = a * b) (hnontrivial: IsNontrivial x) (hxa: Divides x a) : IsUnit b := by
   obtain ⟨c, hxa⟩ := hxa -- a = c * x
   rw [hxa, mul_comm, ←mul_assoc] at h_mul -- rewrite to x = a * b = b * a = b * c * x
@@ -176,33 +148,6 @@ theorem isIrreducible_of_isPrime [IsDomain R] (x : R) (h : IsPrime x) : IsIrredu
         rw[mul_comm]
         exact h_mul
       exact Or.inl (is_unit_of_mul_eq_one h_mul1 hnontrivial hxb)
-
-
-
-
-
-
-
-/-
-Now define factorial rings (also called unique factorization domains) and show that in any factorial ring,
-also the converse of `isIrreducible_of_isPrime` holds, i.e. every irreducible element is prime.
--/
-
-
-def IsFactorialRing (R: Type) [CommRing R] [IsDomain R] [Inhabited R]: Prop := -- Ring has a 0 by default, Inhabited R only done for Lean to stop complaining
-  -- It's based on a ring R
-  -- And every non-zero and non-unit element is factorable into irreducibles
-  (∀ (x : R), x ≠ 0 → ¬IsUnit x → ∃ (factors :List R), ((∀ y ∈ factors, IsIrreducible y) ∧ x=List.prod factors)) ∧
-  -- And such factorisation is unique up to associates and permutation:
-  (
-  ∀ (x : R) (factors1 factors2 : List R), -- there exist 2 lists
-  x ≠ 0 → (¬IsUnit x) → -- for any x in R that is non-zero and non-unit
-  (x = List.prod factors1) → (x = List.prod factors2) → -- such that x is the product of the factors in each list
-  (∀ y ∈ factors1, IsIrreducible y) → (∀ y ∈ factors2, IsIrreducible y) → -- and those lists are made up of irreducibles
-  ((factors1.length=factors2.length) ∧ -- then they are of equal length
-  ∃ σ ∈ factors1.permutations, -- and there exists a permutation of one of them, here called sigma
-  (∀ i : Fin σ.length,  (IsAssociated (σ.get i) (factors2.get! i )))) -- such that sigma_i is associated to factors2_i
-  )
 
 variable {R : Type} [CommRing R] [IsDomain R] [Inhabited R]
 
@@ -280,7 +225,5 @@ theorem isPrime_of_isIrreducible (p : R) (h : IsIrreducible p) (hUFD: IsFactoria
       contradiction
     -- Step 4: Because we're in a UFD,factor a*b and p*c into irreducibles,
     -- and show that the factorisations are the same
-
-
 
 end Algebra'
