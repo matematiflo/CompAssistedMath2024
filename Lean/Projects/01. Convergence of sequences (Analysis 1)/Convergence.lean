@@ -465,8 +465,16 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
         have h2 : 0 ≤ Real.sqrt ((m : ℝ)-1) := by simp [Real.sqrt_nonneg]
         apply le_of_pow_le_pow_left h1 h2
         field_simp
-        -- 1 addieren auf beiden Seiten und dann hm
-        sorry
+        rw [Real.sq_sqrt]
+        rw [le_sub_iff_add_le]
+        · --exact hm
+          sorry
+        · field_simp
+          calc
+          1 ≤  1 + ⌈2/ ε^2⌉₊ := by apply Nat.le_add_right
+          _ = ⌈2/ ε^2⌉₊ + 1 := by ring
+          _ ≤ m := by exact hm
+
     have hle₂ : Real.sqrt 2 / (Real.sqrt ⌈2 / ε^2⌉₊)≤ Real.sqrt 2 / (Real.sqrt (2 / ε^2)) := by
       apply div_le_div_of_nonneg_left
       · exact Real.sqrt_nonneg 2
