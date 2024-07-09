@@ -30,8 +30,17 @@
 
 \begin{document}
 
-\begin{frame}
-    \titlepage
+\begin{frame}[fragile]{Definitions}
+    \begin{definition}
+        A sequence $(a_n)$ is said to be bounded if there exists a real number $C$ such that $|a_n| \leq C$ for all $n \in \mathbb{N}$.
+    \end{definition}
+    \begin{block}{Lean Code}
+        \begin{leancode}
+        def IsBounded (a : ℕ → ℝ) : Prop :=
+        ∃ (C : ℝ), ∀ (n : ℕ), |a n| ≤ C
+        \end{leancode}
+    \end{block}
+
 \end{frame}
 
 \begin{frame}[fragile]{Definitions}
@@ -75,7 +84,7 @@
 \end{frame}
 
 \begin{frame}[fragile]{Lemmas}
-    \begin{lemma}
+    \begin{lemma}[Sandwich Theorem]
         If $(a_n)$, $(b_n)$ and $(c_n)$ are sequences and there exists an $N \in \mathbb{N}$ such that $a_m \leq b_m \leq c_m$ for all $m \geq N$, and both $(a_n)$ and $(c_n)$ converge to $x$, then $(b_n)$ converges to $x$.
     \end{lemma}
 
@@ -92,7 +101,7 @@
 \begin{frame}[fragile]{Lemmas}
     % Your content for the math proof section goes here
     \begin{lemma}
-        
+        The nth root of n to the power of n is equal to n, i.e. $\sqrt[n]{n}^n = n$.
     \end{lemma}
 
     \begin{block}{Lean Code}
