@@ -452,7 +452,7 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
 
   have h₄ : ConvergesTo (fun _ ↦ 1) 1 := by apply ConvergesTo.of_constant
 
-  have h₅' : ConvergesTo (fun n ↦ 1 + Real.sqrt (2/(n-1))) 1 := by
+  have h₅' : ConvergesTo (fun n ↦ 1 + Real.sqrt (2 / (n - 1))) 1 := by
     rw[ConvergesTo.iff']
     intro ε hε
     use ⌈2/ ε^2⌉₊ + 1
@@ -467,8 +467,10 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
         field_simp
         rw [Real.sq_sqrt]
         rw [le_sub_iff_add_le]
-        · --exact hm
-          sorry
+        · rw[← Nat.cast_one]
+          rw[← Nat.cast_add]
+          rw [Nat.cast_le]
+          exact hm
         · field_simp
           calc
           1 ≤  1 + ⌈2/ ε^2⌉₊ := by apply Nat.le_add_right
@@ -480,16 +482,16 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
       · exact Real.sqrt_nonneg 2
       · simp [Real.sqrt_pos]; field_simp
       · apply Real.sqrt_le_sqrt (Nat.le_ceil (2 / ε^2))
-    have h_abs : |Real.sqrt 2 / (Real.sqrt (m-1))| = Real.sqrt 2 / (Real.sqrt (m-1)) := by
+    have h_abs : |Real.sqrt 2 / (Real.sqrt (m - 1))| = Real.sqrt 2 / (Real.sqrt (m - 1)) := by
       apply abs_of_pos
       apply div_pos
       · simp [Real.sqrt_pos];
       · simp [Real.sqrt_pos];
         calc
-        1 < 1 + ⌈2/ ε^2⌉₊ := by
-          have h1 : 0 < ⌈2/ ε^2⌉₊ := by field_simp
+        1 < 1 + ⌈2 / ε^2⌉₊ := by
+          have h1 : 0 < ⌈2 / ε^2⌉₊ := by field_simp
           apply Nat.lt_add_of_pos_right h1
-        _ = ⌈2/ ε^2⌉₊ + 1 := by ring
+        _ = ⌈2 / ε^2⌉₊ + 1 := by ring
         _ ≤ m := by exact hm
     simp
     calc
