@@ -1,5 +1,4 @@
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
-set_option pp.all true
 
 example {R : Type} [CommRing R] [IsDomain R] (x y : R) (hx : x ≠ 0) (h : x * y = x) : y = 1 := by
   exact (mul_eq_left₀ hx).mp h
@@ -151,6 +150,12 @@ lemma ac_equals_bc [IsDomain R] {a b c: R} (h: a = b) : a*c = b*c := by
   apply mul_eq_mul_right_iff.mpr
   apply Or.inl
   exact h
+/-
+lemma non_trivial_prod_is_non_trivial [IsDomain R] (a b: R) (hnontr_a: IsNontrivial a) (hnontr_b: IsNontrivial b): IsNontrivial (a * b) := by
+  obtain ⟨ hnonzero_a, hunit_a⟩ := hnontr_a
+  obtain ⟨ hnonzero_b, hunit_b⟩ := hnontr_b
+ -/
+
 lemma  is_unit_of_mul_eq_one [IsDomain R] {a b x: R} (h_mul : x = a * b) (hnontrivial: IsNontrivial x) (hxa: Divides x a) : IsUnit b := by
   obtain ⟨c, hxa⟩ := hxa -- a = c * x
   rw [hxa, mul_comm, ←mul_assoc] at h_mul -- rewrite to x = a * b = b * a = b * c * x
@@ -189,13 +194,13 @@ also the converse of `isIrreducible_of_isPrime` holds, i.e. every irreducible el
 -/
 
 
-def IsFactorialRing (R: Type) [CommRing R] [IsDomain R] [Inhabited R]: Prop := -- Ring has a 0 by default, Inhabited R only done for Lean to stop complaining
+def IsFactorialRing (D: Type) [CommRing D] [IsDomain D] [Inhabited D]: Prop := -- Ring has a 0 by default, Inhabited R only done for Lean to stop complaining
   -- It's based on a ring R
   -- And every non-zero and non-unit element is factorable into irreducibles
-  (∀ (x : R), x ≠ 0 → ¬IsUnit x → ∃ (factors :List R), ((∀ y ∈ factors, IsIrreducible y) ∧ x=List.prod factors)) ∧
+  (∀ (x : D), x ≠ 0 → ¬IsUnit x → ∃ (factors :List D), ((∀ y ∈ factors, IsIrreducible y) ∧ x=List.prod factors)) ∧
   -- And such factorisation is unique up to associates and permutation:
   (
-  ∀ (x : R) (factors1 factors2 : List R), -- there exist 2 lists
+  ∀ (x : D) (factors1 factors2 : List D), -- there exist 2 lists
   x ≠ 0 → (¬IsUnit x) → -- for any x in R that is non-zero and non-unit
   (x = List.prod factors1) → (x = List.prod factors2) → -- such that x is the product of the factors in each list
   (∀ y ∈ factors1, IsIrreducible y) → (∀ y ∈ factors2, IsIrreducible y) → -- and those lists are made up of irreducibles
@@ -204,9 +209,9 @@ def IsFactorialRing (R: Type) [CommRing R] [IsDomain R] [Inhabited R]: Prop := -
   (∀ i : Fin σ.length,  (IsAssociated (σ.get i) (factors2.get! i )))) -- such that sigma_i is associated to factors2_i
   )
 
-variable {R : Type} [CommRing R] [IsDomain R] [Inhabited R]
+variable {D : Type} [CommRing D] [IsDomain D] [Inhabited D]
 
-lemma isPrime_of_isIrreducible (p : R) (h : IsIrreducible p) (hUFD: IsFactorialRing R): IsPrime p := by
+lemma isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactorialRing D): IsPrime p := by
   obtain ⟨hnontrivial, hirr⟩ := h
   constructor
   · exact hnontrivial
@@ -280,7 +285,96 @@ lemma isPrime_of_isIrreducible (p : R) (h : IsIrreducible p) (hUFD: IsFactorialR
       contradiction
     -- Step 4: Because we're in a UFD,factor a*b and p*c into irreducibles,
     -- and show that the factorisations are the same
+    obtain ⟨ hfactorisable, hunique ⟩ := hUFD
+    obtain ⟨factors_a, hfactor_a_irreducible, hprodfactors_a⟩ := hfactorisable a ha hunit_a
+    obtain ⟨factors_b, hfactor_b_irreducible, hprodfactors_b⟩ := hfactorisable b hb hunit_b
+    obtain ⟨factors_c, hfactor_c_irreducible, hprodfactors_c⟩ := hfactorisable c hzero_c hunit_c
+    -- we factorised a, b, c into irreducibles
+    have habneq0 : a*b ≠ 0 := by simp[ha, hb]
+    have habnotunit: ¬ IsUnit (a*b) := by
+        intro hunit -- proof by contradiction
+        have hunit_b': IsUnit b := by -- more precisely, we show that b is a unit
+          obtain ⟨u, hu⟩ := hunit -- u * 1 = a * b
+          have humul' : b * (u⁻¹ * a) = 1  := by -- rewrite it
+            have hu': u * 1 = (a * b) := by simp[hu]
+            have humul : 1 = u⁻¹ * (a * b) := by
+              apply (Units.eq_inv_mul_iff_mul_eq u).mpr hu'
+            simp[humul]
+            ring
+          -- and use theorem that if b * x = 1, then b is a unit
+          exact isUnit_of_mul_eq_one b (u⁻¹ * a) humul'
+        contradiction
+    -- here we factors non-trivial a*b in 2 different ways:
+    -- a*b = prod (a_i) * prod (b_i)
+    let factors_ab := factors_a ++ factors_b
+    have hfactor_ab_irreducible : ∀ y ∈ factors_ab, IsIrreducible y := by
+      intros y hy
+      simp[factors_ab] at hy
+      rcases hy with hya | hyb
+      · exact hfactor_a_irreducible y hya
+      · exact hfactor_b_irreducible y hyb
+    have hprodfactors_ab : a*b = List.prod factors_ab := by
+      simp[factors_ab, hprodfactors_a, hprodfactors_b]
+    -- a * b = c * p=prod (c_i) * p
+    let factors_pc := [p] ++ factors_c  -- note that p is irreducible itself, so every element in [p] is irreducible
+    have hprodfactors_pc : a*b = List.prod factors_pc := by
+      simp[factors_pc, hprodfactors_c, hdiv]
+      ring
+    have hfactor_pc_irreducible : ∀ y ∈ factors_pc, IsIrreducible y := by
+      intros y hy
+      simp[factors_pc] at hy
+      rcases hy with rfl | hy
+      · exact ⟨hnontrivial, hirr⟩ -- we split IsIrreducible p into those 2 before
+      · exact hfactor_c_irreducible y hy
+    -- now we use the uniqueness of factorisation in UFD
+    -- namely, the 2 factorisations of a*b must be associate up to reordering:
+    -- they are the same length:
+    obtain hlength := (hunique (a*b) factors_ab factors_pc habneq0 habnotunit hprodfactors_ab hprodfactors_pc hfactor_ab_irreducible hfactor_pc_irreducible).1
+    -- (trust is we just wrote up every part of the definition of this property)
+    -- and there exists a permutation of factors_pc that makes it associate to factors_ab:
+    obtain ⟨σ, hσ, hσassoc⟩ := (hunique (a*b) factors_ab factors_pc habneq0 habnotunit hprodfactors_ab hprodfactors_pc hfactor_ab_irreducible hfactor_pc_irreducible).2
+    -- we now show that p is associate to one of the factors in factors_ab
+    -- have hσlen : factors_pc.length = factors_ab.length := by
+    --   rw [hlength]
+    -- we need to show that p is associated to one of the factors in factors_ab
+    -- but since in the definition we have only indexes of elements, we need to find the index of p in factors_pc
+    have hpassociatedwithab_i: (∃ i : Fin σ.length, IsAssociated p (σ.get i) ) := by
+      use factors_pc.findIndex (x = p)
+      have hphasnumberj : ∃ j : Fin σ.length, p = factors_pc.get! j := by
+        have hpfactor : p = factors_pc.get! 0 := by
+          simp[factors_pc]
+        -- we need σ.length>0 to be able to translate 0 from ℕ to Fin σ.length
+        have hσlengthgr0 : σ.length > 0 := by
+          have hpclengthgr0 : factors_pc.length > 0 := by
+            have hfactors_pc_isnotnull : ¬factors_pc = [] := by
+              intro hf
+              simp[factors_pc] at hf -- how the fuck did it work
+            exact (List.length_pos_iff_ne_nil.mpr hfactors_pc_isnotnull)
+          -- apply List.Perm.length_eq hσ
+        -- we provide (σ.length-1).succ = σ.length
+
+
+
+
+
 
 
 
 end Algebra'
+
+-- this has been at the beginning of step 4, may be we shall need it
+/-
+  have habneq0 : a*b ≠ 0 := by simp[ha, hb]
+  have hpcneq0 : p*c ≠ 0 := by simp[hzero_c, hnontrivial.left]
+  have abnotunit: ¬ IsUnit (a*b) := by -- why the fuck did I need it?
+      intro hunit
+      obtain ⟨u, hu⟩ := hunit
+      have hu': u * 1 = (a * b) := by simp[hu]
+      have humul : 1 = u⁻¹ * (a * b) := by
+        apply (Units.eq_inv_mul_iff_mul_eq u).mpr hu'
+      have humul' : b * (u⁻¹ * a) = 1  := by
+        simp[humul]
+        ring
+      have hunit_b': IsUnit b := by
+        exact isUnit_of_mul_eq_one b (u⁻¹ * a) humul'
+      contradiction  -/
