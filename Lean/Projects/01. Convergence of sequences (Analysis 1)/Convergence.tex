@@ -16,7 +16,7 @@
 \usetheme{Madrid}
 
 % Title page
-\title{Convergence of the nth Root of n in Lean}
+\title{Convergence of the nth Root of n in Lean4}
 \author{Sophie Weber, David Leeb}
 \date{16.07.2024}
 
@@ -40,7 +40,7 @@
     \end{definition}
     
     \begin{block}{Lean Code}
-        \begin{leancode}
+    \begin{leancode}
         def ConvergesTo (a : ℕ → ℝ) (x : ℝ) : Prop :=
         ∀ ε > 0, ∃ (n : ℕ), ∀ m ≥ n, |a m - x| < ε
     \end{leancode}
