@@ -211,7 +211,7 @@ def IsFactorialRing (D: Type) [CommRing D] [IsDomain D] [Inhabited D]: Prop := -
 
 variable {D : Type} [CommRing D] [IsDomain D] [Inhabited D]
 
-lemma isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactorialRing D): IsPrime p := by
+theorem isPrime_of_isIrreducible (p : R) (h : IsIrreducible p) (hUFD: IsFactorialRing R): IsPrime p := by
   obtain ⟨hnontrivial, hirr⟩ := h
   constructor
   · exact hnontrivial
