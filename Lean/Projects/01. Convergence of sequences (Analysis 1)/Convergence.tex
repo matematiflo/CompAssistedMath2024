@@ -90,7 +90,7 @@
 \end{frame}
 
 \begin{frame}{Math Proof}
-    \begin{proofs}
+    \begin{proofs}[Proof continued]
         Note that for any positive integer $n \geq 1$, we have $1 \leq \sqrt[n]{n}$. This follows from: 
         \begin{align*}
             1 &\leq n \\
@@ -102,12 +102,12 @@
         \begin{align*}
             1 + d_n = \sqrt[n]{n}
         \end{align*}
-        for a suitable sequence $(d_n)$.\\
+        for a suitable sequence $(d_n)$ given by: $(d_n) := \sqrt[n]{n} -1 $\\
     \end{proofs}
 \end{frame}
 \begin{frame}{Math Proof}
-    \begin{proofs}
-        To find the second sequence $(c_n)$, we want to show that $\sqrt[n]{n} \leq 1 + \frac{2}{\sqrt{n}}$. For $n \geq 2$ this follows from:
+    \begin{proofs}[Proof continued]
+        To find the second sequence $(c_n)$, we want to show that $\sqrt[n]{n} \leq 1 + \sqrt{\frac{2}{n-1}}$. For $n \geq 2$ this follows from:
         \begin{align*}
             n = \sqrt[n]{n}^n & = (1 + d_n)^n \\
             & = \sum_{k=0}^{n} \binom{n}{k} \cdot d_n^k \\
@@ -119,7 +119,7 @@
 \end{frame}
 
 \begin{frame}{Math Proof}
-    \begin{proofs}
+    \begin{proofs}[Proof continued]
         What we have so far:
         \begin{align*}
             n & \geq \frac{n \cdot (n-1)}{2} \cdot d_n^2
@@ -129,7 +129,7 @@
             \Leftrightarrow d_n^2 & \leq \frac{2}{n-1} \\
             \Leftrightarrow d_n & \leq \sqrt{\frac{2}{n-1}}
         \end{align*} 
-        Now, we can conclude:
+        We can conclude:
         \begin{align*}
             \sqrt[n]{n} = 1 + d_n & \leq 1 + \sqrt{\frac{2}{n-1}}
         \end{align*}
@@ -139,13 +139,13 @@
 
 
 \begin{frame}{Math Proof}
-    \begin{proofs}
+    \begin{proofs}[Proof continued]
         Now we have the sequences $(b_n)$ and $(c_n)$:
         \begin{align*}
             b_n & = 1 \\
             c_n & = 1 + \sqrt{\frac{2}{n-1}}
         \end{align*}
-        We still have to show, that both sequences converge to 1, which is easy to see:
+        We still have to show, that both sequences converge to 1:
         \[
         \lim_{n \to \infty} 1 = 1
         \]
@@ -157,8 +157,8 @@
 \end{frame}
 
 \begin{frame}{Math Proof}
-    \begin{proof}
-        Using what we have previously shown, we have:
+    \begin{proof}[Proof continued]
+        Using what we have previously shown, we get:
         \begin{align*}
             1 \leq \sqrt[n]{n} \leq 1 + \sqrt{\frac{2}{n-1}}
         \end{align*}
