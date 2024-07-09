@@ -105,6 +105,12 @@ lemma isAssociated_of_divides_divides_of_domain [IsDomain R] (x y : R) (hxy : x 
     }
     use a'
 
+
+lemma isAssociated_is_symmetric (x y: R) (h : IsAssociated x y) : IsAssociated y x := by
+  obtain ⟨a, rfl⟩ := h
+  use a⁻¹
+  exact (Units.eq_inv_mul_iff_mul_eq a).mpr rfl
+
 /-
 In a domain, two elements are associated if and only if they divide each other.
 -/
@@ -192,9 +198,12 @@ theorem isIrreducible_of_isPrime [IsDomain R] (x : R) (h : IsPrime x) : IsIrredu
 Now define factorial rings (also called unique factorization domains) and show that in any factorial ring,
 also the converse of `isIrreducible_of_isPrime` holds, i.e. every irreducible element is prime.
 -/
+noncomputable instance (D: Type) [CommRing D] : Inhabited D := by
+  exact Classical.inhabited_of_nonempty'
 
 
-def IsFactorialRing (D: Type) [CommRing D] [IsDomain D] [Inhabited D]: Prop := -- Ring has a 0 by default, Inhabited R only done for Lean to stop complaining
+
+def IsFactorialRing (D: Type) [CommRing D] [IsDomain D]: Prop := -- Ring has a 0 by default, Inhabited R only done for Lean to stop complaining
   -- It's based on a ring R
   -- And every non-zero and non-unit element is factorable into irreducibles
   (∀ (x : D), x ≠ 0 → ¬IsUnit x → ∃ (factors :List D), ((∀ y ∈ factors, IsIrreducible y) ∧ x=List.prod factors)) ∧
@@ -209,9 +218,10 @@ def IsFactorialRing (D: Type) [CommRing D] [IsDomain D] [Inhabited D]: Prop := -
   (∀ i : Fin σ.length,  (IsAssociated (σ.get i) (factors2.get! i )))) -- such that sigma_i is associated to factors2_i
   )
 
-variable {D : Type} [CommRing D] [IsDomain D] [Inhabited D]
 
-theorem isPrime_of_isIrreducible (p : R) (h : IsIrreducible p) (hUFD: IsFactorialRing R): IsPrime p := by
+variable {D : Type} [CommRing D] [IsDomain D]
+
+theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactorialRing D): IsPrime p := by
   obtain ⟨hnontrivial, hirr⟩ := h
   constructor
   · exact hnontrivial
@@ -339,7 +349,6 @@ theorem isPrime_of_isIrreducible (p : R) (h : IsIrreducible p) (hUFD: IsFactoria
     -- we need to show that p is associated to one of the factors in factors_ab
     -- but since in the definition we have only indexes of elements, we need to find the index of p in factors_pc
     have hpassociatedwithab_i: (∃ i : Fin σ.length, IsAssociated p (σ.get i) ) := by
-      use factors_pc.findIndex (x = p)
       have hphasnumberj : ∃ j : Fin σ.length, p = factors_pc.get! j := by
         have hpfactor : p = factors_pc.get! 0 := by
           simp[factors_pc]
@@ -350,8 +359,27 @@ theorem isPrime_of_isIrreducible (p : R) (h : IsIrreducible p) (hUFD: IsFactoria
               intro hf
               simp[factors_pc] at hf -- how the fuck did it work
             exact (List.length_pos_iff_ne_nil.mpr hfactors_pc_isnotnull)
+          have hequallength : σ.length = factors_pc.length  := by
+            rw[<-hlength]
+            apply List.Perm.length_eq
+            exact List.mem_permutations.mp hσ
+          rw[hequallength]
+          exact hpclengthgr0
+        use @Fin.ofNat' σ.length 0 hσlengthgr0
+        exact hpfactor
+
           -- apply List.Perm.length_eq hσ
         -- we provide (σ.length-1).succ = σ.length
+      obtain ⟨j, hfactorspc_j_equals_p⟩ := hphasnumberj
+      use j
+      rw[hfactorspc_j_equals_p]
+      -- specialize hσassoc j
+      have hp_associated_with_j : IsAssociated (σ.get j) (factors_pc.get! ↑j) := by
+        exact hσassoc j
+      exact isAssociated_is_symmetric (σ.get j) (factors_pc.get! ↑j) hp_associated_with_j
+    have hp_assoc_a_or_b:
+      (∃ a ∈ factors_a, IsAssociated a p) ∨
+      (∃ b ∈ factors_b, IsAssociated b p) := by
 
 
 
