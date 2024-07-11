@@ -35,10 +35,6 @@ lemma zero_of_zero_divides (x : R) (hx : 0 | x) : x = 0 := by
 lemma everything_divides_zero (x : R) : x | 0 := by
   use 0
   simp
-/-
-Hint: If you want to know what a specific tactic does, use the `#help tactic` command. For example:
--/
-
 
 /-
 If `x` divides a non-zero element `y`, `x` is non-zero.
@@ -56,13 +52,28 @@ We say that `x` and `y` are associated if and only if `x` and `y` agree up to a 
 def IsAssociated (x y : R) : Prop :=
   ∃ (a : Rˣ), y = a * x
 
-/-
-Every element is associated to itself.
--/
 
+-- it's reflective:
 lemma isAssociated_of_eq (x : R) : IsAssociated x x := by
   use 1
   simp
+
+-- it's symmetric:
+lemma isAssociated_is_symmetric (x y: R) (h : IsAssociated x y) : IsAssociated y x := by
+  obtain ⟨a, rfl⟩ := h
+  use a⁻¹
+  exact (Units.eq_inv_mul_iff_mul_eq a).mpr rfl
+
+-- and transitive:
+lemma isAssociated_is_transitive (x y z: R) (hxy : IsAssociated x y) (hyz : IsAssociated y z) : IsAssociated x z := by
+  obtain ⟨a, ha⟩ := hxy
+  obtain ⟨b, hb⟩ := hyz
+  subst ha
+  rw[<-mul_assoc] at hb
+  subst hb
+  use (b * a)
+  sorry
+
 
 /-
 If two elements are associated, they divide each other.
@@ -106,10 +117,6 @@ lemma isAssociated_of_divides_divides_of_domain [IsDomain R] (x y : R) (hxy : x 
     use a'
 
 
-lemma isAssociated_is_symmetric (x y: R) (h : IsAssociated x y) : IsAssociated y x := by
-  obtain ⟨a, rfl⟩ := h
-  use a⁻¹
-  exact (Units.eq_inv_mul_iff_mul_eq a).mpr rfl
 
 /-
 In a domain, two elements are associated if and only if they divide each other.
@@ -129,7 +136,8 @@ We say an element `x : R` is non-trivial, if it is neither zero nor a unit.
 def IsNontrivial (x : R) : Prop := x ≠ 0 ∧ ¬ (IsUnit x)
 
 /-
-An irreducible element `x : R` is a non-trivial element such that whenever `x = a * b`, either `a` is a unit or `b` is a unit.
+An irreducible element `x : R` is a non-trivial element such that whenever `x = a * b`,
+either `a` is a unit or `b` is a unit.
 -/
 
 def IsIrreducible (x : R) : Prop :=
@@ -147,61 +155,7 @@ def IsPrime (x : R) : Prop :=
 In an integral domain, every prime element is irreducible.
 -/
 
-lemma ca_equals_ba [IsDomain R] {a b c: R} (h: a = b) : c*a = c*b := by
-  apply mul_eq_mul_left_iff.mpr
-  apply Or.inl
-  exact h
 
-lemma ac_equals_bc [IsDomain R] {a b c: R} (h: a = b) : a*c = b*c := by
-  apply mul_eq_mul_right_iff.mpr
-  apply Or.inl
-  exact h
-
-
-lemma units_dont_break_divisibility [IsDomain R] {a b c p : R} (hunit_a : IsUnit a) (hdiv : a * b = c * p) : (p | b) := by
-  -- we simply multiply by a⁻¹
-  -- and use (a⁻¹ * c) * p = b
-  obtain ⟨u, hu⟩ := hunit_a
-
-  have hmul :   b = ↑u⁻¹ * (c * p) := by
-    subst hu
-    refine (Units.eq_inv_mul_iff_mul_eq u).mpr ?_
-    exact hdiv
-  simp[<-mul_assoc] at hmul
-  use c * ↑u⁻¹
-  subst hmul
-  ring
-
-/-
-lemma non_trivial_prod_is_non_trivial [IsDomain R] (a b: R) (hnontr_a: IsNontrivial a) (hnontr_b: IsNontrivial b): IsNontrivial (a * b) := by
-  obtain ⟨ hnonzero_a, hunit_a⟩ := hnontr_a
-  obtain ⟨ hnonzero_b, hunit_b⟩ := hnontr_b
- -/
-
-
-lemma factor_divides_prod [IsDomain R] {a a_i : R} {factors_a : List R} (hfactors: a=factors_a.prod) (ha_i: a_i ∈ factors_a) : a_i | a := by
-  obtain ⟨s, t, hsplit⟩ := (List.append_of_mem ha_i)
-  simp[List.prod_cons, hsplit] at hfactors
-  use s.prod * t.prod
-  simp[hfactors]
-  ring
-
-lemma factor_associate_divides_prod [IsDomain R] {a p : R} {factors_a : List R}
- (hprodfactors_a : a = factors_a.prod) (hpa: ∃ a ∈ factors_a, IsAssociated a p):
-  (p | a) := by
-  -- name a_i the factor of a that is associated to p
-  obtain ⟨a_i, ha_i, hp_assoc_a_i⟩ := hpa
-
-  -- p * u = a_i by lemma
-  obtain ⟨u, hu⟩ := ((isAssociated_iff_divides_divides_of_domain a_i p).mp hp_assoc_a_i).2
-  -- a_i * a_rest = a by another lemma and the fact that a_i is in factors_a
-  obtain ⟨a_rest, a_rest_div⟩  := factor_divides_prod hprodfactors_a ha_i
-
-  -- so a = p * u * a_rest, thus p|a
-  subst hu
-  use a_rest * u
-  simp[a_rest_div]
-  ring
 
 
 lemma  is_unit_of_mul_eq_one [IsDomain R] {a b x: R} (h_mul : x = a * b) (hnontrivial: IsNontrivial x) (hxa: Divides x a) : IsUnit b := by
@@ -229,10 +183,6 @@ theorem isIrreducible_of_isPrime [IsDomain R] (x : R) (h : IsPrime x) : IsIrredu
         rw[mul_comm]
         exact h_mul
       exact Or.inl (is_unit_of_mul_eq_one h_mul1 hnontrivial hxb)
-
-
-
-
 
 
 
@@ -267,10 +217,53 @@ def IsFactorialRing (D: Type) [CommRing D] [IsDomain D]: Prop :=
 
 
 variable {D : Type} [CommRing D] [IsDomain D]
---variable {factors_a factors_b factors_pc σ : list D}
---def factors_ab := factors_a ++ factors_b
--- variable {a b c p : D}
 
+
+-- now a ** a few ** lemmas for the inverse theorem
+
+-- if ab=pc and a is a unit, then p|b
+-- we simply multiply by a⁻¹
+-- and use (a⁻¹ * c) * p = b
+lemma units_dont_break_divisibility [IsDomain R] {a b c p : R} (hunit_a : IsUnit a) (hdiv : a * b = c * p) : (p | b) := by
+  obtain ⟨u, hu⟩ := hunit_a
+
+  have hmul :   b = ↑u⁻¹ * (c * p) := by
+    subst hu
+    refine (Units.eq_inv_mul_iff_mul_eq u).mpr ?_
+    exact hdiv
+  simp[<-mul_assoc] at hmul
+  use c * ↑u⁻¹
+  subst hmul
+  ring
+
+
+-- if a_i∈ factors_a, factors_a.prod = a, then a_i | a
+lemma factor_divides_prod [IsDomain R] {a a_i : R} {factors_a : List R} (hfactors: a=factors_a.prod) (ha_i: a_i ∈ factors_a) : a_i | a := by
+  obtain ⟨s, t, hsplit⟩ := (List.append_of_mem ha_i)
+  simp[List.prod_cons, hsplit] at hfactors
+  use s.prod * t.prod
+  simp[hfactors]
+  ring
+
+-- if a_i is associated to p, then p|a, a_i as in previous lemma
+lemma factor_associate_divides_prod [IsDomain R] {a p : R} {factors_a : List R}
+ (hprodfactors_a : a = factors_a.prod) (hpa: ∃ a ∈ factors_a, IsAssociated a p):
+  (p | a) := by
+  -- name a_i the factor of a that is associated to p
+  obtain ⟨a_i, ha_i, hp_assoc_a_i⟩ := hpa
+
+  -- p * u = a_i by lemma
+  obtain ⟨u, hu⟩ := (divides_divides_of_isAssociated a_i p hp_assoc_a_i).right
+  -- a_i * a_rest = a by another lemma and the fact that a_i is in factors_a
+  obtain ⟨a_rest, a_rest_div⟩  := factor_divides_prod hprodfactors_a ha_i
+
+  -- so a = p * u * a_rest, thus p|a
+  subst hu
+  use a_rest * u
+  simp[a_rest_div]
+  ring
+
+-- c in the main theorem can't be a unit:
 
 lemma c_is_non_unit {a b c p : D} (hdiv : a * b = c * p) (hirr : ∀ (a b : D), p = a * b → IsUnit a ∨ IsUnit b)
   (hunit_a : ¬IsUnit a) (hunit_b : ¬IsUnit b) : ¬IsUnit c := by
@@ -321,6 +314,8 @@ lemma c_is_non_unit {a b c p : D} (hdiv : a * b = c * p) (hirr : ∀ (a b : D), 
 
     contradiction -- to ¬IsUnit b
 
+-- product of 2 units is not a unit
+
 lemma product_of_non_units_is_non_unit {a b: D} (hunit_b : ¬IsUnit b) : ¬IsUnit (a * b) := by
   intro hunit -- proof by contradiction
 
@@ -341,6 +336,8 @@ lemma product_of_non_units_is_non_unit {a b: D} (hunit_b : ¬IsUnit b) : ¬IsUni
     exact isUnit_of_mul_eq_one b (u⁻¹ * a) humul'
   contradiction
 
+
+-- from Step 4.6: p is associate to one of the factors in factors_ab
 lemma fin_σ_has_index_for_p {factors_pc factors_c factors_ab σ : List D} {p: D} (h: factors_pc = [p]++factors_c)
  (hlength : factors_ab.length = factors_pc.length) (hσ : σ ∈ factors_ab.permutations) :
  (∃ j : Fin σ.length, p = factors_pc.get! j) := by
@@ -375,7 +372,7 @@ lemma fin_σ_has_index_for_p {factors_pc factors_c factors_ab σ : List D} {p: D
   use @Fin.ofNat' σ.length 0 hσlengthgr0
   exact hpfactor
 
-
+-- also from 4.6
 lemma p_has_an_associate_in_ab {factors_pc factors_c factors_ab σ : List D} {p: D} (h: factors_pc = [p]++factors_c)
  (hlength : factors_ab.length = factors_pc.length) (hσ : σ ∈ factors_ab.permutations)
  (hσassoc : ∀ i : Fin σ.length, IsAssociated (σ.get i) (factors_pc.get! i)) :
@@ -536,20 +533,3 @@ theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactoria
 
 
 end Algebra'
-
--- this has been at the beginning of step 4, may be we shall need it
-/-
-  have habneq0 : a*b ≠ 0 := by simp[ha, hb]
-  have hpcneq0 : p*c ≠ 0 := by simp[hzero_c, hnontrivial.left]
-  have abnotunit: ¬ IsUnit (a*b) := by -- why the fuck did I need it?
-      intro hunit
-      obtain ⟨u, hu⟩ := hunit
-      have hu': u * 1 = (a * b) := by simp[hu]
-      have humul : 1 = u⁻¹ * (a * b) := by
-        apply (Units.eq_inv_mul_iff_mul_eq u).mpr hu'
-      have humul' : b * (u⁻¹ * a) = 1  := by
-        simp[humul]
-        ring
-      have hunit_b': IsUnit b := by
-        exact isUnit_of_mul_eq_one b (u⁻¹ * a) humul'
-      contradiction  -/
