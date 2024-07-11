@@ -163,6 +163,14 @@ lemma non_trivial_prod_is_non_trivial [IsDomain R] (a b: R) (hnontr_a: IsNontriv
  -/
 
 
+lemma factor_divides_prod [IsDomain R] {a a_i : R} {factors_a : List R} (hfactors: a=factors_a.prod) (ha_i: a_i ∈ factors_a) : a_i | a := by
+  obtain ⟨s, t, hsplit⟩ := (List.append_of_mem ha_i)
+  simp[List.prod_cons, hsplit] at hfactors
+  use s.prod * t.prod
+  simp[hfactors]
+  ring
+
+
 lemma  is_unit_of_mul_eq_one [IsDomain R] {a b x: R} (h_mul : x = a * b) (hnontrivial: IsNontrivial x) (hxa: Divides x a) : IsUnit b := by
   obtain ⟨c, hxa⟩ := hxa -- a = c * x
   rw [hxa, mul_comm, ←mul_assoc] at h_mul -- rewrite to x = a * b = b * a = b * c * x
@@ -418,9 +426,6 @@ theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactoria
         --refine List.mem_of_elem_eq_true ?_
         -- exact List.get_mem σ i
       -- and p is associated to σ.get i
-
-      have hp_associated_to_ab : ∃ a ∈ factors_ab, IsAssociated p a := by
-        use σ.get i
       have hσ_i_in_a_or_b: (σ.get i) ∈ factors_a ∨ (σ.get i) ∈ factors_b := by
         exact (List.mem_append.mp hσiinab')
       -- we know that σ get i is in factors_a or factors_b
@@ -442,8 +447,19 @@ theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactoria
     · left
       obtain ⟨a_i, ha_i, hp_assoc_a_i⟩ := hpa
       obtain ⟨u, hu⟩ := (isAssociated_is_symmetric a_i p hp_assoc_a_i)
-
-      -- we can use fucking factors_a \ {a_i} ? hard
+      obtain ⟨a_rest, a_rest_div⟩  := factor_divides_prod hprodfactors_a ha_i
+      subst hu
+      use a_rest * u
+      simp[a_rest_div]
+      ring
+    · right
+      obtain ⟨b_i, hb_i, hp_assoc_b_i⟩ := hpb
+      obtain ⟨u, hu⟩ := (isAssociated_is_symmetric b_i p hp_assoc_b_i)
+      obtain ⟨b_rest, b_rest_div⟩  := factor_divides_prod hprodfactors_b hb_i
+      subst hu
+      use b_rest * u
+      simp[b_rest_div]
+      ring
 
 
 
