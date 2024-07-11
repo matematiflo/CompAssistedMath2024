@@ -5,18 +5,15 @@
 \usepackage{amssymb}
 
 \usepackage{fontspec}
-% switch to a monospace font supporting more Unicode characters
 \setmonofont{FreeMono}
 \usepackage{minted}
 \newmintinline[lean]{lean4}{bgcolor=white}
-\newminted[leancode]{lean4}{fontsize=\footnotesize}
-\usemintedstyle{tango}  % a nice, colorful theme
+\newminted[leancode]{lean4}{fontsize=\small}
+\usemintedstyle{tango}
 
-% Theme
 \usetheme{Madrid}
 
-% Title page
-\title{Convergence of the nth Root of n in Lean4}
+\title{Convergence of $\sqrt[n]{n}$ in Lean4}
 \author{Sophie Weber, David Leeb}
 \date{16.07.2024}
 
@@ -34,28 +31,27 @@
 \end{frame}
 
 \begin{frame}[fragile]{Definitions}
-    % Your content for the introduction section goes here
     \begin{definition}[Convergence of a sequence]
         The sequence $(a_n)$ converges to $x$ if for every $\epsilon > 0$ there exists an $N \in \mathbb{N}$ such that for all $n \geq N$ we have $|a_n - x| < \epsilon$.
     \end{definition}
     
     \begin{block}{Lean Code}
-    \begin{leancode}
-        def ConvergesTo (a : ℕ → ℝ) (x : ℝ) : Prop :=
-        ∀ ε > 0, ∃ (n : ℕ), ∀ m ≥ n, |a m - x| < ε
-    \end{leancode}
+        \centering
+        \begin{leancode}
+def ConvergesTo (a : ℕ → ℝ) (x : ℝ) : Prop := 
+    ∀ ε > 0, ∃ (n : ℕ), ∀ m ≥ n, |a m - x| < ε
+\end{leancode}
     \end{block}
 \end{frame}
 
 \begin{frame}[fragile]{Lemmas}
-    % Your content for the lemmas section goes here
     \begin{lemma}[Convergence of a constant sequence]
         Let $(a_n)$ be a constant sequence with $a_n = x$ for all $n$. Then $(a_n)$ converges to $x$.
     \end{lemma}
 
     \begin{block}{Lean Code}
     \begin{leancode}
-    theorem of_constant (x : ℝ) : ConvergesTo (fun _ ↦ x) x
+theorem of_constant (x : ℝ) : ConvergesTo (fun _ ↦ x) x
     \end{leancode}
     \end{block}
 \end{frame}
@@ -67,18 +63,15 @@
 
     \begin{block}{Lean Code}
     \begin{leancode}
-    theorem sandwich (a b c : ℕ → ℝ) 
-    (h : ∃ (n : ℕ), ∀ m ≥ n , a m ≤ b m ∧ b m ≤ c m) (x : ℝ)
-    (ha : ConvergesTo a x) (hb : ConvergesTo c x) :
+theorem sandwich (a b c : ℕ → ℝ) 
+(h : ∃ (n : ℕ), ∀ m ≥ n , a m ≤ b m ∧ b m ≤ c m) (x : ℝ)
+(ha : ConvergesTo a x) (hb : ConvergesTo c x) :
     ConvergesTo b x
     \end{leancode}
     \end{block}
 \end{frame}
 
-
-
 \begin{frame}{Math Proof}
-    % Your content for the math proof section goes here
     \begin{block}{Example}
         The sequence $(a_n)$ defined by $a_n = \sqrt[n]{n}$ converges to 1.
     \end{block}
@@ -166,10 +159,6 @@
         We can now apply the Sandwich Theorem to conclude that $\lim_{n \to \infty} \sqrt[n]{n} = 1$.
     \end{proof}
 
-\end{frame}
-
-\begin{frame}{Proof in Lean}
-    % Your content for the proof in Lean section goes here
 \end{frame}
 
 \end{document}

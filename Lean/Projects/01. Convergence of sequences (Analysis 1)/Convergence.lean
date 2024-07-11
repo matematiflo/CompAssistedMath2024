@@ -309,45 +309,19 @@ For convenience, we define the `n`-th root of `x : ℝ`.
 
 noncomputable def Nat.root (n : ℕ) (x : ℝ) : ℝ := Real.rpow x (1 / n)
 
-/-
-The `n`-th root of `n` to the power of `n` is `n`.
--/
-
-lemma nthRoot_pow (n : ℕ) (h : n ≥ 1) : (n.root n) ^ n = n := by
---lemma nthRoot_pow (n : ℕ) : (n.root n) ^ n = n := by
-  simp [Nat.root]
-  convert_to Real.rpow (Real.rpow n (1 / n)) n = n
-  · simp
-  · simp only [Real.rpow_eq_pow]
-    rw [← Real.rpow_mul (Nat.cast_nonneg n)]
-    field_simp
+-------------------------------------------------------------------
 
 /-
 The sequence of the `n`-th root of `n` converges to `1`.
 -/
 
-noncomputable def a (n : ℕ) : ℝ := n.root n - 1
+-------------------------------------------------------------------
 
-example : ConvergesTo (fun n ↦ n.root n) 1 := by
+/-
+Here we show necessary properties involving type casting
+-/
 
-  have one_leq_nrootn (n : ℕ) (h : 1 ≤ n) : 1 ≤ n.root n := by
-    have h_pow: n = (n.root n) ^ n := by simp [nthRoot_pow n h]
-    have h_1 : (1 : ℕ) ^ n = ((1 : ℕ) : ℝ) := by simp
-    have h' := h
-    apply Nat.mono_cast (α := ℝ) at h
-    rw [← h_1] at h
-    rw [h_pow] at h
-    rw [pow_le_pow_iff_left] at h
-    simp at h
-    exact h
-    · simp
-    · apply Real.rpow_nonneg
-      simp
-    · exact Nat.not_eq_zero_of_lt h'
-
-  have h₂ (n : ℕ) (h : n ≥ 2) : n.root n ≤ 1 + Real.sqrt (2 / (n - 1)) := by
-
-    have Nat_eq_Real (n : ℕ) (h : 1 ≤ n) : ((n * (n - 1)) / 2 : ℕ) = (n * (n - 1 : ℝ)) / 2 := by
+lemma Nat_eq_Real (n : ℕ) (h : 1 ≤ n) : ((n * (n - 1)) / 2 : ℕ) = (n * (n - 1 : ℝ)) / 2 := by
       rw [Nat.cast_div]
       · simp
         rw [Nat.cast_sub]
@@ -360,37 +334,95 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
         use c
       · simp
 
-    have hf (n : ℕ) (hn : n ≥ 2) : (a n + 1) ^ n ≥ (n * (n - 1 : ℝ)) / 2 * (a n) ^ 2 := by
+/-
+Here we show necessary properties involving the `n`-th root of `n`
+-/
+
+-------------------------------------------------------------------
+
+/-
+The `n`-th root of `n` to the power of `n` is `n`.
+-/
+
+lemma nthRoot_pow (n : ℕ) (h : n ≥ 1) : (n.root n) ^ n = n := by
+  simp [Nat.root]
+  convert_to Real.rpow (Real.rpow n (1 / n)) n = n
+  · simp
+  · simp only [Real.rpow_eq_pow]
+    rw [← Real.rpow_mul (Nat.cast_nonneg n)]
+    field_simp
+
+/-
+One is less or equal to the `n`-th root of `n`
+-/
+
+lemma one_le_nrootn (n : ℕ) (h : 1 ≤ n) : 1 ≤ n.root n := by
+  have h_pow: n = (n.root n) ^ n := by simp [nthRoot_pow n h]
+  have h_1 : (1 : ℕ) ^ n = ((1 : ℕ) : ℝ) := by simp
+  have h' := h
+  apply Nat.mono_cast (α := ℝ) at h
+  rw [← h_1] at h
+  rw [h_pow] at h
+  rw [pow_le_pow_iff_left] at h
+  simp at h
+  exact h
+  · simp
+  · apply Real.rpow_nonneg
+    simp
+  · exact Nat.not_eq_zero_of_lt h'
+
+-------------------------------------------------------------------
+
+/-
+We define the auxilliary sequence `d n := n.root n - 1` and
+show necessary properties
+-/
+
+noncomputable def d (n : ℕ) : ℝ := n.root n - 1
+
+/-
+Using the binomial theorem we can show the following inwquality
+-/
+
+lemma dn_ge_binomial (n : ℕ) (hn : n ≥ 2) : (d n + 1) ^ n ≥ (n * (n - 1 : ℝ)) / 2 * (d n) ^ 2 := by
       rw [add_pow]
       simp
       calc
-        _ ≥ a n ^ 2 * Nat.choose n 2 := by
+        _ ≥ d n ^ 2 * Nat.choose n 2 := by
             show _ ≤ _
-            apply Finset.single_le_sum (f := fun k ↦ a n ^ k * n.choose k)
+            apply Finset.single_le_sum (f := fun k ↦ d n ^ k * n.choose k)
             · intro i _
-              have h1 : 0 ≤ a n ^ i := by
+              have h1 : 0 ≤ d n ^ i := by
                 apply pow_nonneg
-                simp[a]
-                apply one_leq_nrootn
+                simp[d]
+                apply one_le_nrootn
                 linarith
               have h2 : 0 ≤ (n.choose i : ℝ) := by
                 simp
               exact Left.mul_nonneg h1 h2
             · simp
               exact Nat.succ_lt_succ hn
-        _ = (n * (n - 1 : ℝ)) / 2 * (a n) ^ 2 := by
+        _ = (n * (n - 1 : ℝ)) / 2 * (d n) ^ 2 := by
           rw [Nat.choose_two_right]
           rw [mul_comm]
           rw [Nat_eq_Real n]
           exact Nat.one_le_of_lt hn
 
-    have hg (n : ℕ) (hn : n ≥ 2) : n ≥ (n * (n - 1 : ℝ)) / 2 * (a n) ^ 2 := by
+/-
+Following from the previously shown, we can derive the inequality for `n`
+-/
+
+lemma n_ge_binomial (n : ℕ) (hn : n ≥ 2) : n ≥ (n * (n - 1 : ℝ)) / 2 * (d n) ^ 2 := by
       calc
         n = (n.root n) ^ n := by simp [nthRoot_pow n (Nat.one_le_of_lt hn)]
-        _ = (a n + 1) ^ n := by simp [a]
-        _ ≥ (n * (n - 1 : ℝ)) / 2 * (a n) ^ 2 := by exact hf n hn
+        _ = (d n + 1) ^ n := by simp [d]
+        _ ≥ (n * (n - 1 : ℝ)) / 2 * (d n) ^ 2 := by exact dn_ge_binomial n hn
 
-    have hh (n : ℕ) (h : n ≥ 2) : (a n) ≤ Real.sqrt (2 / (n - 1 : ℝ)) := by
+/-
+Finally this leads to the following inequality for the sequence `d n`
+-/
+
+lemma dn_le_sqrt (n : ℕ) (h : n ≥ 2) : (d n) ≤ Real.sqrt (2 / (n - 1 : ℝ)) := by
       apply Real.le_sqrt_of_sq_le
       have hh1 : 0 < (n - 1 : ℝ) / 2 := by
         apply div_pos
@@ -404,30 +436,41 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
         apply le_of_mul_le_mul_left _ hh2
         simp
         show _ ≥ _
-        rw [mul_comm ((a n) ^ 2) ((n - 1 : ℝ))]
+        rw [mul_comm ((d n) ^ 2) ((n - 1 : ℝ))]
         rw [mul_div_right_comm]
         rw [← mul_assoc]
         rw [← mul_div_assoc]
-        apply hg n h
+        apply n_ge_binomial n h
       · linarith
 
+-------------------------------------------------------------------
+
+/-
+Start of the Proof
+-/
+
+example : ConvergesTo (fun n ↦ n.root n) 1 := by
+
+  have prop_an (n : ℕ) (h : 1 ≤ n) : 1 ≤ n.root n := by apply one_le_nrootn n h
+
+  have prop_cn (n : ℕ) (h : n ≥ 2) : n.root n ≤ 1 + Real.sqrt (2 / (n - 1)) := by
     calc
-      n.root n = a n + 1 := by simp [a]
+      n.root n = d n + 1 := by simp [d]
              _ ≤ 1 + Real.sqrt (2 / (n-1)) := by
                 rw[add_comm]
                 rw[add_le_add_iff_left]
-                exact hh n h
+                exact dn_le_sqrt n h
 
-  have h₃ : ∃ (n : ℕ), ∀ m ≥ n, 1 ≤ m.root m ∧ m.root m ≤ 1 + Real.sqrt (2 / (m - 1)) := by
+  have prop_sandwich : ∃ (n : ℕ), ∀ m ≥ n, 1 ≤ m.root m ∧ m.root m ≤ 1 + Real.sqrt (2 / (m - 1)) := by
     use 2
     intro m hm
     constructor
-    · apply one_leq_nrootn m; linarith
-    · apply h₂ m; linarith
+    · apply prop_an m; linarith
+    · apply prop_cn m; linarith
 
-  have h₄ : ConvergesTo (fun _ ↦ 1) 1 := by apply ConvergesTo.of_constant
+  have conv_an : ConvergesTo (fun _ ↦ 1) 1 := by apply ConvergesTo.of_constant
 
-  have h₅ : ConvergesTo (fun n ↦ 1 + Real.sqrt (2 / (n - 1))) 1 := by
+  have conv_cn : ConvergesTo (fun n ↦ 1 + Real.sqrt (2 / (n - 1))) 1 := by
     rw[ConvergesTo.iff']
     intro ε hε
     use ⌈2/ ε^2⌉₊ + 1
@@ -478,5 +521,4 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
                       _ = Real.sqrt 2 / (Real.sqrt 2 / ε) := by field_simp
                       _ = ε := by field_simp
 
-
-  exact ConvergesTo.sandwich (fun _ ↦ 1) (fun n ↦ n.root n) (fun n ↦ 1 + Real.sqrt (2 / (n - 1))) h₃ 1 h₄ h₅
+  exact ConvergesTo.sandwich (fun _ ↦ 1) (fun n ↦ n.root n) (fun n ↦ 1 + Real.sqrt (2 / (n - 1))) prop_sandwich 1 conv_an conv_cn
