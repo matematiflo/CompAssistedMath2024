@@ -93,6 +93,7 @@ In a domain, two elements are associated if they divide each other.
 -/
 
 lemma isAssociated_of_divides_divides_of_domain [IsDomain R] (x y : R) (hxy : x | y) (hyx : y | x) :
+  -- has not been annotated yet
     IsAssociated x y := by
   by_cases hx : x = 0
   · subst hx
@@ -167,6 +168,7 @@ lemma  is_unit_of_mul_eq_one [IsDomain R] {a b x: R} (h_mul : x = a * b) (hnontr
   exact isUnit_of_mul_eq_one b c hbc1
 
 theorem isIrreducible_of_isPrime [IsDomain R] (x : R) (h : IsPrime x) : IsIrreducible x := by
+  -- has not been annotated yet
   obtain ⟨hnontrivial, hdiv⟩ := h
   constructor
   · exact hnontrivial
