@@ -227,15 +227,20 @@ theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactoria
   · exact hnontrivial
   -- Step 2: a and b non-unit, non-zero
   · intros a b hdiv
+
     by_cases ha : a = 0
     · left
       rw [ha]
       exact everything_divides_zero p
+
+
     by_cases hb : b = 0
     · right
       rw [hb]
       exact everything_divides_zero p
     obtain ⟨ c, hdiv ⟩ := hdiv -- pc= a * b
+
+
     by_cases hunit_a : IsUnit a
     · right
       obtain ⟨u, hu⟩ := hunit_a
@@ -247,6 +252,8 @@ theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactoria
       use c * ↑u⁻¹
       subst hmul
       ring
+
+
     by_cases hunit_b : IsUnit b
     · left
       obtain ⟨u, hu⟩ := hunit_b
@@ -259,14 +266,18 @@ theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactoria
       subst hmul
       ring
     -- Step 3.1: c is non-zer0
+
+
     by_cases hzero_c : c = 0
     · subst hzero_c
       simp at hdiv
       rcases hdiv with ⟨u, hu⟩
       · contradiction
       · contradiction
+
+
     -- Step 3.2: c is non-unit
-    by_cases hunit_c : IsUnit c
+    by_cases hunit_c : IsUnit c -- first use c⁻¹ to get p = ...
     obtain ⟨u, hu⟩ := hunit_c
     have hdiv' : u⁻¹ * (a * b) = u⁻¹ * (c * p) := by
       subst hu
@@ -278,9 +289,11 @@ theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactoria
     have hdiv': p = a * (↑u⁻¹*b) := by subst hdiv'; rfl
     have hunits: IsUnit a ∨ IsUnit (↑u⁻¹*b)  := by
       apply hirr a (↑u⁻¹*b) hdiv'
+    -- now either a is a unit or u⁻¹*b is a unit
     rcases hunits with hunit_a | hunit_ub
     · contradiction
-    · have hunit_b: IsUnit b := by
+
+    · have hunit_b: IsUnit b := by -- if u⁻¹*b is a unit, then b is a unit
         obtain ⟨v, hv⟩ := hunit_ub
         have huv: u * v = b := by
           exact (Units.eq_inv_mul_iff_mul_eq u).mp hv
@@ -293,6 +306,8 @@ theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactoria
         rw[<-huv]
         exact hunit_uv
       contradiction
+
+
     -- Step 4: Because we're in a UFD,factor a*b and p*c into irreducibles,
     -- and show that the factorisations are the same
     obtain ⟨ hfactorisable, hunique ⟩ := hUFD
@@ -349,37 +364,96 @@ theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactoria
     -- we need to show that p is associated to one of the factors in factors_ab
     -- but since in the definition we have only indexes of elements, we need to find the index of p in factors_pc
     have hpassociatedwithab_i: (∃ i : Fin σ.length, IsAssociated p (σ.get i) ) := by
+      -- because in the definition we have only indexes of elements, we need to find the index of p in factors_pc
       have hphasnumberj : ∃ j : Fin σ.length, p = factors_pc.get! j := by
+        -- we actually know the index is 0
         have hpfactor : p = factors_pc.get! 0 := by
           simp[factors_pc]
-        -- we need σ.length>0 to be able to translate 0 from ℕ to Fin σ.length
+        -- but we need to prove σ.length>0 to be able to translate 0 from ℕ to Fin σ.length
         have hσlengthgr0 : σ.length > 0 := by
+          -- so we prove that factors_pc.length > 0
           have hpclengthgr0 : factors_pc.length > 0 := by
             have hfactors_pc_isnotnull : ¬factors_pc = [] := by
               intro hf
-              simp[factors_pc] at hf -- how the fuck did it work
+              simp[factors_pc] at hf -- by using a lemma that says that non-empty list has length > 0
             exact (List.length_pos_iff_ne_nil.mpr hfactors_pc_isnotnull)
+           -- now we use the fact,  hlength says that f_pc.length=f_ab.length, obviously = σ.length, as a permutation of factors_ab
           have hequallength : σ.length = factors_pc.length  := by
             rw[<-hlength]
             apply List.Perm.length_eq
             exact List.mem_permutations.mp hσ
           rw[hequallength]
           exact hpclengthgr0
-        use @Fin.ofNat' σ.length 0 hσlengthgr0
-        exact hpfactor
 
-          -- apply List.Perm.length_eq hσ
-        -- we provide (σ.length-1).succ = σ.length
+         -- now that σ.length>0, we can just translate 0 to Fin σ.length,
+        use @Fin.ofNat' σ.length 0 hσlengthgr0
+        exact hpfactor -- and substitute 0
+      -- now we know p's index, and we can simply substitute it into hσassoc
       obtain ⟨j, hfactorspc_j_equals_p⟩ := hphasnumberj
       use j
       rw[hfactorspc_j_equals_p]
-      -- specialize hσassoc j
-      have hp_associated_with_j : IsAssociated (σ.get j) (factors_pc.get! ↑j) := by
-        exact hσassoc j
-      exact isAssociated_is_symmetric (σ.get j) (factors_pc.get! ↑j) hp_associated_with_j
+      exact isAssociated_is_symmetric (σ.get j) (factors_pc.get! ↑j) (hσassoc j)
+    have hσ_perm_of_ab: σ.Perm factors_ab := by
+      exact List.mem_permutations.mp hσ
+    have a_in_σ_a_in_ab: ∀ a ∈ σ, a∈ factors_ab := by
+      intros a ha
+      exact (List.Perm.mem_iff hσ_perm_of_ab).mp ha
+    -- we know p is associated to one of elements of σ
+    -- which means p is associated to one of factors in factors_a or factors_b
     have hp_assoc_a_or_b:
       (∃ a ∈ factors_a, IsAssociated a p) ∨
       (∃ b ∈ factors_b, IsAssociated b p) := by
+      -- we need to prove that p is associated to one of the elements in factors_ab first
+      obtain ⟨i, hpi⟩ := hpassociatedwithab_i
+
+      -- σ.get i is also in factors_ab:
+      have hσiinσ : σ.get i ∈ σ := by
+        refine List.mem_iff_get.mpr ?_
+        use i
+
+        -- refine List.mem_append.mp ?_ -- this one: a ∈ s ++ t ↔ a ∈ s ∨ a ∈ t
+      have hσiinab' : σ.get i ∈ factors_ab := by
+        exact a_in_σ_a_in_ab (σ.get i) (hσiinσ)
+        --refine List.mem_of_elem_eq_true ?_
+        -- exact List.get_mem σ i
+      -- and p is associated to σ.get i
+
+      have hp_associated_to_ab : ∃ a ∈ factors_ab, IsAssociated p a := by
+        use σ.get i
+      have hσ_i_in_a_or_b: (σ.get i) ∈ factors_a ∨ (σ.get i) ∈ factors_b := by
+        exact (List.mem_append.mp hσiinab')
+      -- we know that σ get i is in factors_a or factors_b
+      -- and naturally we split into 2 cases:
+      rcases hσ_i_in_a_or_b with hσ_i_in_a | hσ_i_in_b
+      · left
+        use (σ.get i)
+        constructor
+        · exact hσ_i_in_a
+        · exact (isAssociated_is_symmetric p (σ.get i) hpi)
+      · right
+        use (σ.get i)
+        constructor
+        · exact hσ_i_in_b
+        · exact (isAssociated_is_symmetric p (σ.get i) hpi)
+
+    -- Step 5: p is associated to a or b
+    rcases hp_assoc_a_or_b with hpa | hpb
+    · left
+      obtain ⟨a_i, ha_i, hp_assoc_a_i⟩ := hpa
+      obtain ⟨u, hu⟩ := (isAssociated_is_symmetric a_i p hp_assoc_a_i)
+      -- we can use fucking factors_a \ {a_i} ? hard
+      sorry
+
+
+
+
+
+
+
+
+
+
+
 
 
 
