@@ -162,6 +162,7 @@ lemma non_trivial_prod_is_non_trivial [IsDomain R] (a b: R) (hnontr_a: IsNontriv
   obtain ⟨ hnonzero_b, hunit_b⟩ := hnontr_b
  -/
 
+
 lemma  is_unit_of_mul_eq_one [IsDomain R] {a b x: R} (h_mul : x = a * b) (hnontrivial: IsNontrivial x) (hxa: Divides x a) : IsUnit b := by
   obtain ⟨c, hxa⟩ := hxa -- a = c * x
   rw [hxa, mul_comm, ←mul_assoc] at h_mul -- rewrite to x = a * b = b * a = b * c * x
@@ -441,8 +442,9 @@ theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactoria
     · left
       obtain ⟨a_i, ha_i, hp_assoc_a_i⟩ := hpa
       obtain ⟨u, hu⟩ := (isAssociated_is_symmetric a_i p hp_assoc_a_i)
+
       -- we can use fucking factors_a \ {a_i} ? hard
-      sorry
+
 
 
 

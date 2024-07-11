@@ -212,6 +212,15 @@ lemma is_unit_of_mul_eq_one [IsDomain R] {a b x : R} (h_mul : x = a * b)
   exact isUnit_of_mul_eq_one b c hbc1
 
 
+
+/-
+lemma factor_divides_prod [IsDomain R] {a a_i : R} {factors_a : List R} (hfactors: a=factors_a.prod) (ha_i: a_i ∈ factors_a) : a_i | a := by
+  obtain ⟨s, t, hsplit⟩ := (List.append_of_mem ha_i)
+  simp[List.prod_cons, hsplit] at hfactors
+  use s.prod*t.prod
+  ring[hfactors]
+-/
+
 /-
 In an integral domain, every prime element is irreducible.
 -/
