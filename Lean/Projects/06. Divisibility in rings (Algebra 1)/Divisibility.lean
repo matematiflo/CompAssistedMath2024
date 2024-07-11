@@ -433,7 +433,7 @@ theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactoria
   · exact hnontrivial
   -- Step 2: a and b non-unit, non-zero, so nontrivial
   · intros a b hdiv
-    obtain ⟨ c, hdiv ⟩ := hdiv -- pc= a * b
+    obtain ⟨ c, hdiv ⟩ := hdiv -- a * b = c * p
 
     by_cases ha : a = 0
     · left
@@ -459,11 +459,10 @@ theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactoria
     -- Step 3: c is nontrivial
 
     -- 3.1: c is non-zero
-    -- idea: if c were 0, then pc=0, then either a or b is 0, but we've already handled that case
     by_cases hzero_c : c = 0
-    · subst hzero_c
-      simp at hdiv
-      rcases hdiv with ⟨u, hu⟩
+    · subst hzero_c -- if c were 0
+      simp at hdiv --  then pc=0 and either a or b is 0
+      rcases hdiv with ⟨u, hu⟩ -- but we've already handled that case
       · contradiction
       · contradiction
 
@@ -539,11 +538,10 @@ theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactoria
       (∃ a ∈ factors_a, IsAssociated a p) ∨ (∃ b ∈ factors_b, IsAssociated b p) := by
       have hfactors_ab : factors_ab = factors_a ++ factors_b := by
         rfl
-      -- can I do this easier? without stupid hypotheses rfl
       exact p_associate_of_a_or_b hfactors_ab hσ hpassociatedwithab_i
 
 
-    -- Step 5: p is associated to a or b
+    -- Step 5: p is divides a or b
     -- basically, rewrite a_i = p*u
     -- and a=a₁⬝a₂...a_{i-1}⬝p⬝u⬝a_{i+1}... in case hpa
     -- or same with b in hpb
