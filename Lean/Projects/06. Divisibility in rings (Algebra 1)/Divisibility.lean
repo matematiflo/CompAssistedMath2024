@@ -387,16 +387,45 @@ lemma p_has_an_associate_in_ab {factors_pc factors_c factors_ab σ : List D} {p:
   exact hσassoc j
 
 
+  -- theorem with fancy arguments where all we really do unpack factors_ab into factors_a and factors_b
+
 lemma p_associate_of_a_or_b {factors_a factors_b factors_ab σ : List D} (h: factors_ab = factors_a ++ factors_b)
   (hσ : σ ∈ factors_ab.permutations)
   (hpassociatedwithab_i: (∃ i : Fin σ.length, IsAssociated (σ.get i) p)) :
   (∃ a ∈ factors_a, IsAssociated a p) ∨ (∃ b ∈ factors_b, IsAssociated b p) := by
 
-  sorry
+  -- first we get out the index of p in σ to get σ[i]
+  obtain ⟨i, hpi⟩ := hpassociatedwithab_i
+
+  -- σ.get i ∈ σ:
+  have hσiinσ : σ.get i ∈ σ := by
+    refine List.mem_iff_get.mpr ?_
+    use i
+  -- any element from σ is element of factors_ab:
+  have a_in_σ_a_in_ab: ∀ a ∈ σ, a∈ factors_ab := by
+    intros a ha
+    exact (List.Perm.mem_iff (List.mem_permutations.mp hσ)).mp ha
+
+  -- and therefore σ.get i ∈ factors_ab = factors_a ++ factors_b
+  have hσ_i_in_ab : σ.get i ∈ (factors_a ++ factors_b) := by
+    subst h
+    exact a_in_σ_a_in_ab (σ.get i) (hσiinσ)
+
+  -- which we can split into 2 cases
+  have hσ_i_in_a_or_b: (σ.get i) ∈ factors_a ∨ (σ.get i) ∈ factors_b := by
+    exact (List.mem_append.mp hσ_i_in_ab)
+  -- and resolve each one trivially
+  rcases hσ_i_in_a_or_b with hσ_i_in_a | hσ_i_in_b
+  · left
+    use (σ.get i)
+  · right
+    use (σ.get i)
 
 
 
-
+/-
+In factorial rings, every irreducible element is prime.
+-/
 
 theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactorialRing D): IsPrime p := by
   obtain ⟨hnontrivial, hirr⟩ := h
