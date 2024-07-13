@@ -1,85 +1,58 @@
-/-
-# Lagrange polynomials
-
-By Judith Ludwig, Christian Merten and Florent Schaffhauser,
-Proseminar on computer-assisted mathematics,
-Heidelberg, Summer Semester 2024
-
-In this project sketch, we define Lagrange polynomials and show that they form a basis of the vector space of bounded polynomials. This is also called the 'Lagrange Interpolation Theorem'.
--/
-
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import Mathlib.Algebra.BigOperators.Basic
+import Mathlib.Algebra.BigOperators.GroupWithZero.Finset
 import Mathlib.RingTheory.Polynomial.Basic
+import Mathlib.Data.Nat.WithBot
+import Mathlib.Data.Nat.Order.Lemmas
 
-/-
-We can find lemma names by using the library search tactic `exact?`.
--/
-
-example (x y : ℝ) : |x + y| ≤ |x| + |y| := by
-  exact?
-
-open BigOperators Polynomial
-
-/-
-We fix a natural number `n` (can be zero) and distinct real numbers `x i` for `0 ≤ i < n + 1` (the 'distinct' is expressed by the fact that the function `x` is injective!).
-
-The reason why we use the upper bound `n + 1` is avoid subtractions: This way the degree of the Lagrange polynomial is `n` and not `n - 1`.
--/
 
 variable {n : ℕ} (x : Fin (n + 1) → ℝ) (hx : Function.Injective x)
 
-/-
-The type of polynomials is spelled `ℝ[X]` and the variable is simply `X`:
--/
+noncomputable def LagrangePolynomial (i : Fin (n + 1)) : Polynomial ℝ :=
+  ∏ j in {j | i ≠ j}, (Polynomial.C (x i - x j)⁻¹) * (Polynomial.X - Polynomial.C (x j))
 
-#check (X : ℝ[X])
+-- Proof that all our defined Lagrange polynomials lay in Pn, therefore have degree of n or lower:
 
-/-
-The constant polynomials are accessed by `C`:
--/
+-- Proof that every factor of ∏ of every lagrange polynomial is of degree 1
+-- Proof that every factor of ∏ of every lagrange polynomial is of degree 1
 
-#check (C 3 : ℝ[X])
 
-/-
-The `i`-th Lagrange polynomial.
--/
-
-noncomputable def LagrangePolynomial (i : Fin (n + 1)) : ℝ[X] :=
-  ∏ j ∈ {j | i ≠ j}, (x i - x j)⁻¹ • (X - C (x i))
-
-namespace LagrangePolynomial
-
-/-
-The first goal is to show that the degree of `LagrangePolynomial` is indeed `n`.
-
-In Lean the type of the degree of a polynomial is `WithBot ℕ` reflecting that it is either a non-negative integer or `- ∞` which is spelled `⊥` (the 'bottom' element). You can always check this with `#check`:
--/
-
-#check Polynomial.degree
-
-lemma support_card_eq (i : Fin (n + 1)) : {j | i ≠ j}.toFinset.card = n := by
-  have h1 : (Finset.filter _ Finset.univ).card + (Finset.filter _ Finset.univ).card = Finset.univ.card :=
-    Finset.filter_card_add_filter_neg_card_eq_card (fun j : Fin (n + 1) ↦ i ≠ j)
-  simp only [ne_eq, Decidable.not_not, Finset.card_univ, Fintype.card_fin] at h1
-  have h2 : (Finset.filter (fun a => i = a) Finset.univ) = {i} := by
-    -- We can show equality of finsets in exactly the same way as we show equality of sets.
-    sorry
-  simpa [h2] using h1
-
-/-
-Each of the factors of `LagrangePolynomial` has degree one.
--/
 lemma degree_factor_eq (i j : Fin (n + 1)) (hij : i ≠ j) :
-    ((x i - x j)⁻¹ • (X - C (x i))).degree = 1 := by
-  -- Try to understand why this proof works!
-  have : x i ≠ x j := fun a => hij (hx a)
-  sorry
+  ((Polynomial.C ((x i - x j)⁻¹)) * (Polynomial.X - Polynomial.C (x j))).degree = 1 := by
+  -- Verify that the constant term (x i - x j)⁻¹ is non-zero
+  have h_nonzero : (x i - x j)⁻¹ ≠ 0 := by
+    -- Since x is injective, x i ≠ x j, hence their difference is non-zero
+    apply inv_ne_zero
+    exact sub_ne_zero_of_ne (hx.ne hij)
+
+  -- Simplify the degree of the product
+  rw [Polynomial.degree_C_mul h_nonzero]
+  -- Simplify the degree of the constant term
+  rw [Polynomial.degree_X_sub_C]
+  -- Degree of X is 1 and Degree of C(x j) is 0
+
+-- proof that number of ∏ factors=n, property of finite set is (needed?) for cardinality
+lemma support_card_eq (i : Fin (n + 1)) : (Finset.univ.filter (λ j => i ≠ j)).card = n := by
+  have h1 : (Finset.filter _ Finset.univ).card + (Finset.filter _ Finset.univ).card = Finset.univ.card :=
+    Finset.filter_card_add_filter_neg_card_eq_card (fun j : Fin (n + 1) ↦ i ≠ j)-- uses theorem that card of a filtered set + card of its negated filter set = card of unfiltered set on the first filter and set of h1
+  simp only [ne_eq, Decidable.not_not, Finset.card_univ, Fintype.card_fin] at h1 -- ≠  ¬ = for easier processing and fill in n+1 for card of total set
+  have h2 : (Finset.filter (λ a => i = a) Finset.univ) = {i} := by
+    ext j
+    simp [Finset.mem_filter, Finset.mem_univ]
+    rw[eq_comm]
+
+  rw [h2] at h1 -- replaces second filtered set with card one set {i}
+  have h3 : (Finset.filter (λ j => i ≠ j) Finset.univ).card + 1 = n + 1 := h1 -- evaluates {i}.card
+
+  have h4 : (Finset.filter (λ j => i ≠ j) Finset.univ).card = n := by
+    injection h3 with h_eq
+     -- subtracts 1 on each side
+ -- formally rewrites h4 to exactly suit final type
+  exact h4
+
 
 lemma degree_eq : (LagrangePolynomial x i).degree = (n : WithBot ℕ) := by
   unfold LagrangePolynomial
-  rw [Polynomial.degree_prod]
-  show ∑ j ∈ {j | i ≠ j}, ((x i - x j)⁻¹ • (X - C (x i))).degree = (n : WithBot ℕ)
+  rw [Polynomial.degree_prod] -- proof/rule that degree of product of polynomials is sum of degrees of factors
   convert_to ∑ j ∈ {j | i ≠ j}, 1 = (n : WithBot ℕ)
   · apply Finset.sum_congr
     · rfl
@@ -87,52 +60,57 @@ lemma degree_eq : (LagrangePolynomial x i).degree = (n : WithBot ℕ) := by
       simp at hj
       exact degree_factor_eq x hx i j hj
   · simp only [Finset.sum_const, nsmul_eq_mul, mul_one, Nat.cast_inj]
-    exact support_card_eq i
+    have h1 : {j | i ≠ j}.toFinset.card = n := by
+      have h1_1 : {j | i ≠ j}.toFinset = (Finset.univ.filter (λ j => i ≠ j)) := by
+        ext j
+        simp
+      rw [h1_1]
+      rw [support_card_eq]
+    exact h1
 
-/-
-We now want to consider the `ℝ`-subvectorspace of polynomials with bounded degree.
--/
+-- show for lagrange polynomial of (arbitrary?) point xi that degree is n, based on the previous proofs that n factors all with degree 1
 
-#check Polynomial.degreeLT ℝ (n + 1)
 
-/-
-The underlying type of `degreeLT ℝ (n + 1)` is a subtype defined by some property,
-which is implemented as a `structure`. To inspect the fields of `Subtype`,
-you can use the `#print` command:
--/
 
-#print Subtype
 
-/-
-To construct a term of a type defined by a `structure`, you can use the `def foo : bar where` syntax.
+  -- uses proof to show that for any i in domain of X  ∑ j ∈ {j | i ≠ j} has always n addends
+ -- rw [support_card_eq j]
+ -- rw [Finset.sum_const, nat.smul_one_eq_coe] -- rewrites the addends to 1s and proof that sum of n addends of a constant value a is n*(const a)
+ -- exact n
 
-For convenience, we define a modified `LagrangePolynomial'` that is a term of type
-`Polynomial.degreeLT ℝ (n + 1)`.
 
-Remark: There is also the type `Polynomial.degreeLE ℝ n` which is of course mathematically
-equivalent. But we use `Polynomial.degreeLT` here, since it has better library support.
--/
 
-noncomputable def LagrangePolynomial' (i : Fin (n + 1)) : Polynomial.degreeLT ℝ (n + 1) where
+
+
+
+noncomputable def LagrangePolynomial' (i : Fin (n + 1)) (hx : Function.Injective x) : Polynomial.degreeLT ℝ (n + 1) where
   val := LagrangePolynomial x i
   property := by
     rw [Polynomial.mem_degreeLT]
-    -- Complete the proof using `degree_eq`
-    sorry
+    rw [degree_eq]
+    swap
+    exact hx
+    exact WithBot.coe_lt_coe.mpr (lt_add_one n)
 
-/-
-Technical note: Here, slightly more is going on: As we saw above, the type of `Polynomial.degreeLT ℝ (n + 1)` is `Submodule ℝ ℝ[X]`, which has a coercion (https://leanprover.github.io/theorem_proving_in_lean/interacting_with_lean.html#coercions) to `Type`.
--/
 
-#synth CoeSort (Submodule ℝ ℝ[X]) Type
 
-/-
-This allows Lean to interpret `Submodule ℝ ℝ[X]` as a type and hence allows us to define terms of type `degreeLT ℝ (n + 1)`.
-
-We now want to show that the family of `LagrangePolynomial'` is a basis of `Polynomial.degreeLT`. For this, we first want to show that they are `LinearIndependent`.
-
-*Hint 1:* To conclude that the `LagrangePolynomial'`s are a basis, you can use that the `Module.rank` (aka dimension) of `Polynomial.degreeLT ℝ (n + 1)` is `n`.
-
-*Hint 2:* You can combine two theorems from the library to calculate the rank. Browse the mathlib 4 documentation (https://leanprover-community.github.io/mathlib4_docs/index.html)
-on `Polynomial.degreeLT` and search via `loogle` (https://loogle.lean-lang.org/) for related results.
--/
+lemma LagrangePolynomials_linear_independent (hx : Function.Injective x) :
+  LinearIndependent ℝ (λ i : Fin (n + 1) ↦ LagrangePolynomial x i) := by
+  rw [linearIndependent_iff]
+  intros l hl
+  have h_eval : ∀ j : Fin (n + 1), Polynomial.eval (x j) (Finsupp.total (Fin (n + 1)) (Polynomial ℝ) ℝ (λ i ↦ LagrangePolynomial x i) l) = 0 := by
+    intro j
+    rw [hl, Polynomial.eval_zero]
+  ext i
+  specialize h_eval i
+  simp only [Finsupp.total_apply, Finsupp.sum, Polynomial.eval_finset_sum, Polynomial.eval_smul] at h_eval
+  have : ∑ j in l.support, l j * Polynomial.eval (x i) (LagrangePolynomial x j) = 0 := by
+    simpa using h_eval
+  have h_li : l i * 1 = l i := by ring
+  simp only [LagrangePolynomial, Polynomial.eval_prod, Polynomial.eval_C, Polynomial.eval_X, Polynomial.eval_sub, Polynomial.eval_C] at this
+  have : (if i ∈ l.support then l i else 0) = l i := by
+    by_cases h : i ∈ l.support
+    · rw [if_pos h]
+    · rw [if_neg h]
+      simp only [Finsupp.not_mem_support_iff] at h
+      exact h.symm
