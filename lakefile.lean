@@ -10,7 +10,7 @@ package «leanproject» where
   -- add any additional package configuration options here
 
 require mathlib from git
-  "https://github.com/leanprover-community/mathlib4.git" @ "latest-release"
+  "https://github.com/leanprover-community/mathlib4.git"
 
 require mdgen from git
   "https://github.com/Seasawher/mdgen" @ "main"
