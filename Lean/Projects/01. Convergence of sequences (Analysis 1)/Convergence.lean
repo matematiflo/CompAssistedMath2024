@@ -483,7 +483,7 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
           exact hm
         · field_simp
           calc
-          1 ≤  1 + ⌈2/ ε^2⌉₊ := by apply Nat.le_add_right
+          1 ≤ 1 + ⌈2/ ε^2⌉₊ := by apply Nat.le_add_right
           _ = ⌈2/ ε^2⌉₊ + 1 := by ring
           _ ≤ m := by exact hm
 

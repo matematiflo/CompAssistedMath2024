@@ -61,6 +61,9 @@ The sequence of the `n`-th root of `n` converges to `1`.
 
 /-
 Here we show necessary properties involving type casting
+
+---Explain why type casting is necessary (dividing a natural number)
+---Hover over the term to see if a expression is N/R
 -/
 
 lemma Nat_eq_Real (n : ℕ) (h : n ≥ 1) : ((n * (n - 1)) / 2 : ℕ) = (n * (n - 1 : ℝ)) / 2 := by
@@ -69,7 +72,7 @@ lemma Nat_eq_Real (n : ℕ) (h : n ≥ 1) : ((n * (n - 1)) / 2 : ℕ) = (n * (n 
         rw [Nat.cast_sub]
         simp
         exact h
-      · have := Nat.even_mul_pred_self n
+      · have := Nat.even_mul_pred_self n -- one n or n-1 has to be even
         rw [even_iff_exists_two_nsmul] at this
         simp at this
         obtain ⟨c, hc⟩ := this
@@ -148,20 +151,9 @@ example : ConvergesTo (fun n ↦ n.root n) 1 := by
 
   have prop_an (n : ℕ) (h : n ≥ 1) : 1 ≤ n.root n := by apply one_le_nrootn n h
 
-  have prop_cn (n : ℕ) (h : n ≥ 2) : n.root n ≤ 1 + Real.sqrt (2 / (n - 1)) := by
-    calc
-      n.root n = d n + 1 := by simp [d]
-             _ ≤ 1 + Real.sqrt (2 / (n - 1)) := by
-                rw[add_comm]
-                rw[add_le_add_iff_left]
-                exact dn_le_sqrt n h
+  have prop_cn (n : ℕ) (h : n ≥ 2) : n.root n ≤ 1 + Real.sqrt (2 / (n - 1)) := by sorry
 
-  have prop_sandwich : ∃ (n : ℕ), ∀ m ≥ n, 1 ≤ m.root m ∧ m.root m ≤ 1 + Real.sqrt (2 / (m - 1)) := by
-    use 2
-    intro m hm
-    constructor
-    · apply prop_an m; linarith
-    · apply prop_cn m; linarith
+  have prop_sandwich : ∃ (n : ℕ), ∀ m ≥ n, 1 ≤ m.root m ∧ m.root m ≤ 1 + Real.sqrt (2 / (m - 1)) := by sorry
 
   have conv_an : ConvergesTo (fun _ ↦ 1) 1 := by apply ConvergesTo.of_constant
 

@@ -138,24 +138,23 @@ theorem sandwich (a b c : ℕ → ℝ)
             b_n & = 1 \\
             c_n & = 1 + \sqrt{\frac{2}{n-1}}
         \end{align*}
-        We can easily see, that they both converge to 1:
-        \[
-        \lim_{n \to \infty} 1 = 1
-        \]
-        \[
-        \lim_{n \to \infty} (1 + \sqrt{\frac{2}{n-1}}) = 1
-        \]
+        They fulfill the condition $b_n \leq a_n \leq c_n$ for all $n \geq 2$:
+        \begin{align*}
+            1 \leq \sqrt[n]{n} \leq 1 + \sqrt{\frac{2}{n-1}}
+        \end{align*}
     \end{proofs}
 
 \end{frame}
 
 \begin{frame}{Math Proof}
     \begin{proof}[Proof continued]
-        Using what we have previously shown, we get:
-        \begin{align*}
-            1 \leq \sqrt[n]{n} \leq 1 + \sqrt{\frac{2}{n-1}}
-        \end{align*}
-        for all $n \geq 2$ and we know that both sequences converge to 1.\\
+        We can easily see, that they both converge to 1:
+        \[
+        \lim_{n \to \infty} 1 = 1
+        \]
+        \[
+        \lim_{n \to \infty} \left(1 + \sqrt{\frac{2}{n-1}} \right) = 1
+        \]\\
         We can now apply the Sandwich Theorem to conclude that $\lim_{n \to \infty} \sqrt[n]{n} = 1$.
     \end{proof}
 
