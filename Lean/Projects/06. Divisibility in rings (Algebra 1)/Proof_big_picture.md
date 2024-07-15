@@ -30,7 +30,7 @@ In this project, we define irreducible and prime elements of a commutative ring.
     1. Let $ x = a \cdot b $ for $ a, b \in R $.
     2. Since $ x $ is prime, from $ x \mid a \cdot b $, it follows that $ x \mid a $ or $ x \mid b $.
     3. Assume $ x \mid a $. Then there exists $ c \in R $ with $ a = c \cdot x $.
-    4. Set $ x = a \cdot b = (c \cdot x) \cdot b = c \cdot (x \cdot b) $.
+    4. Set $ x = a \cdot b = (c \cdot x) \cdot b = x \cdot (c \cdot b) $.
     5. Since $ R $ is an integral domain and $ x \neq 0 $, it follows $ c \cdot b = 1 $. Thus, $ b $ is a unit.
     6. Similarly, $ a $ is a unit if $ x \mid b $.
     7. Therefore, $ x $ is irreducible.

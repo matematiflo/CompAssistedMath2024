@@ -170,29 +170,30 @@ In an integral domain, every prime element is irreducible.
 
 lemma  is_unit_of_mul_eq_one [IsDomain R] {a b x: R} (h_mul : x = a * b) (hnontrivial: IsNontrivial x) (hxa: Divides x a) : IsUnit b := by
   obtain ⟨c, hxa⟩ := hxa -- a = c * x
-  rw [hxa, mul_comm, ←mul_assoc] at h_mul -- rewrite to x = a * b = b * a = b * c * x
-  have hbc1 : b * c = 1 := by -- proof that b * c = 1
+  rw [hxa, mul_comm, ←mul_assoc] at h_mul -- rewrite to a * b = x = b * c * x
+  have hbc1 : b * c = 1 := by -- we use a property of 1 in domains to get b * c = 1
         apply (mul_eq_right₀ hnontrivial.left).mp
         rw[←h_mul]
-  exact isUnit_of_mul_eq_one b c hbc1
+  exact isUnit_of_mul_eq_one b c hbc1 -- in-built lemma: b * c = 1 → b is unit
 
 theorem isIrreducible_of_isPrime [IsDomain R] (x : R) (h : IsPrime x) : IsIrreducible x := by
-  -- has not been annotated yet
   obtain ⟨hnontrivial, hdiv⟩ := h
   constructor
   · exact hnontrivial
   · intros a b h_mul
+    -- x divides a * b, as x = a * b
     have hx_divides_ab : x | a*b := by
       use 1
-      rw[h_mul]
-      simp
+      simp[h_mul]
+    -- so x divides either a or b because it's prime
     have hxa_or_xb := hdiv a b hx_divides_ab
-    -- x divides either a or b because it's prime
     rcases hxa_or_xb with hxa | hxb
-    · exact Or.inr (is_unit_of_mul_eq_one h_mul hnontrivial hxa)
-    · have h_mul1 : x = b * a := by
-        rw[mul_comm]
-        exact h_mul
+    · -- if x | a, substitute a = c * x, to get x = x * (c * b)
+      -- x≠0, so c * b = 1, thus b is a unit
+      exact Or.inr (is_unit_of_mul_eq_one h_mul hnontrivial hxa)
+    · -- same here
+      have h_mul1 : x = b * a := by
+        simp[mul_comm, h_mul]
       exact Or.inl (is_unit_of_mul_eq_one h_mul1 hnontrivial hxb)
 
 
@@ -208,18 +209,19 @@ noncomputable instance (D: Type) [CommRing D] : Inhabited D := by
 
 
 def IsFactorialRing (D: Type) [CommRing D] [IsDomain D]: Prop :=
-  -- It's based on a ring R
-  -- And every non-zero and non-unit element is factorable into irreducibles
-  (∀ (x : D), x ≠ 0 → ¬IsUnit x → ∃ (factors :List D), ((∀ y ∈ factors, IsIrreducible y) ∧ x=List.prod factors)) ∧
+  -- It's based on an integral domain D
+  -- every non-trivial element is factorable into irreducibles
+  (∀ (x : D), x ≠ 0 → ¬IsUnit x → ∃ (factors :List D), -- for any non-zero, non-unit x in D there's a list
+  ((∀ y ∈ factors, IsIrreducible y) ∧ x=List.prod factors)) ∧ -- of irreducibles that multiply to x
   -- And such factorisation is unique up to associates and permutation:
   (
-  ∀ (x : D) (factors1 factors2 : List D), -- there exist 2 lists
-  x ≠ 0 → (¬IsUnit x) → -- for any x in R that is non-zero and non-unit
-  (x = List.prod factors1) → (x = List.prod factors2) → -- such that x is the product of the factors in each list
+  ∀ (x : D) (factors1 factors2 : List D), -- for any x in D, if there exist 2 lists
+  x ≠ 0 → (¬IsUnit x) → -- such that x is non-zero and non-unit
+  (x = List.prod factors1) → (x = List.prod factors2) → -- that x is the product of the factors in each list
   (∀ y ∈ factors1, IsIrreducible y) → (∀ y ∈ factors2, IsIrreducible y) → -- and those lists are made up of irreducibles
   ((factors1.length=factors2.length) ∧ -- then they are of equal length
   ∃ σ ∈ factors1.permutations, -- and there exists a permutation of one of them, here called sigma
-  (∀ i : Fin σ.length,  (IsAssociated (σ.get i) (factors2.get! i )))) -- such that sigma_i is associated to factors2_i
+  (∀ i : Fin σ.length,  (IsAssociated (σ.get i) (factors2.get! i )))) -- such that sigma[i] is associated to factors2[i]
   )
 
   -- in the definition we could have used IsNontrivial x instead of a ≠ 0 and ¬IsUnit,
