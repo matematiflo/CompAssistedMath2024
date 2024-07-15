@@ -90,19 +90,19 @@ theorem sandwich (a b c : ℕ → ℝ)
             \Leftrightarrow 1^n &\leq \sqrt[n]{n}^{\,n} \\
             \Leftrightarrow 1 &\leq \sqrt[n]{n}
         \end{align*}
-        From that, we can see, that the sequence $(b_n)$ can be defined by the constant sequence $b_n = 1$ for all $n$.\\
+        From that we can see, that the sequence $(b_n)$ can be defined by the constant sequence $b_n = 1$ for all $n$.\\
         From the inequality $ 1 \leq \sqrt[n]{n}$ we can also derive the equality
         \begin{align*}
-            1 + d_n = \sqrt[n]{n}
+            \sqrt[n]{n} = 1 + d_n
         \end{align*}
-        for a suitable sequence $(d_n)$ given by: $(d_n) := \sqrt[n]{n} -1 $\\
+        for a suitable sequence $(d_n)$ given by: $d_n := \sqrt[n]{n} -1 $\\
     \end{proofs}
 \end{frame}
 \begin{frame}{Math Proof}
     \begin{proofs}[Proof continued]
         To find the second sequence $(c_n)$, we want to show that $\sqrt[n]{n} \leq 1 + \sqrt{\frac{2}{n-1}}$. For $n \geq 2$ this follows from:
         \begin{align*}
-            n = \sqrt[n]{n}^n & = (1 + d_n)^n \\
+            n = \sqrt[n]{n}^{\,n} & = (1 + d_n)^n \\
             & = \sum_{k=0}^{n} \binom{n}{k} \cdot d_n^{\,k} \\
             & \geq \binom{n}{2} \cdot d_n^{\,2} \\
             & = \frac{n!}{(n-2)! \cdot 2!} \cdot d_n^{\,2} \\
@@ -122,7 +122,7 @@ theorem sandwich (a b c : ℕ → ℝ)
             \Leftrightarrow d_n^{\,2} & \leq \frac{2}{n-1} \\
             \Leftrightarrow d_n & \leq \sqrt{\frac{2}{n-1}}
         \end{align*} 
-        We can conclude:
+        Conclusion:
         \begin{align*}
             \sqrt[n]{n} = 1 + d_n & \leq 1 + \sqrt{\frac{2}{n-1}}
         \end{align*}
@@ -138,7 +138,7 @@ theorem sandwich (a b c : ℕ → ℝ)
             b_n & = 1 \\
             c_n & = 1 + \sqrt{\frac{2}{n-1}}
         \end{align*}
-        We still have to show, that both sequences converge to 1:
+        We can easily see, that they both converge to 1:
         \[
         \lim_{n \to \infty} 1 = 1
         \]

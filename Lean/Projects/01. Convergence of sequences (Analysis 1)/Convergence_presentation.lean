@@ -1,13 +1,3 @@
-/-
-# Convergence of sequences
-
-By Judith Ludwig, Christian Merten and Florent Schaffhauser,
-Proseminar on computer-assisted mathematics,
-Heidelberg, Summer Semester 2024
-
-In this project, we show basic properties of convergent sequences. The goal is to show that the sequence of the `n`-th root of `n` converges to one.
--/
-
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 /-
@@ -26,26 +16,6 @@ The definition of `ConvergesTo` unwrapped.
 lemma iff (a : ℕ → ℝ) (x : ℝ) :
     ConvergesTo a x ↔ ∀ ε > 0, ∃ (n : ℕ), ∀ m ≥ n, |a m - x| < ε := by
   rfl
-
-/-
-In the definition of `ConvergesTo`, we may replace the condition `< ε` by `≤ ε`.
--/
-
-lemma iff' (a : ℕ → ℝ) (x : ℝ) :
-    ConvergesTo a x ↔ ∀ ε > 0, ∃ (n : ℕ), ∀ m ≥ n, |a m - x| ≤ ε := by
-  constructor
-  · intro h ε hε
-    obtain ⟨n, hn⟩ := h ε hε
-    use n
-    intro m hmn
-    exact le_of_lt (hn m hmn)
-  · intro h ε hε
-    obtain ⟨n, hn⟩ := h (ε / 2) (by simpa)
-    use n
-    intro m hmn
-    have : |a m - x| ≤ ε / 2 := hn m hmn
-    have : ε / 2 < ε := by simpa
-    linarith
 
 /-
 Constant sequences converge to the constant value.
@@ -76,6 +46,11 @@ For convenience, we define the `n`-th root of `x : ℝ`.
 
 noncomputable def Nat.root (n : ℕ) (x : ℝ) : ℝ := Real.rpow x (1 / n)
 
+
+
+
+
+
 -------------------------------------------------------------------
 
 /-
@@ -88,7 +63,7 @@ The sequence of the `n`-th root of `n` converges to `1`.
 Here we show necessary properties involving type casting
 -/
 
-lemma Nat_eq_Real (n : ℕ) (h : 1 ≤ n) : ((n * (n - 1)) / 2 : ℕ) = (n * (n - 1 : ℝ)) / 2 := by
+lemma Nat_eq_Real (n : ℕ) (h : n ≥ 1) : ((n * (n - 1)) / 2 : ℕ) = (n * (n - 1 : ℝ)) / 2 := by
       rw [Nat.cast_div]
       · simp
         rw [Nat.cast_sub]
@@ -117,7 +92,7 @@ lemma nthRoot_pow (n : ℕ) (h : n ≥ 1) : (n.root n) ^ n = n := by sorry
 One is less or equal to the `n`-th root of `n`
 -/
 
-lemma one_le_nrootn (n : ℕ) (h : 1 ≤ n) : 1 ≤ n.root n := by sorry
+lemma one_le_nrootn (n : ℕ) (h : n ≥ 1) : 1 ≤ n.root n := by sorry
 
 -------------------------------------------------------------------
 
@@ -129,13 +104,14 @@ show necessary properties
 noncomputable def d (n : ℕ) : ℝ := n.root n - 1
 
 /-
-Using the binomial theorem we can show the following inwquality
+Using the binomial theorem we can show the following inequality for `n`
 -/
 
-lemma dn_ge_binomial (n : ℕ) (hn : n ≥ 2) : (d n + 1) ^ n ≥ (n * (n - 1 : ℝ)) / 2 * (d n) ^ 2 := by
-      rw [add_pow]
-      simp
+lemma n_ge_binomial (n : ℕ) (h : n ≥ 2) : n ≥ (n * (n - 1 : ℝ)) / 2 * (d n) ^ 2 := by
       calc
+        n = (n.root n) ^ n := by simp [nthRoot_pow n (Nat.one_le_of_lt h)]
+        _ = (d n + 1) ^ n := by simp [d]
+        _ = ∑ x ∈ Finset.range (n + 1), d n ^ x * ↑(n.choose x) := by rw[add_pow]; simp
         _ ≥ d n ^ 2 * Nat.choose n 2 := by
             show _ ≤ _
             apply Finset.single_le_sum (f := fun k ↦ d n ^ k * n.choose k)
@@ -149,18 +125,12 @@ lemma dn_ge_binomial (n : ℕ) (hn : n ≥ 2) : (d n + 1) ^ n ≥ (n * (n - 1 : 
                 simp
               exact Left.mul_nonneg h1 h2
             · simp
-              exact Nat.succ_lt_succ hn
+              exact Nat.succ_lt_succ h
         _ = (n * (n - 1 : ℝ)) / 2 * (d n) ^ 2 := by
           rw [Nat.choose_two_right]
-          rw [mul_comm]
+          rw [mul_comm] -- type casting issue, show step above
           rw [Nat_eq_Real n]
-          exact Nat.one_le_of_lt hn
-
-/-
-Following from the previously shown, we can derive the inequality for `n`
--/
-
-lemma n_ge_binomial (n : ℕ) (hn : n ≥ 2) : n ≥ (n * (n - 1 : ℝ)) / 2 * (d n) ^ 2 := by sorry
+          exact Nat.one_le_of_lt h
 
 /-
 Finally this leads to the following inequality for the sequence `d n`
@@ -176,12 +146,12 @@ Start of the Proof
 
 example : ConvergesTo (fun n ↦ n.root n) 1 := by
 
-  have prop_an (n : ℕ) (h : 1 ≤ n) : 1 ≤ n.root n := by apply one_le_nrootn n h
+  have prop_an (n : ℕ) (h : n ≥ 1) : 1 ≤ n.root n := by apply one_le_nrootn n h
 
   have prop_cn (n : ℕ) (h : n ≥ 2) : n.root n ≤ 1 + Real.sqrt (2 / (n - 1)) := by
     calc
       n.root n = d n + 1 := by simp [d]
-             _ ≤ 1 + Real.sqrt (2 / (n-1)) := by
+             _ ≤ 1 + Real.sqrt (2 / (n - 1)) := by
                 rw[add_comm]
                 rw[add_le_add_iff_left]
                 exact dn_le_sqrt n h
