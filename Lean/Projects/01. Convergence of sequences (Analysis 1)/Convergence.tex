@@ -13,7 +13,7 @@
 
 \usetheme{Madrid}
 
-\title{Convergence of $\sqrt[n]{n}$ in Lean4}
+\title{Convergence of $\sqrt[{n\,}]{n}$ in Lean4}
 \author{Sophie Weber, David Leeb}
 \date{16.07.2024}
 
@@ -32,7 +32,7 @@
 
 \begin{frame}[fragile]{Definitions}
     \begin{definition}[Convergence of a sequence]
-        The sequence $(a_n)$ converges to $x$ if for every $\epsilon > 0$ there exists an $N \in \mathbb{N}$ such that for all $n \geq N$ we have $|a_n - x| < \epsilon$.
+        A sequence $(a_n)$ converges to $x$ if for every $\epsilon > 0$, there exists an $m \in \mathbb{N}$ such that for all $n \geq m$ we have $|a_m - x| < \epsilon$.
     \end{definition}
     
     \begin{block}{Lean Code}
@@ -58,14 +58,14 @@ theorem of_constant (x : ℝ) : ConvergesTo (fun _ ↦ x) x
 
 \begin{frame}[fragile]{Lemmas}
     \begin{lemma}[Sandwich theorem]
-        If $(a_n)$, $(b_n)$ and $(c_n)$ are sequences and there exists an $N \in \mathbb{N}$ such that $a_m \leq b_m \leq c_m$ for all $m \geq N$, and both $(a_n)$ and $(c_n)$ converge to $x$, then $(b_n)$ converges to $x$.
+        If $(a_n)$, $(b_n)$ and $(c_n)$ are sequences and there exists an $m \in \mathbb{N}$ such that $a_m \leq b_m \leq c_m$ for all $m \geq n$, and both $(a_n)$ and $(c_n)$ converge to $x$, then $(b_n)$ converges to $x$.
     \end{lemma}
 
     \begin{block}{Lean Code}
     \begin{leancode}
 theorem sandwich (a b c : ℕ → ℝ) 
 (h : ∃ (n : ℕ), ∀ m ≥ n , a m ≤ b m ∧ b m ≤ c m) (x : ℝ)
-(ha : ConvergesTo a x) (hb : ConvergesTo c x) :
+(ha : ConvergesTo a x) (hc : ConvergesTo c x) :
     ConvergesTo b x
     \end{leancode}
     \end{block}

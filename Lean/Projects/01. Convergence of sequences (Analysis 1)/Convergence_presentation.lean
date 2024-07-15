@@ -30,7 +30,7 @@ The sandwich lemma: Given three sequences `a`, `b` and `c` such that
 -/
 
 theorem sandwich (a b c : ℕ → ℝ) (h : ∃ (n : ℕ), ∀ m ≥ n , a m ≤ b m ∧ b m ≤ c m) (x : ℝ)
-    (ha : ConvergesTo a x) (hb : ConvergesTo c x) : ConvergesTo b x := by sorry
+    (ha : ConvergesTo a x) (hc : ConvergesTo c x) : ConvergesTo b x := by sorry
 
 end ConvergesTo
 
@@ -114,7 +114,7 @@ lemma n_ge_binomial (n : ℕ) (h : n ≥ 2) : n ≥ (n * (n - 1 : ℝ)) / 2 * (d
       calc
         n = (n.root n) ^ n := by simp [nthRoot_pow n (Nat.one_le_of_lt h)]
         _ = (d n + 1) ^ n := by simp [d]
-        _ = ∑ x ∈ Finset.range (n + 1), d n ^ x * ↑(n.choose x) := by rw[add_pow]; simp
+        _ = ∑ k ∈ Finset.range (n + 1), d n ^ k * (n.choose k) := by rw[add_pow]; simp
         _ ≥ d n ^ 2 * Nat.choose n 2 := by
             show _ ≤ _
             apply Finset.single_le_sum (f := fun k ↦ d n ^ k * n.choose k)
@@ -131,9 +131,9 @@ lemma n_ge_binomial (n : ℕ) (h : n ≥ 2) : n ≥ (n * (n - 1 : ℝ)) / 2 * (d
               exact Nat.succ_lt_succ h
         _ = (n * (n - 1 : ℝ)) / 2 * (d n) ^ 2 := by
           rw [Nat.choose_two_right]
-          rw [mul_comm] -- type casting issue, show step above
+          rw [mul_comm]
           rw [Nat_eq_Real n]
-          exact Nat.one_le_of_lt h
+          linarith
 
 /-
 Finally this leads to the following inequality for the sequence `d n`
@@ -149,14 +149,14 @@ Start of the Proof
 
 example : ConvergesTo (fun n ↦ n.root n) 1 := by
 
-  have prop_an (n : ℕ) (h : n ≥ 1) : 1 ≤ n.root n := by apply one_le_nrootn n h
+  have prop_bn (n : ℕ) (h : n ≥ 1) : 1 ≤ n.root n := by apply one_le_nrootn n h
 
   have prop_cn (n : ℕ) (h : n ≥ 2) : n.root n ≤ 1 + Real.sqrt (2 / (n - 1)) := by sorry
 
   have prop_sandwich : ∃ (n : ℕ), ∀ m ≥ n, 1 ≤ m.root m ∧ m.root m ≤ 1 + Real.sqrt (2 / (m - 1)) := by sorry
 
-  have conv_an : ConvergesTo (fun _ ↦ 1) 1 := by apply ConvergesTo.of_constant
+  have conv_bn : ConvergesTo (fun _ ↦ 1) 1 := by apply ConvergesTo.of_constant
 
   have conv_cn : ConvergesTo (fun n ↦ 1 + Real.sqrt (2 / (n - 1))) 1 := by sorry
 
-  exact ConvergesTo.sandwich (fun _ ↦ 1) (fun n ↦ n.root n) (fun n ↦ 1 + Real.sqrt (2 / (n - 1))) prop_sandwich 1 conv_an conv_cn
+  exact ConvergesTo.sandwich (fun _ ↦ 1) (fun n ↦ n.root n) (fun n ↦ 1 + Real.sqrt (2 / (n - 1))) prop_sandwich 1 conv_bn conv_cn
