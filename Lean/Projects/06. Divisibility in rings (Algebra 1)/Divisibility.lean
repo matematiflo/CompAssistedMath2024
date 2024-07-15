@@ -71,8 +71,17 @@ lemma isAssociated_is_transitive (x y z: R) (hxy : IsAssociated x y) (hyz : IsAs
   subst ha
   rw[<-mul_assoc] at hb
   subst hb
-  use (b * a)
-  sorry
+  let ba' : Rˣ := {
+      val := b * a,
+      inv := a⁻¹ * b⁻¹,
+      val_inv := by
+        ring_nf
+        simp
+      inv_val := by
+        ring_nf
+        simp
+    }
+  use ba'
 
 
 /-
