@@ -16,6 +16,8 @@ In this repository, we give an introduction to **continuous functions** and form
 
 In this repo, you find:
 
+- [**Our presentation**](./Presentation/Felix%20Dominic%20-%20Lean%20Continuous%20Functions.pptx)
+
 - [**A LaTeX document**](./HandProof/main.pdf) that contains manual proofs. All proofs that were formalized in Lean4 are also written out in this document for reference. It's suggested to first comprehend the proof there, then look at the Lean4 code to see how it's formalized.
 
 - The [**Lean4 code**](./Continuity/) with different files that correspond to the sections in the LaTeX document:
