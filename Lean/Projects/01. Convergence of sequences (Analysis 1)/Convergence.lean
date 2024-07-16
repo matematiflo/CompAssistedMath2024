@@ -106,7 +106,6 @@ theorem add (a₁ a₂ : ℕ → ℝ) (x₁ x₂ : ℝ) (h₁ : ConvergesTo a₁
   have hlt₂ : |a₂ m - x₂| < ε / 2 := by
     apply hn₂
     exact le_of_max_le_right hmn
-
   calc
     |a₁ m + a₂ m - (x₁ + x₂)| = |(a₁ m - x₁) + (a₂ m - x₂)| := by abel_nf
                             _ ≤ |a₁ m - x₁| + |a₂ m - x₂| := abs_add _ _
@@ -185,36 +184,6 @@ Hint for the proof: use that convergent sequences are bounded!
 
 theorem mul (a₁ a₂ : ℕ → ℝ) (x₁ x₂ : ℝ) (h₁ : ConvergesTo a₁ x₁)
     (h₂ : ConvergesTo a₂ x₂) : ConvergesTo (a₁ * a₂) (x₁ * x₂) := by
-  rw [iff']
-
-  have hb₁ : IsBounded a₁ := by simp only[IsBounded.of_convergesTo a₁ x₁ h₁]
-  have hb₂ : IsBounded a₂ := by simp only[IsBounded.of_convergesTo a₂ x₂ h₂]
-  obtain ⟨C₁, hC₁⟩ := hb₁
-  obtain ⟨C₂, hC₂⟩ := hb₂
-  intro ε hε
-  obtain ⟨n₁, hn₁⟩ := h₁ (ε / (|C₂| * 2)) (by simpa)
-  obtain ⟨n₂, hn₂⟩ := h₂ (ε / (|x₁| * 2)) (by simpa)
-  use (max n₁ n₂)
-  intro m hmn
-  have hlt₁ : |a₁ m - x₁| < ε / (|C₂| * 2):= by
-    apply hn₁
-    exact le_of_max_le_left hmn
-  have hlt₂ : |a₂ m - x₂| < ε / (|x₁| * 2) := by
-    apply hn₂
-    exact le_of_max_le_right hmn
-  calc
-    |a₁ m * a₂ m - x₁ * x₂| = |a₁ m * a₂ m - x₁ * a₂ m + x₁ * a₂ m - x₁ * x₂| := by ring_nf
-    _ = |a₁ m * a₂ m - x₁ * a₂ m + (x₁ * a₂ m - x₁ * x₂)| := by abel_nf
-    _ ≤ |a₁ m * a₂ m - x₁ * a₂ m| + |x₁ * a₂ m - x₁ * x₂| := abs_add _ _
-    _ = |(a₁ m - x₁) * a₂ m| + |x₁ * (a₂ m - x₂)| := by ring_nf
-    _ = |(a₁ m - x₁)| * |a₂ m| + |x₁| * |(a₂ m - x₂)| := sorry
-    _ ≤ |(a₁ m - x₁)| * |C₂| + |x₁| * |(a₂ m - x₂)| := sorry
-    _ ≤ ε / (|C₂| * 2) * |C₂| + |x₁| * ε / (|x₁| * 2) := sorry
-    _ = ε := by ring_nf;
-
-
-
-
 
 /-
 The sandwich lemma: Given three sequences `a`, `b` and `c` such that
