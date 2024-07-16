@@ -1,0 +1,117 @@
+\section{Left- and Right-Continuous Functions}
+
+
+\subsection{Definitions}
+
+\begin{definition}
+    A function $f : D \to \mathbb{R}$ is \textit{left-continuous at a point} $a \in D$ if
+    \begin{align*}
+    \boxed{
+        \forall \epsilon > 0 \quad \exists \delta > 0
+        \quad \forall x \in D, \: x < a: \quad
+        \Bigl(|x - a| < \delta \: \implies \: |f(x) - f(a)| < \epsilon \Bigr)
+    }
+    \end{align*}
+    If $f$ is left-continuous at every point in $D$, then we say that $f$ is \textit{left-continuous on} $D$.
+\end{definition}
+
+\begin{definition}
+    A function $f : D \to \mathbb{R}$ is \textit{right-continuous at a point} $a \in D$ if
+    \begin{align*}
+    \boxed{
+        \forall \epsilon > 0 \quad \exists \delta > 0
+        \quad \forall x \in D, \: x > a: \quad
+        \Bigl(|x - a| < \delta \: \implies \: |f(x) - f(a)| < \epsilon \Bigr)
+    }
+    \end{align*}
+    If $f$ is right-continuous at every point in $D$, then we say that $f$ is \textit{right-continuous on} $D$.
+\end{definition}
+
+
+
+
+\subsection{Heaviside function as example}
+
+\begin{definition}
+    The Heaviside function $\Theta : \mathbb{R} \to \{0, 1\}$ is defined as
+    \begin{align*}
+        \Theta(x) \coloneqq \begin{cases} 
+            0 & \text{for } x < 0 \\
+            1 & \text{for } x \geq 0
+        \end{cases}
+    \end{align*}
+\end{definition}
+
+
+\begin{theorem}
+    Let $\Theta: \R \to \R$ denote the Heaviside function. $\Theta$ is right-continuous at $0$.
+\end{theorem}
+
+\begin{proof}
+    We consider the point $0$. Let $\epsilon > 0$. Choose $\delta \coloneqq 1 > 0$.
+
+    Let $x \in \R$, $x > 0$ and $|x - 0| < \delta$, \ie $|x| < 1$. In summary, $x\in (0,1)$. Then $\Theta(x) = 1$.\\
+    We find: $|\Theta(x) - \Theta(0)| = |1 - 1| = 0 < \epsilon$. This proves that $\Theta$ is right-continuous at $0$.
+\end{proof}
+
+
+\begin{theorem}
+    Let $\Theta: \R \to \R$ denote the Heaviside function. $\Theta$ is not continuous at $0$.
+\end{theorem}
+
+\begin{proof}
+    Assume, for contradiction, that $\Theta$ is continuous at 0. Let $\epsilon = 1/2$. Then there $\exists \delta > 0$, such that $\forall x \in D$, if $|x - 0| < \delta$, then $|\Theta(x) - \Theta(0)| < \epsilon = 1/2$. Consider $\displaystyle x = -\delta/2$, which fulfills $|x| < \delta$ since $|- \delta / 2| = \delta / 2 < \delta$.
+
+    For our choice of $x$, we find $\Theta(x) = 0$ since $x < 0$.
+    Therefore:
+    \begin{align*}
+        |\Theta(x) - \Theta(0)| = |0 - 1| = 1
+    \end{align*}
+    This is a contradiction to $|\Theta(x) - \Theta(0)| < 1/2$. Therefore, $\Theta$ is not continuous at $0$.
+\end{proof}
+
+
+
+
+\pagebreak
+\subsection{Equivalence of continuity and left- and right-continuity}
+
+\begin{theorem}
+    A function $f : D \subseteq \R \to \R$ is continuous at a point $a \in D$ if and only if it is both left-continuous and right-continuous at $a$.
+\end{theorem}
+
+\begin{proof}
+    Let $a \in D$ and consider a function $f : D \subset \R \to \R$. That is,
+
+    \begin{itemize}
+    \item[($\Rightarrow$)] Assume $f$ is continuous at $a$.
+        \begin{align*}
+            \forall \epsilon > 0 \quad \exists \delta > 0
+            \quad \forall x \in D: \quad
+            \Bigl(|x - a| < \delta \: \implies \: |f(x) - f(a)| < \epsilon \Bigr)
+        \end{align*}
+        This implies both left- and right-continuity at $a$ due to $x < a$ and $x > a$ being stronger conditions than $x \in D$.
+
+    \item[($\Leftarrow$)] Assume $f$ is both left- and right-continuous at $a$. Let $\epsilon > 0$.
+    
+        Since $f$ is left-continuous: $\exists \delta_1 > 0 \quad
+        \forall x \in D, x < a: \quad
+        \bigl(|x - a| < \delta_1 \implies |f(x) - f(a)| < \epsilon\bigr)$
+
+        Since $f$ is right-continuous: $\exists \delta_2 > 0 \quad
+        \forall x \in D, x > a: \quad
+        \bigl(|x - a| < \delta_2 \implies |f(x) - f(a)| < \epsilon\bigr)$
+
+        Choose $\delta \coloneqq \min(\delta_1, \delta_2)$. Let $x \in D$ and $|x - a| < \delta$. Due to our choice of $\delta$, we also have $|x-a| < \delta_1$ and $|x-a| < \delta_2$.
+        
+        Now consider these cases:
+
+        \begin{itemize}
+            \item If $x < a$, then $|f(x) - f(a)| < \epsilon$ by left-continuity.
+            \item If $x > a$, then $|f(x) - f(a)| < \epsilon$ by right-continuity.
+            \item If $x = a$, then $|f(x) - f(a)| = 0 < \epsilon$.
+        \end{itemize}
+
+        Hence, $f$ is continuous at $a$.
+    \end{itemize}
+\end{proof}
