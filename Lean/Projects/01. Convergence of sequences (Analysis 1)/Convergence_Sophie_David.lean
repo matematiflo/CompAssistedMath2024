@@ -390,7 +390,6 @@ lemma n_ge_binomial (n : ℕ) (h : n ≥ 2) : n ≥ (n * (n - 1 : ℝ)) / 2 * (d
         _ = (d n + 1) ^ n := by simp [d]
         _ = ∑ k ∈ Finset.range (n + 1), d n ^ k * (n.choose k) := by rw[add_pow]; simp
         _ ≥ d n ^ 2 * Nat.choose n 2 := by
-            show _ ≤ _
             apply Finset.single_le_sum (f := fun k ↦ d n ^ k * n.choose k)
             · intro i _
               have h1 : 0 ≤ d n ^ i := by
