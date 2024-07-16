@@ -1,0 +1,165 @@
+\documentclass[8pt]{beamer}
+\usetheme{Copenhagen}
+\usepackage[fleqn]{mathtools}
+\usepackage{stmaryrd}
+\usepackage[numbers]{natbib}
+
+\title{Lagrange Polynomials}
+\date{16 July 2024}
+\author{Simon Binder, Mihail Prudnikov}
+\begin{document}
+	\begin{frame}[plain]
+		\maketitle
+	\end{frame}
+	
+	\begin{frame}{Intruduction}
+		\begin{block}{What is the presentaiton about ?}
+			\begin{itemize}
+				\item
+				Lagrange polynomials are used for polynom interpolation:\\
+				you can interpolate any polynomial of degree $n$ exactly knowing only $n+1$ of its points
+				\item
+				very useful in numreical analysis
+				\item
+				We will define lagrange polynomails and show why they form a basis of $P_n$
+				\item
+				Our References: Rannacher R: introduction to numerics script \\ Brown Wiliam A: Matricies and vectorspaces
+			
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Definitions 1}
+		\begin{block}{Basis}
+			Let $V$ be a vector space over a field $K$. $B :=\{ v_1, \ldots, v_n\}\subset V $ is a basis of $V$ if and only if:
+			\begin{itemize}
+				\item B is linearly independent
+				\item
+				 $\forall v \in V:  v = \sum_{i=1}^{n}\alpha_i v_i\text{   } \alpha_i \in K:\forall i\in 1,\ldots,n:$ : 
+			\end{itemize}\cite{basis}
+		\end{block}
+		\begin{block}{Lagrange Polynomials}
+			Let $\{x_0, \ldots, x_n \} \subset \mathbb{R}: \forall i,j \in 0, \ldots ,n: x_i \neq x_j \text{ if } i \neq j$. For this set of values, we can define Lagrange polynomials: $\{\ell_0(x), \ldots, \ell_n(x)\}$ with \\ $\ell_j(x) = 
+			\displaystyle \prod_{\substack{i= 0 \\ i \neq j }}^{n}\frac{x - x_i}{x_j - x_i}$. \cite{lagrange}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Definitions 2}
+		\begin{block}{Dimension}
+			The cardinality of a basis. \cite{basis}
+		\end{block}
+		\begin{block}{Polynomials}
+			A polynomial of a degree $n\in \mathbb{N}$ is defined as: 
+			\begin{align*}
+				p = \sum_{i = 0}^{n} \alpha_i X^i\qquad \alpha_i \in \mathbb{R}
+			\end{align*}
+			with $p\in \mathbb{R}[X]$ where $X$ is the indeterminante 
+		\end{block}
+		\begin{block}{$P_n$}
+			$P_n$ is a vector space of polynomials of bounded degree, defined as $P_n = \{p \in R[X] : \deg(p) \leq n \}$ with $n \in \mathbb{N}_0$ where $R[X]$ is the ring of polynomials.\cite{lagrange}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Proofs 1}
+		\begin{block}{Theorem 1}
+			$\forall i,j \in1,\ldots,n:\ell_j(x_i) = \delta_{ij}$
+		\end{block}
+		\begin{proof}
+			Let $x_i, x_j \in \{x_0, \ldots, x_n \}$ and $j \neq i$ then we conclude: 
+			\begin{align*}
+				\ell_j(x_i) &= \prod_{\substack{k= 0 \\ k \neq j }}^{n}\frac{x_i - x_k}{x_j - x_k} = \prod_{\substack{k= 0 \\ k \neq j}}^{i-1}\frac{x_i - x_k}{x_j - x_k} \cdot 0 \cdot \prod_{\substack{k= i+1 \\ k \neq j}}^{n}\frac{x_i - x_k}{x_j - x_k} = 0 \\
+				\ell_j(x_j) &= \prod_{\substack{k= 0 \\ k \neq j }}^{n}\frac{x_j - x_k}{x_j - x_k} =  \prod_{\substack{k= 0 \\ k \neq j }}^{n} 1 = 1
+			\end{align*}
+		\end{proof}
+	\end{frame}
+			
+	\begin{frame}{Proofs 2}
+		\begin{block}{Theorem 2}
+			Monomials of degree $0$ to $n$ form a basis of $P_n$. with $n \in \mathbb{N}_0$.
+		\end{block}
+		\begin{proof}
+ 			we can evaluate the polynomial at $x = 0$ for the polynomial and all of its derivatives
+			\begin{align*}
+				0 &= \sum_{i=0}^{n}\alpha_i x^i \Rightarrow 0  =\sum_{i=1}^{n}\alpha_i \cdot 0 + \alpha_0 \Rightarrow \alpha_0 = 0\\
+				\Rightarrow \frac{d}{dx} 0 = 0 &=\sum_{i=1}^{n}i\alpha_i x^{i-1} \Rightarrow 0  =\sum_{i=2}^{n}i\alpha_i \cdot 0 + \alpha_1 \Rightarrow \alpha_1 = 0\\
+			\end{align*}
+			repeat the argument till all of $\alpha_i$ are evaluated $\Rightarrow \forall i \in 0, \ldots, n: \alpha_i = 0\Rightarrow$ the polynomials are linearly independant\\
+		\end{proof}
+
+		\end{frame}
+			
+		\begin{frame}{Proofs 3}
+			\begin{proof}
+				Using monomials, we can also construct any polynomial up to the degree of $n$ because
+				\begin{align*}
+					\forall p \in P_n : p = \sum_{i=1}^{n}\alpha_i x^i \qquad \alpha_i\in K 
+				\end{align*}
+				because of how polynomials are defined. Hence, the monomials form a basis of $P_n$\\
+			\end{proof}
+			Because we require $n+1$ monomials to span $P_n$, we can say that $\dim(P_n) = n+1$.
+			
+		\end{frame}
+							
+		\begin{frame}{Proofs 4}
+			\begin{theorem}
+				For $\{x_0, \ldots x_n \}\subset \mathbb{R}$, as defined above, the corresponding Lagrange polynomials $\{\ell_0, \ldots \ell_n \}$ will be linearly independent in $P_n$.
+			\end{theorem}
+			\begin{proof}
+				\begin{itemize}
+					\item 
+					Proof that $\forall j \in 0\ldots n: \ell_j \in P_n$\\
+					\begin{align*}
+						\displaystyle deg(\ell_j) =& deg\bigg(\prod_{\substack{k= 0 \\ k \neq j }}^{n}\frac{x - x_k}{x_j - x_k}\bigg) =deg\bigg( \prod_{\substack{k= 0 \\ k \neq j }}^{n}(x-x_k)\bigg) \\=& \sum_{\substack{k= 0 \\ k \neq j }}^{n} deg(x-x_k) = \sum_{\substack{k= 0 \\ k \neq j }}^{n} 1 = n\\
+						\Rightarrow& \ell_j \in P_n
+					\end{align*}
+				
+				\end{itemize}
+			\end{proof}
+		\end{frame}
+		\begin{frame}{Proofs 5}
+			\begin{proof}
+				\begin{itemize}
+					\item Proof of linear independence:\\
+					Let's assume $\{\ell_0, \ldots \ell_n \}$ is linearly dependent and use the $\delta_{ij}$ property of $\ell_j$:
+					\begin{align*}
+						&\exists j \in \{1, \ldots ,n \} : \ell_j(x) = \sum_{\substack{i= 0 \\ i \neq j }}^{n} \alpha_i \ell_i(x)
+						\Rightarrow\quad  \ell_j(x_j) = \sum_{\substack{i= 0 \\ i \neq j }}^{n} \alpha_i \ell_i(x_j)\\
+						&\Rightarrow 1 = \ell_j(x_j) = \sum_{\substack{i= 0 \\ i \neq j }}^{n} \alpha_i \underbrace{\ell_i(x_j)}_{=0} = 0 \lightning\\& \Rightarrow \text{Lagrange polynomials are linearly independent}
+					\end{align*}
+				\end{itemize}
+			\end{proof}
+		\end{frame}
+									
+		\begin{frame}{Proofs 6}
+			\begin{theorem}
+				Let $V$ be a vector space, $M = \{v_1, \ldots, v_n\}$, $\# M = \dim(V)$, $M \subset V$ and $\{v_1, \ldots, v_n\}$ are linearly independent, then $M$ is a basis of $V$.
+			\end{theorem}
+			\begin{proof}
+				Let there be one more vector in $V$ that is linearly independent of vectors in $M$, then $\dim(V) \geq n+1$ due to how the dimension is defined, which is a contradiction.\\ 
+				We now know that $\forall u \in V$ $\{v_1, \ldots, v_n, u\}$ will be linearly dependent.
+				\begin{align*}
+					&\Rightarrow \forall u \in V: u = \sum_{i = 1}^{n}\alpha_i v_i \qquad \alpha_i \in K\quad i \in 1, \ldots, n
+				\end{align*}
+				And, because vectors in $M$ are linearly independent, $M$ must be the basis of $V$.
+			\end{proof}
+		\end{frame}
+											
+		\begin{frame}{Proofs 7}
+			\begin{theorem}
+				Set of Lagrange polynomials $\{\ell_0,\ldots, \ell_n\}$ is a basis of $P_n$ for $n \in \mathbb{N}_0$.
+			\end{theorem}
+			\begin{proof}
+				We know that $\#\{\ell_0,\ldots, \ell_n\} = n+1 = \dim(P_n)$. The Lagrange polynomials are linearly independent and $\{\ell_0,\ldots, \ell_n\} \subset P_n$. according to our previous theorem, $\{\ell_0,\ldots, \ell_n\}$ is a basis of $P_n$.
+			\end{proof}
+		\end{frame}
+		\begin{frame}{Sources}
+			\begin{thebibliography}{9}
+				\setbeamertemplate{bibliography item}[number]
+				\bibitem{basis}
+				Brown William A. (1991), Matricies and vector spaces, New York M. Dekker, ISBN 978-0-8247-8419-5 page 107
+				\bibitem{lagrange}
+				Rannacher, R. 2017. Numerik 0: Einführung in die Numerische Mathematik. Heidelberg University Publishing. Page 24
+			\end{thebibliography}
+		\end{frame}
+													
+\end{document}

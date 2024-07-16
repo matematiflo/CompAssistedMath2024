@@ -58,7 +58,7 @@ lemma iff' (a : ℕ → ℝ) (x : ℝ) :
 Constant sequences converge to the constant value.
 -/
 
-theorem of_constant (x : ℝ) : ConvergesTo (fun _ ↦ x) x := by
+theorem of_constant (x : ℝ) : ConvergesTo (fun _ ↦ x)  x := by
   dsimp [ConvergesTo]
   intro ε hε
   use 0
@@ -185,83 +185,41 @@ Hint for the proof: use that convergent sequences are bounded!
 theorem mul (a₁ a₂ : ℕ → ℝ) (x₁ x₂ : ℝ) (h₁ : ConvergesTo a₁ x₁)
     (h₂ : ConvergesTo a₂ x₂) : ConvergesTo (a₁ * a₂) (x₁ * x₂) := by
 
-    have hb₁ := IsBounded.of_convergesTo a₁ x₁ h₁
-    have hb₂ := IsBounded.of_convergesTo a₂ x₂ h₂
-
-    obtain ⟨C₁, hC₁⟩ := hb₁
-    obtain ⟨C₂, hC₂⟩ := hb₂
-
-    have hC₁_nonneg : 0 ≤ C₁ := by
-      trans
-      · exact abs_nonneg (a₁ 0)
-      · exact hC₁ 0
-
-    have hC₂_nonneg : 0 ≤ C₂ := by
-      trans
-      · exact abs_nonneg (a₂ 0)
-      · exact hC₂ 0
-
-    have hCmax_nonneg : 0 ≤ (max C₁ C₂) := by
-      exact le_max_of_le_left hC₁_nonneg
-
-    intro ε hε
-
-    let K := max C₁ C₂ + ε
-    --have hK_pos : 0 < max C₁ C₂ + ε := by
-    --  apply lt_of_lt_of_le
-    --  · exact hε
-    --  · exact le_add_of_nonneg_left hCmax_nonneg
-    have hK_pos : 0 < K := by
-      apply lt_of_lt_of_le
-      · exact hε
-      · exact le_add_of_nonneg_left hCmax_nonneg
-
-    obtain ⟨n₁, hn₁⟩ := h₁ (ε / (2 * K)) (div_pos hε (by linarith))
-    obtain ⟨n₂, hn₂⟩ := h₂ (ε / (2 * K)) (div_pos hε (by linarith))
-
-    use (max n₁ n₂)
-    intro m hmn
-
-    have hlt₁ : |a₁ m - x₁| <  ε / (2 * K) := by
-      apply hn₁
-      exact le_of_max_le_left hmn
-
-    have hlt₂ : |a₂ m - x₂| <  ε / (2 * K) := by
-      apply hn₂
-      exact le_of_max_le_right hmn
-
-    have hlt₁' : |a₁ m| ≤ K := by
-      trans
-      · exact hC₁ m
-      · apply le_trans
-        · exact le_max_left C₁ C₂
-        · simp [K]; linarith
-
-    have hlt₂' : |x₂| ≤ K := by sorry
-
-
-
-
-    calc
-      |a₁ m * a₂ m - (x₁ * x₂)| = |(a₁ m * a₂ m) - (a₁ m * x₁) + (a₁ m * x₁) - (x₁ * x₂)| := by ring_nf
-                              _ = |a₁ m * (a₂ m - x₂) + (a₁ m - x₁) * x₂| := by ring_nf
-                              _ ≤ |a₁ m * (a₂ m - x₂)| + |(a₁ m - x₁) * x₂| := abs_add _ _
-                              _ = |a₁ m| * |a₂ m - x₂| + |a₁ m - x₁| * |x₂| := by simp [abs_mul]
-                              _ ≤ K * |a₂ m - x₂| + |a₁ m - x₁| * |x₂| := add_le_add (mul_le_mul_of_nonneg_right hlt₁' (abs_nonneg _)) (le_refl _)
-                              _ ≤ K * |a₂ m - x₂| + |a₁ m - x₁| * K := add_le_add (le_refl _) (mul_le_mul_of_nonneg_left hlt₂' (abs_nonneg _))
-                              _ < K * (ε / (2 * K)) + (ε / (2 * K)) * K := add_lt_add (mul_lt_mul_of_pos_left hlt₂ hK_pos) (mul_lt_mul_of_pos_right hlt₁ hK_pos)
-                              _ = ε / 2 + ε / 2 := by field_simp; ring
-                              _ = ε := by ring
-
 /-
 The sandwich lemma: Given three sequences `a`, `b` and `c` such that
 `a n ≤ b n ≤ c n` for all `n : ℕ` and both `a` and `c` converge to `x : ℝ`. Then also
 `b` converges to `x`.
 -/
 
-theorem sandwich (a b c : ℕ → ℝ) (h : ∀ n, a n ≤ b n ∧ b n ≤ c n) (x : ℝ)
-    (ha : ConvergesTo a x) (hb : ConvergesTo c x) : ConvergesTo b x :=
-  sorry
+
+  theorem sandwich (a b c : ℕ → ℝ) (h : ∀ n, a n ≤ b n ∧ b n ≤ c n) (x : ℝ)
+    (ha : ConvergesTo a x) (hb : ConvergesTo c x) : ConvergesTo b x := by
+  intro ε hε
+  obtain ⟨n₁, hn₁⟩ := ha ε hε
+  obtain ⟨n₂, hn₂⟩ := hb ε hε
+  let N := max n₁ n₂
+  use N
+  intro m hmn
+  have hn₁n : n₁ ≤ N := le_max_left n₁ n₂
+  have hn₂n : n₂ ≤ N := le_max_right n₁ n₂
+
+  have hmn₁ : n₁ ≤ m := le_trans hn₁n hmn
+  have hmn₂ : n₂ ≤ m := le_trans hn₂n hmn
+
+  have h₁ : |a m - x| < ε := hn₁ m hmn₁
+  have h₂ : |c m - x| < ε := hn₂ m hmn₂
+
+  have h₃ : a m ≤ b m := (h m).left
+  have h₄ : b m ≤ c m := (h m).right
+
+  rw [abs_sub_lt_iff] at h₁ h₂
+  rw [abs_sub_lt_iff]
+  rcases h₁ with ⟨_, h₁r⟩
+  rcases h₂ with ⟨h₂l, _⟩
+  constructor
+  · linarith
+  · linarith
+
 
 end ConvergesTo
 
