@@ -1,5 +1,16 @@
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
+/- In this project sketch we define and prove some basic properties of divisibility in commutative rings.
+Such as:
+- Definition of divisibility
+- Definition of associated elements and some basic properties
+- Definition of irreducible elements
+- Definition of prime elements
+- Definition of unique factorization domains
+- Theorem 1: In an integral domain, every prime element is irreducible.
+- Theorem 2: In unique factorization domains, every irreducible element is prime.
+ -/
+
 
 example {R : Type} [CommRing R] [IsDomain R] (x y : R) (hx : x ≠ 0) (h : x * y = x) : y = 1 := by
   exact (mul_eq_left₀ hx).mp h
@@ -202,9 +213,10 @@ theorem isIrreducible_of_isPrime [IsDomain R] (x : R) (h : IsPrime x) : IsIrredu
       exact Or.inl (is_unit_of_mul_eq_one h_mul1 hnontrivial hxb)
 
 
+-- Here we switch from R to D to more easily distinguish between the integral domain and UFD properties.
 
 /-
-Now define factorial rings (also called unique factorization domains) and show that in any UFD,
+We now define factorial rings (also called unique factorization domains) and show that in any UFD,
 the converse of `isIrreducible_of_isPrime` holds, i.e. every irreducible element is prime.
 -/
 noncomputable instance (D: Type) [CommRing D] : Inhabited D := by
@@ -217,7 +229,7 @@ rings are bound to have a 0, but Lean doesn't know that.
 Thus, we include these 2 lines above, which for some reason help Lean to realise inhabitedness of D.
 -/
 
-def IsFactorialRing (D: Type) [CommRing D] [IsDomain D]: Prop :=
+def IsUFD (D: Type) [CommRing D] [IsDomain D]: Prop :=
   -- It's based on an integral domain D
   -- every non-trivial element is factorable into irreducibles
   (∀ (x : D), x ≠ 0 → ¬IsUnit x → ∃ (factors :List D), -- for any non-zero, non-unit x in D there's a list
@@ -233,9 +245,9 @@ def IsFactorialRing (D: Type) [CommRing D] [IsDomain D]: Prop :=
   (∀ i : Fin σ.length,  (IsAssociated (σ.get i) (factors2.get! i )))) -- such that sigma[i] is associated to factors2[i]
   )
 
-  -- in the definition we could have used IsNontrivial x instead of a ≠ 0 and ¬IsUnit,
-  -- but we decided not to, to not need to fold and unfold ∧ in the nontriviality all the time
-
+/- in the definition we could have used IsNontrivial x instead of a ≠ 0 and ¬IsUnit,
+but we decided not to, to not need to fold and unfold the 2 properties of nontriviality all the time
+-/
 
 
 variable {D : Type} [CommRing D] [IsDomain D]
@@ -353,7 +365,7 @@ lemma fin_σ_has_index_for_p {factors_pc factors_c factors_ab σ : List D} {p: D
 
   have hpfactor : p = factors_pc.get! 0 := by
     simp[h]
-  -- in short: σ.length=ab.length=pc.length>0, because pc≠[]
+  -- in short: σ.length=ab.length=pc.length>0, because p∈ factors_pc→ factors_pc≠[]
   have hpclengthgr0 : factors_pc.length > 0 := by
     have hfactors_pc_isnotnull : ¬factors_pc = [] := by
       intro hf
@@ -455,7 +467,7 @@ lemma factor_associate_divides_prod [IsDomain R] {a p : R} {factors_a : List R}
 Theorem 2: In unique factorization domains, every irreducible element is prime.
 -/
 
-theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactorialRing D): IsPrime p := by
+theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsUFD D): IsPrime p := by
   obtain ⟨hnontrivial, hirr⟩ := h
   constructor
   · exact hnontrivial
@@ -520,7 +532,6 @@ theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactoria
       simp[factors_ab, hprodfactors_a, hprodfactors_b]
 
     -- Step 4.3: a factorisation of ab must be non-trivial to be unique up to association
-
     -- proof: as simple as split into a factor is in factors_a or factors_b
     have hfactor_ab_irreducible : ∀ y ∈ factors_ab, IsIrreducible y := by
       intros y hy
@@ -528,6 +539,7 @@ theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactoria
       rcases hy with hya | hyb
       · exact hfactor_a_irreducible y hya
       · exact hfactor_b_irreducible y hyb
+
     -- -- Step 4.4: same for p*c and factors_pc
     have hprodfactors_pc : a*b = List.prod factors_pc := by
       simp[factors_pc, hprodfactors_c, hdiv]
@@ -539,6 +551,7 @@ theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactoria
       rcases hy with rfl | hy
       · exact ⟨hnontrivial, hirr⟩ -- p itself is irreducible
       · exact hfactor_c_irreducible y hy
+
     -- Step 4.5: use the uniqueness of factorisation in UFD
     -- namely, for factors_ab and factors_pc is true:
 
@@ -577,12 +590,6 @@ theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactoria
       exact factor_associate_divides_prod hprodfactors_a hpa
     · right
       exact factor_associate_divides_prod hprodfactors_b hpb
-
-
-
-
-
-
 
 
 
