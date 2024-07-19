@@ -1,5 +1,6 @@
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
+
 example {R : Type} [CommRing R] [IsDomain R] (x y : R) (hx : x ≠ 0) (h : x * y = x) : y = 1 := by
   exact (mul_eq_left₀ hx).mp h
 
@@ -199,14 +200,18 @@ theorem isIrreducible_of_isPrime [IsDomain R] (x : R) (h : IsPrime x) : IsIrredu
 
 
 /-
-Now define factorial rings (also called unique factorization domains) and show that in any factorial ring,
-also the converse of `isIrreducible_of_isPrime` holds, i.e. every irreducible element is prime.
+Now define factorial rings (also called unique factorization domains) and show that in any UFD,
+the converse of `isIrreducible_of_isPrime` holds, i.e. every irreducible element is prime.
 -/
 noncomputable instance (D: Type) [CommRing D] : Inhabited D := by
   exact Classical.inhabited_of_nonempty'
--- Some dark magic to help Lean realise, that every ring has a 0 by default,
--- which helps us in the following definition to use get! on a list
-
+/-
+In the next definnition, we have to access element of factors2 list by using i ∈ Fin σ.length,
+instead of i ∈ Fin factors2.length. It is no problem, because they are the same length, so we use get!,
+which ignores the lengths, but requires existence of some element in D. Which, again, is obvious,
+rings are bound to have a 0, but Lean doesn't know that.
+Thus, we include these 2 lines above, which for some reason help Lean to realise inhabitedness of D.
+-/
 
 def IsFactorialRing (D: Type) [CommRing D] [IsDomain D]: Prop :=
   -- It's based on an integral domain D
@@ -249,8 +254,8 @@ lemma units_dont_break_divisibility [IsDomain R] {a b c p : R} (hunit_a : IsUnit
   subst hmul
   ring
 
-
--- if a_i∈ factors_a, factors_a.prod = a, then a_i | a
+-- from Step 5
+-- if a_i ∈ factors_a, factors_a.prod = a, then a_i | a
 lemma factor_divides_prod [IsDomain R] {a a_i : R} {factors_a : List R} (hfactors: a=factors_a.prod) (ha_i: a_i ∈ factors_a) : a_i | a := by
   obtain ⟨s, t, hsplit⟩ := (List.append_of_mem ha_i)
   simp[List.prod_cons, hsplit] at hfactors
@@ -354,24 +359,20 @@ lemma product_of_non_units_is_non_unit {a b: D} (hunit_b : ¬IsUnit b) : ¬IsUni
 lemma fin_σ_has_index_for_p {factors_pc factors_c factors_ab σ : List D} {p: D} (h: factors_pc = [p]++factors_c)
  (hlength : factors_ab.length = factors_pc.length) (hσ : σ ∈ factors_ab.permutations) :
  (∃ j : Fin σ.length, p = factors_pc.get! j) := by
-  -- we actually know the index is 0
-  -- but we need to prove σ.length>0 to be able to translate 0 from ℕ to Fin σ.length
-
-  -- first, prove that factors_pc.length > 0
-  -- by using a lemma that says that non-empty list has length > 0,
-  -- and the fact, that factors_pc=[p]++factors_c
+  /- the definition of same was (∀ i : Fin σ.length,  (IsAssociated (σ.get i) (factors2.get! i )))
+  so we need to find the index of p in factors_pc.
+  It's 0, because factors_pc := p ++ factors_c, BUT
+  i : Fin σ.length, not i : Fin factors_pc.length
+  -/
   have hpfactor : p = factors_pc.get! 0 := by
     simp[h]
-
+  -- in short: σ.length=ab.length=pc.length>0, because pc≠[]
   have hpclengthgr0 : factors_pc.length > 0 := by
     have hfactors_pc_isnotnull : ¬factors_pc = [] := by
       intro hf
       simp[h] at hf
     exact (List.length_pos_iff_ne_nil.mpr hfactors_pc_isnotnull)
 
-  -- now we use the hlength, it states that factors_pc.length=factors_ab.length
-  -- and List.mem_permutations.mp, which says σ.length=factors_ab.length, as σ is a permutation of factors_ab
-  -- to get σ.length=factors_pc.length>0
   have hσlengthgr0 : σ.length > 0 := by
     have hequallength : σ.length = factors_pc.length  := by
       rw[<-hlength]
@@ -392,8 +393,6 @@ lemma p_has_an_associate_in_ab {factors_pc factors_c factors_ab σ : List D} {p:
  (∃ i : Fin σ.length, IsAssociated (σ.get i) p) := by
 
   -- because in the definition we have only indexes of elements, we need to find the index of p in factors_pc
-  -- it's obviously 0, but it requires a separate lemma, called fin_σ_has_index_for_p,
-  -- the results of which we can substitute here
   obtain ⟨j, hfactorspc_j_equals_p⟩ := (fin_σ_has_index_for_p h hlength hσ)
   use j
   rw[hfactorspc_j_equals_p]
@@ -437,7 +436,7 @@ lemma p_associate_of_a_or_b {factors_a factors_b factors_ab σ : List D} (h: fac
 
 
 /-
-In factorial rings, every irreducible element is prime.
+Theorem 2: In unique factorization domains, every irreducible element is prime.
 -/
 
 theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactorialRing D): IsPrime p := by
@@ -513,7 +512,6 @@ theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactoria
       rcases hy with hya | hyb
       · exact hfactor_a_irreducible y hya
       · exact hfactor_b_irreducible y hyb
-
     -- -- Step 4.4: same for p*c and factors_pc
     have hprodfactors_pc : a*b = List.prod factors_pc := by
       simp[factors_pc, hprodfactors_c, hdiv]
@@ -525,8 +523,6 @@ theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactoria
       rcases hy with rfl | hy
       · exact ⟨hnontrivial, hirr⟩ -- p itself is irreducible
       · exact hfactor_c_irreducible y hy
-
-
     -- Step 4.5: use the uniqueness of factorisation in UFD
     -- namely, for factors_ab and factors_pc is true:
 
@@ -554,10 +550,9 @@ theorem isPrime_of_isIrreducible (p : D) (h : IsIrreducible p) (hUFD: IsFactoria
       exact p_associate_of_a_or_b hfactors_ab hσ hpassociatedwithab_i
 
 
-    -- Step 5: p is divides a or b
-    -- basically, rewrite a_i = p*u
-    -- and a=a₁⬝a₂...a_{i-1}⬝p⬝u⬝a_{i+1}... in case hpa
-    -- or same with b in hpb
+    /- Step 5: p is divides a or b.
+    Rewrite a_i = p*u and a=a₁⬝a₂...a_{i-1}⬝p⬝u⬝a_{i+1}... in case hpa,
+    or same with b in hpb -/
     rcases hp_assoc_a_or_b with hpa | hpb
     · left
       exact factor_associate_divides_prod hprodfactors_a hpa
