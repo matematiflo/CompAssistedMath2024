@@ -77,13 +77,8 @@ lemma isPID_of_field (k : Type) [Field k] : IsPID k where
       intro y
       constructor
       · intro hy
-
-
-
-
         sorry
-
-
+      sorry
 
 
 
