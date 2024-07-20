@@ -149,6 +149,22 @@ def Int.euclidean : EuclideanFunction ℤ where
     let q := a / b
     let r := a % b
 
+    -- Proof that a = b * q + r
+    have h1 : a = b * q + r := by{
+      nth_rewrite 1 [← Int.emod_add_ediv a b, add_comm]
+      rfl
+    }
+    --proof 0 ≤ r
+    have h2 : 0 ≤ r := by{
+      --exact?
+      exact emod_nonneg a hb
+    }
+    --proof r < |b|
+    have h3 : r < natAbs b := by{
+      simp
+      exact emod_lt a hb
+    }
+
     sorry
 
 
