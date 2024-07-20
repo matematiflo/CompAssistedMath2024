@@ -147,8 +147,15 @@ Hint: The remainder of integer division of `a : ℤ` by `b : ℤ` is `a % b`.
 
 def Int.euclidean : EuclideanFunction ℤ where
   height := λ n => n.natAbs
-  zero_of_bot := sorry
-  division a b hb := sorry
+  zero_of_bot := by
+    intro a
+    simp
+  division a b hb :=
+    let q := a / b
+    let r := a % b
+
+    sorry
+
 
 theorem Int.isEuclidean : IsEuclideanDomain ℤ where
   isDomain := inferInstance
