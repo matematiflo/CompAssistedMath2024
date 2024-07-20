@@ -19,7 +19,8 @@ We can find lemma names by using the library search tactic `exact?`.
 -/
 
 example (a b : ℤ) : a % b + b * (a / b) = a := by
-  exact?
+  --exact?
+  exact Int.emod_add_ediv a b
 
 /-
 A commutative ring is a *principal ideal domain* (PID) if it is a domain and every ideal is principal.
@@ -145,7 +146,7 @@ Hint: The remainder of integer division of `a : ℤ` by `b : ℤ` is `a % b`.
 -/
 
 def Int.euclidean : EuclideanFunction ℤ where
-  height := sorry
+  height := λ n => n.natAbs
   zero_of_bot := sorry
   division a b hb := sorry
 
