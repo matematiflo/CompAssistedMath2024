@@ -43,20 +43,53 @@ For more information about structures, see https://lean-lang.org/theorem_proving
 Next we prove that a field is a principal ideal domain.
 -/
 
-lemma isPID_of_field (k : Type) [Field k] : IsPID k where
-  /- `IsDomain` is a so-called 'typeclass'. We don't get into the details here, but this means that we can use `inferInstance` to ask Lean to automatically fill in a proof.
+
+
+
+
+
+
+/- `IsDomain` is a so-called 'typeclass'. We don't get into the details here, but this means that we can use `inferInstance` to ask Lean to automatically fill in a proof.
   In this case `IsDomain` is already proven for any field. -/
+
+
+lemma isPID_of_field (k : Type) [Field k] : IsPID k where
   isDomain := inferInstance
   ideal_principal := by
     intro I
     by_cases h : I = 0
+    -- Case 1: I = 0
     · subst h
       use 0
       simp
-    · simp at h
-      have h2 : ∃ x ∈ I, x ≠ 0 := sorry
+    -- Case 2: I ≠ 0
+    · simp at h   --i dont think this does much...
+      have h2 : ∃ x ∈ I, x ≠ 0 := by
+        --since k is a field and I is a non zero ideal, it must contain a non zero element
+        -- exact?
+        exact Submodule.exists_mem_ne_zero_of_ne_bot h
+
+      -- Let x be a nonzero element of I
       obtain ⟨x, hx, hnezero⟩ := h2
-      sorry
+      use x
+      apply Ideal.ext
+      intro y
+      constructor
+      · intro hy
+
+
+
+
+        sorry
+
+
+
+
+
+
+
+
+
 
 /-
 A *Euclidean function* on a commutative ring is a height function `R → ℕ` and a division with remainder, where the height of the remainder is smaller than the denominator.
