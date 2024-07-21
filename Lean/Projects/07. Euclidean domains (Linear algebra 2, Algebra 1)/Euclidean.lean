@@ -253,5 +253,7 @@ example : ¬ IsEuclideanDomain ℤ[X] := by
   have h1 := not_isPID_Zx
   have h2 := isPID_of_euclidean
 
-
-  sorry
+  intro h
+  apply h2 at h
+  apply h1 at h
+  exact h
