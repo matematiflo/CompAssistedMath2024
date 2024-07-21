@@ -76,7 +76,7 @@ lemma isPID_of_field (k : Type) [Field k] : IsPID k where
       apply Ideal.ext
       intro y
       constructor
-      · intro hy
+      · intro
         have hxu: IsUnit x := by {
           rw[isUnit_iff_ne_zero]
           exact hnezero
@@ -84,7 +84,8 @@ lemma isPID_of_field (k : Type) [Field k] : IsPID k where
         have h2 : I = ⊤ := by exact Ideal.eq_top_of_isUnit_mem I hx hxu
         rw[h2]
         exact trivial
-      · intro h2
+
+      · intro
         have hxu: IsUnit x := by {
           rw[isUnit_iff_ne_zero]
           exact hnezero
@@ -92,12 +93,6 @@ lemma isPID_of_field (k : Type) [Field k] : IsPID k where
         rw[← Ideal.span_singleton_eq_top] at hxu
         rw[hxu]
         exact trivial
-
-
-
-
-
-
 
 /-
 A *Euclidean function* on a commutative ring is a height function `R → ℕ` and a division with remainder, where the height of the remainder is smaller than the denominator.
@@ -238,8 +233,9 @@ def Polynomial.euclidean (k : Type) [Field k] : EuclideanFunction k[X] where
     intro hb
     let q :=
     let r :=
+    sorry
 
-theorem Polynomial.isEuclidean_of_field (k : Type) [Field k] : IsEuclideanDomain k[X] :=
+theorem Polynomial.isEuclidean_of_field (k : Type) [Field k] : IsEuclideanDomain k[X] := by
   sorry
 
 /-
