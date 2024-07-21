@@ -227,17 +227,9 @@ theorem isPID_of_euclidean (R : Type) [CommRing R] (h : IsEuclideanDomain R) : I
         exact hx
 
       · intro hy
-        rw [Ideal.mem_span_singleton]
-        obtain ⟨q, rfl⟩ := hy
-        exact Ideal.mul_mem_right I q hx
+        rw [Ideal.mem_span_singleton']
+        -- Should be easy to find an a and show that y/x = a is in R but i cant do it rn
         sorry
-
-      -- Use the Euclidean function to generate the principal ideal
-
-
-
-
-
 
 open Polynomial
 
