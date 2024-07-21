@@ -96,7 +96,7 @@ A *Euclidean function* on a commutative ring is a height function `R → ℕ` an
 Note: This is not merely a proposition, but contains the data of a height function. This height function is not unique, so the datum of a ring `R` with a term `h : Euclidean R` is not equivalent to the notion of a Euclidean domain (see `IsEuclideanDomain`).
 -/
 
-structure EuclideanFunction (R : Type) [CommRing R] where
+structure EuclideanFunction ( R : Type) [CommRing R] where
   /-- Height function. -/
   height : R → WithBot ℕ
   zero_of_bot (x : R) : height x = ⊥ → x = 0
@@ -187,7 +187,7 @@ theorem Int.isEuclidean : IsEuclideanDomain ℤ where
   exists_euclideanFunction := ⟨Int.euclidean⟩
 
 /-
-Any Euclidean ring is a principal ideal domain.
+Any Euclidean ring (domain) is a principal ideal domain.
 -/
 
 theorem isPID_of_euclidean (R : Type) [CommRing R] (h : IsEuclideanDomain R) : IsPID R where
@@ -211,5 +211,12 @@ theorem Polynomial.isEuclidean_of_field (k : Type) [Field k] : IsEuclideanDomain
 `Polynomial.isEuclidean_of_field` is wrong if we drop the field assumption. For example:
 -/
 
-example : ¬ IsEuclideanDomain ℤ[X] :=
+theorem not_isPID_Zx : ¬ IsPID (Polynomial ℤ) := by
+  sorry
+
+example : ¬ IsEuclideanDomain ℤ[X] := by
+  have h1 := not_isPID_Zx
+  have h2 := isPID_of_euclidean
+
+
   sorry
