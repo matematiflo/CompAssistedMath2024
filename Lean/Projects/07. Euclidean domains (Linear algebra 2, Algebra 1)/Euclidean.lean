@@ -245,8 +245,8 @@ def Polynomial.euclidean (k : Type) [Field k] : EuclideanFunction k[X] where
     intro a
     intro b
     intro hb
-    --let q :=
-    --let r :=
+
+
     sorry
 
 
