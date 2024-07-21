@@ -245,6 +245,27 @@ def Polynomial.euclidean (k : Type) [Field k] : EuclideanFunction k[X] where
     intro a
     intro b
     intro hb
+    -- Initialize quotient and remainder
+    let q := a / b
+    let r := a % b
+    -- div. identity
+    have h1 : a = b * q + r := by
+      exact Eq.symm (EuclideanDomain.div_add_mod a b)
+    -- Deg. condition
+    have h2 : degree r < degree b ∨ r = 0 := by
+      by_cases hr : r = 0
+      · right
+        exact hr
+      · left
+        sorry
+
+
+
+
+
+
+
+
 
 
     sorry
