@@ -77,12 +77,21 @@ lemma isPID_of_field (k : Type) [Field k] : IsPID k where
       intro y
       constructor
       · intro hy
-        have hxu: IsUnit x := by sorry
-        sorry
-      sorry
-
-      #print Ideal.span_one
-      #print Ideal.span_singleton_eq_top
+        have hxu: IsUnit x := by {
+          rw[isUnit_iff_ne_zero]
+          exact hnezero
+        }
+        have h2 : I = ⊤ := by exact Ideal.eq_top_of_isUnit_mem I hx hxu
+        rw[h2]
+        exact trivial
+      · intro h2
+        have hxu: IsUnit x := by {
+          rw[isUnit_iff_ne_zero]
+          exact hnezero
+        }
+        rw[← Ideal.span_singleton_eq_top] at hxu
+        rw[hxu]
+        exact trivial
 
 
 
@@ -192,8 +201,28 @@ Any Euclidean ring (domain) is a principal ideal domain.
 
 theorem isPID_of_euclidean (R : Type) [CommRing R] (h : IsEuclideanDomain R) : IsPID R where
   isDomain := h.isDomain
-  ideal_principal := sorry
+  ideal_principal := by
+    intro I
+    by_cases h: I = 0
+    · use 0
+      rw[h]
+      simp
+    · simp at h   --i dont think this does much...
+      have h2 : ∃ x ∈ I, x ≠ 0:= by
+        --since k is a field and I is a non zero ideal, it must contain a non zero element
+        -- exact?
+        exact Submodule.exists_mem_ne_zero_of_ne_bot h
 
+      -- Let x be a nonzero element of I
+      obtain ⟨x, hx, hnezero⟩ := h2
+      use x
+      apply Ideal.ext
+      intro y
+      constructor
+      · intro hy
+        sorry
+      · intro hy
+        sorry
 open Polynomial
 
 /-
@@ -201,8 +230,14 @@ The canonical Euclidean function on the polynomial ring in one variable over a f
 -/
 def Polynomial.euclidean (k : Type) [Field k] : EuclideanFunction k[X] where
   height f := f.degree
-  zero_of_bot f hf := sorry
-  division := sorry
+  zero_of_bot f hf := by
+    exact degree_eq_bot.mp hf
+  division := by
+    intro a
+    intro b
+    intro hb
+    let q :=
+    let r :=
 
 theorem Polynomial.isEuclidean_of_field (k : Type) [Field k] : IsEuclideanDomain k[X] :=
   sorry
