@@ -226,10 +226,6 @@ theorem isPID_of_euclidean (R : Type) [CommRing R] (h : IsEuclideanDomain R) : I
         subst rlf
         exact hx
 
-        sorry
-
-
-
       · intro hy
         rw [Ideal.mem_span_singleton]
         obtain ⟨q, rfl⟩ := hy
