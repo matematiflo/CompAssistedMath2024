@@ -77,9 +77,12 @@ lemma isPID_of_field (k : Type) [Field k] : IsPID k where
       intro y
       constructor
       · intro hy
+        have hxu: IsUnit x := by sorry
         sorry
       sorry
 
+      #print Ideal.span_one
+      #print Ideal.span_singleton_eq_top
 
 
 
@@ -117,7 +120,7 @@ Note 2: This is a `def` and not a `theorem`, because it contains data. Try to se
 
 def euclideanOfField (k : Type) [Field k] : EuclideanFunction k where
   height _ := 42
-  zero_of_bot x h := by simp_all; absurd h; decide
+  zero_of_bot x h := by simp_all;/- absurd h; decide-/
   division a b hb := by
     use a / b
     use 0
@@ -145,7 +148,7 @@ def Int.euclidean : EuclideanFunction ℤ where
   zero_of_bot := by
     intro a
     simp
-  division a b hb :=
+  division a b hb := by
     let q := a / b
     let r := a % b
 
@@ -159,13 +162,24 @@ def Int.euclidean : EuclideanFunction ℤ where
       --exact?
       exact emod_nonneg a hb
     }
-    --proof r < |b|
-    have h3 : r < natAbs b := by{
-      simp
+        --proof r = |r|
+    have h3 :   r = |r| := by{
+      rw [← abs_eq_self] at h2
+      symm
+      exact h2}
+    --proof |r| < |b|
+    have h4 :  natAbs r < natAbs b := by{
+      zify
+      rw[← h3]
       exact emod_lt a hb
     }
+    use q, r
+    constructor
+    · apply h1
+    · right
+      simp
+      exact h4
 
-    sorry
 
 
 theorem Int.isEuclidean : IsEuclideanDomain ℤ where
