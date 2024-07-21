@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2024.5.5)  21 JUL 2024 22:00
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2024.5.5)  21 JUL 2024 22:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -983,18 +983,17 @@ Here is how much of TeX's memory you used:
  565166 words of font info for 62 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,19n,123p,413b,701s stack positions out of 10000i,1000n,20000p,200000b,200000s
- <C:\Users\muluc\AppData\Local\MiKTeX\fonts/pk/ljfour/public/stmaryrd/dpi600\
-stmary8.pk><D:/installs/latex/mikTex2/fonts/type1/public/amsfonts/cmextra/cmex8
-.pfb><D:/installs/latex/mikTex2/fonts/type1/public/amsfonts/cm/cmmi8.pfb><D:/in
-stalls/latex/mikTex2/fonts/type1/public/amsfonts/cm/cmss10.pfb><D:/installs/lat
-ex/mikTex2/fonts/type1/public/amsfonts/cm/cmss8.pfb><D:/installs/latex/mikTex2/
-fonts/type1/public/amsfonts/cm/cmssi8.pfb><D:/installs/latex/mikTex2/fonts/type
-1/public/amsfonts/cm/cmsy6.pfb><D:/installs/latex/mikTex2/fonts/type1/public/am
-sfonts/cm/cmsy8.pfb><D:/installs/latex/mikTex2/fonts/type1/public/amsfonts/symb
-ols/msbm10.pfb>
-Output written on template_Beamer.pdf (13 pages, 179598 bytes).
+<D:/installs/latex/mikTex2/fonts/type1/public/amsfonts/cmextra/cmex8.pfb><D:/
+installs/latex/mikTex2/fonts/type1/public/amsfonts/cm/cmmi8.pfb><D:/installs/la
+tex/mikTex2/fonts/type1/public/amsfonts/cm/cmss10.pfb><D:/installs/latex/mikTex
+2/fonts/type1/public/amsfonts/cm/cmss8.pfb><D:/installs/latex/mikTex2/fonts/typ
+e1/public/amsfonts/cm/cmssi8.pfb><D:/installs/latex/mikTex2/fonts/type1/public/
+amsfonts/cm/cmsy6.pfb><D:/installs/latex/mikTex2/fonts/type1/public/amsfonts/cm
+/cmsy8.pfb><D:/installs/latex/mikTex2/fonts/type1/public/amsfonts/symbols/msbm1
+0.pfb>
+Output written on template_Beamer.pdf (13 pages, 177666 bytes).
 PDF statistics:
- 464 PDF objects out of 1000 (max. 8388607)
+ 459 PDF objects out of 1000 (max. 8388607)
  30 named destinations out of 1000 (max. 500000)
  63 words of extra memory for PDF output out of 10000 (max. 10000000)
 
