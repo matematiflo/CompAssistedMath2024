@@ -271,7 +271,7 @@ theorem hyperbola_is_continuous_at_a_point
     _ = ε
       := by field_simp
 
-/--
+/-
   You might ask yourself whether `fun x ↦ 1/x` is continuous at `a=0`.
   From a mathematical point of view, we cannot give an answer as we've only
   defined continuity at points `a ∈ D`, i.e. points in the domain of the function.
@@ -287,8 +287,9 @@ theorem hyperbola_is_continuous_at_a_point
   We haven't gotten to this part yet, as we didn't understand the question
   in the beginning. We will try to file in another PR in the (near) future
   with a proof.
---/
--- example : ¬IsContinuousAt Set.univ (fun x ↦ 1/x) ⟨0, trivial⟩ := by
+
+  example : ¬IsContinuousAt Set.univ (fun x ↦ 1/x) ⟨0, trivial⟩
+-/
 
 
 --------------------------------------------------------------------------------
