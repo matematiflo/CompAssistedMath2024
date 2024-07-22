@@ -53,7 +53,7 @@ Next we prove that a field is a principal ideal domain.
 /- `IsDomain` is a so-called 'typeclass'. We don't get into the details here, but this means that we can use `inferInstance` to ask Lean to automatically fill in a proof.
   In this case `IsDomain` is already proven for any field. -/
 
-
+-- Fields are PID's
 lemma isPID_of_field (k : Type) [Field k] : IsPID k where
   isDomain := inferInstance
   ideal_principal := by
@@ -100,6 +100,7 @@ A *Euclidean function* on a commutative ring is a height function `R → ℕ` an
 Note: This is not merely a proposition, but contains the data of a height function. This height function is not unique, so the datum of a ring `R` with a term `h : Euclidean R` is not equivalent to the notion of a Euclidean domain (see `IsEuclideanDomain`).
 -/
 
+-- Euclidean Function
 structure EuclideanFunction ( R : Type) [CommRing R] where
   /-- Height function. -/
   height : R → WithBot ℕ
@@ -111,6 +112,7 @@ structure EuclideanFunction ( R : Type) [CommRing R] where
 An integral domain is called a Euclidean domain if it admits a Euclidean function.
 -/
 
+-- Euclidean domain
 structure IsEuclideanDomain (R : Type) [CommRing R] : Prop where
   isDomain : IsDomain R
   exists_euclideanFunction : Nonempty (EuclideanFunction R)
@@ -132,6 +134,7 @@ def euclideanOfField (k : Type) [Field k] : EuclideanFunction k where
     simp only [add_zero, lt_self_iff_false, or_false, and_true]
     field_simp
 
+-- Fields are euclidiean domains
 theorem isEuclidean_of_field (k : Type) [Field k] : IsEuclideanDomain k where
   isDomain := inferInstance
   exists_euclideanFunction := ⟨euclideanOfField k⟩
@@ -194,6 +197,7 @@ theorem Int.isEuclidean : IsEuclideanDomain ℤ where
 Any Euclidean ring (domain) is a principal ideal domain.
 -/
 
+-- Euclidean Domains are PID's
 theorem isPID_of_euclidean (R : Type) [CommRing R] (h : IsEuclideanDomain R) : IsPID R where
   isDomain := h.isDomain
   ideal_principal := by
@@ -278,8 +282,9 @@ def Polynomial.euclidean (k : Type) [Field k] : EuclideanFunction k[X] where
       exact h2
 
 
-theorem Polynomial.isEuclidean_of_field (k : Type) [Field k] : IsEuclideanDomain k[X] := by
-  sorry
+theorem Polynomial.isEuclidean_of_field (k : Type) [Field k] : IsEuclideanDomain k[X] where
+  isDomain := inferInstance
+  exists_euclideanFunction := ⟨Polynomial.euclidean k⟩
 
 /-
 `Polynomial.isEuclidean_of_field` is wrong if we drop the field assumption. For example:
