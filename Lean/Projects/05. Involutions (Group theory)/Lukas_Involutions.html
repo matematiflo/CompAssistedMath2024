@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+		<meta charset="utf-8">
+		<title>Involutions</title>
+		<meta name="author" content="Lukas Wrana">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+
+		<link rel="stylesheet" href="src/reset.css">
+		<link rel="stylesheet" href="src/reveal.css">
+		<link rel="stylesheet" href="src/theme.css" id="theme">
+	</head>
+
+	<body>
+
+		<div class="reveal">
+			<div class="slides">
+
+				<section>
+					<span>Group Theory</span>
+					<h1 class="center">Involutions</h1>
+					<p class="sec center">by Lukas Wrana</p>
+				</section>
+
+				<section>
+					<div>
+						<h2>Table of contents</h2>
+						<ol>
+							<li><span class="sec inline">01</span>Fundamentals</li>
+							<li><span class="sec inline">02</span>Main theorem</li>
+							<li><span class="sec inline">03</span>Counter example</li>
+						</ol>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<span class="sec">Chapter 01</span>
+						<h2>Fundamentals</h2>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<h3>Definition</h3>
+						<p>A <b class="underline">Group</b> is an ordered pair $(G, *)$ of a set $G$ and a binary operator
+						$$*:\begin{cases}G\times G\to G\\(a,b)\mapsto a * b\end{cases}$$
+						that satisfies the group axioms:
+						</p>
+						<ul>
+							<li>
+								<h4>Associativity</h4>
+								<p>$\forall a,b,c\in G:\quad (a*b)*c=a*(b*c)$</p>
+							</li>
+							<li>
+								<h4>Identity element</h4>
+								<p>$\exists e\in G$ such that $\forall a\in G:\quad a*e=e*a=a$</p>
+							</li>
+							<li>
+								<h4>Inverse element</h4>
+								<p>$\forall g\in G\space\exists a^{-1}\in G:\quad a*a^{-1}=a^{-1}*a=e$</p>
+							</li>
+						</ul>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<h3>Definition</h3>
+						<p>Given two groups, $(G, *)$ and $(H,\cdot)$, a <b class="underline">group homomorphism</b> from $(G, *)$ to $(H, \cdot)$ is a function
+						$$f:\space G \to H$$ such that $\forall u, v\in G$ it holds that
+						$$f(u*v)=f(u)\cdot f(v)$$</p>
+					</div>
+					<div class="fragment">
+						<h4>Further remarks</h4>
+						<p>From this property, we can also deduce that</p>
+							<ul>
+								<li>$\quad f(e_G)=e_H$</li>
+								<li>$\quad f(u^{-1})=h(u)^{-1}$</li>
+							</ul>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<h3>Definition</h3>
+						<p>An <b class="underline">automorphism</b> is a bijective homomorphism of an object into itself.</p>
+						<img src="src/graphics/bijective.svg">
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<h3>Definiton</h3>
+						<p>Given a group $(G, *)$, a group automorphism $\sigma$ is an <b class="underline">involution</b>, if $$\sigma (\sigma (x)) = x \qquad \forall x\in G$$</p>
+					</div>
+					<object class="fragment" type="image/svg+xml" data="src/graphics/involutions.svg"></object>
+				</section>
+
+				<section>
+					<div>
+						<h3>Definiton</h3>
+						<p>An involution $\sigma$ on a group $(G, *)$ has <b class="underline">no non-trivial-fixpoints</b> if the identity element $e\in G$ is the only fixpoint of $\sigma$:
+						$$\forall g\in G:\quad(\space\sigma(g)=g\Rightarrow g=e\space)$$
+						</p>
+						<p class="sec">We call $e\in G$ a trivial fixpoint of $\sigma$.</p>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<h3>Lemma</h3>
+						<p>Every group $(G, *)$ has a trivial involution, namely the identity $\text{id}$.</p>
+					</div>
+					<div class="fragment">
+						<span class="sec">proof:</span>
+						<p>Let $(G, *)$ be an arbitrary Group. For every $x\in G$:
+						$$x = \text{id}(x) = \text{id}(\text{id}(x))$$
+						$\Rightarrow \text{id}$ is an involution.</p>
+						<span class="sec right">$\square$</span>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<h3>Example</h3>
+						<p>Real negation $$-:\begin{cases}\R \rightarrow \R,\\x\mapsto -x
+						  \end{cases}$$is an involution on $(\R, +)$.</p>
+					</div>
+					<div class="fragment">
+						<span class="sec">proof:</span>
+						<p>For $x,y\in\R$:
+							$$-(x + y) = -x + (-y)$$
+							and
+							$$x = -(-x) = -(-(x))$$
+							... $\Rightarrow$ real negation is an involution on $(\R, +)$.
+						</p>
+						<span class="sec right">$\square$</span>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<span class="sec">Chapter 02</span>
+						<h2>Main theorem</h2>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<h3>Theorem</h3>
+						<p>Let $(G, *)$ be a finite group. If an involution with no non-trivial fixpoints on $(G, *)$ exists, then $(G, *)$ is commutative.</p>
+					</div>
+					<div class="fragment">
+						<span class="sec">proof: Later ...</span>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<h3>Lemma</h3>
+						<p>Let $(G, *)$ be a finite group and $\sigma$ be an involution on $G$. If $\sigma$ has no non-trivial fixpoints, then:
+							$$\forall g\in G\space\exists x\in G:\quad g=x^{-1}* \sigma(x)$$
+						</p>
+					</div>
+					<div class="fragment">
+						<span class="sec">proof:</span>
+						<p>In essence, we want to show surjectivity of a function:$$x\mapsto x^{-1} * \sigma(x)$$
+							Because $G$ is finite, we can conclude surjectivity by injectivity.
+						</p>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<p class="sec">So, lets prove injectivity...</p>
+						<p>Suppose $x, y\in G$ with $x^{-1} * \sigma (x) = y^{-1} * \sigma(y)$.
+							$$\begin{align}x &= \sigma(\sigma(x))\\
+							&= \sigma (x* x^{-1}* \sigma(x))\\
+							&= \sigma (x* y^{-1}* \sigma(y))\\
+							&= \sigma (x)*\sigma(y^{-1})*\sigma (\sigma (y))\\
+							&= \sigma (x)*\sigma(y^{-1})* y
+							\end{align}$$
+						</p>
+						<p class="fragment">$$\begin{align}\Rightarrow x* y^{-1}&=\sigma (x)*\sigma(y^{-1})\\
+							&=\sigma(x* y^{-1})\end{align}$$
+						</p>
+						<p class="fragment">We have no non-trivial fixpoints, so $x* y^{-1}$ has to be the trivial fixpoint:$$\Rightarrow x* y^{-1} = e\\\Leftrightarrow\qquad\space x = y$$</p>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<p>$\Rightarrow x\mapsto x^{-1}*\sigma (x)$ is injective.</p>
+						<img src="src/graphics/involution_finite.svg">
+						<p>Since $G$ is finite, we can conclude that $x\mapsto x^{-1}*\sigma (x)$ is also surjective on $G$.
+							$$\Rightarrow \forall g\in G\space\exists x\in G:\quad g=x^{-1}* \sigma(x)$$
+						</p>
+						<span class="sec right">$\square$</span>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<h3>Lemma</h3>
+						<p>Let $(G, *)$ be a finite group and $\sigma$ be an involution on $G$. If $\sigma$ has no non-trivial fixpoints, then:
+							$$\forall g\in G:\quad \sigma(g)=g$$</p>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<span class="sec">proof:</span>
+						<p>In the previous Lemma, we showed that
+							$$\forall g\in G\space\exists x\in G:\quad g=x^{-1}* \sigma(x)$$
+							We can expand on that result:
+							$$ \begin{align}\Rightarrow \sigma(g)&=\sigma(x^{-1}*\sigma(x))\\
+							&=\sigma(x^{-1})*\sigma(\sigma(x))\\
+							&=\sigma(x^{-1})* x\\
+							&=(\sigma(x))^{-1}* x\\
+							&=(x^{-1}*\sigma(x))^{-1}\\
+							&=g^{-1}
+							\end{align}$$
+						</p>
+						<span class="sec right">$\square$</span>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<h3>Theorem</h3>
+						<p>Let $(G, *)$ be a finite group. If an involution with no non-trivial fixpoints on $(G, *)$ exists, then $(G, *)$ is commutative.</p>
+					</div>
+					<div class="fragment">
+						<span class="sec">proof:</span>
+						<p>Let $a, b\in G$.
+							$$\begin{align}a*b&=(a^{-1})^{-1}*(b^{-1})^{-1}\\
+							&=(b^{-1}*a^{-1})^{-1}\\
+							&=\sigma(b^{-1}*a^{-1})\\
+							&=\sigma(b^{-1})*\sigma(a^{-1})\\
+							&=b*a
+							\end{align}$$
+							$\Rightarrow (G, *)$ is commutative
+						</p>
+						<span class="sec right">$\square$</span>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<span class="sec">Chapter 03</span>
+						<h2>Counter example</h2>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<h3>Definiton</h3>
+						<p>A <b class="underline">free group</b> $(F_S, *)$ over a given set $S$ consists of all words that can be build by elements of $S$ or their inverse.</p>
+						<p class="fragment">Elements of $S$ are called <b class="underline">generators</b>. Two constructed words are considered different unless their equality follows from the group axioms.</p>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<h4>Universal property</h4>
+						<p>Given any function $f$ from $S$ to a group $(G, *)$, there exists a unique homomorphism $$\phi:\quad F_S\mapsto G$$</p>
+						<img src="src/graphics/unique_prop.svg">
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<h3>Counter-Example</h3>
+						<p>We will look at a free group $(F_2, *)$ on two generators $\{a, b\}:$
+							$$e,\quad ab,\quad a^{-1}bb,\quad a^{-1}bbaab^{-1}a,\quad ...$$
+						</p>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<p>We can define an automorphism $s$ that swaps the generators over a free group $(F_2, *)$.
+							$$s(x):= \begin{cases}a,\quad\text{if }\space x=b\\b,\quad\text{if }\space x=a
+							\end{cases}$$
+							This function is just defined on the generators, but by the universal property of free groups, it also constructs
+							a unique automorphism on the whole group.
+						</p>
+					</div>
+				</section>
+
+			</div>
+		</div>
+		
+		<script src="src/reveal.js"></script>
+		<script src="src/plugin/math/math.js"></script>
+		<script>
+
+			Reveal.initialize({
+				controls: false,
+  				view: 'scroll',
+				margin: 0.1,
+				scrollProgress: true,
+				slideNumber: true,
+				hash: true,
+				pdfMaxPagesPerSlide: 1,
+				pdfSeparateFragments: false,
+				plugins: [RevealMath.KaTeX],
+				
+			});
+
+			Reveal.addKeyBinding({ keyCode: 40, key: 'DOWN', description: 'Next slide' }, () => {
+    			const viewportElement = Reveal.getViewportElement();
+    			viewportElement.scrollTo({
+        			"top": viewportElement.scrollTop + viewportElement.offsetHeight,
+        			"behavior": "smooth"
+    			});    
+			});
+
+			Reveal.on('slidechanged', (event) => {
+				event.currentSlide.querySelectorAll('object').forEach(obj => {
+					obj.contentDocument.querySelector('svg').classList.add('active');
+				})
+			});
+
+		</script>
+
+	</body>
+</html>
