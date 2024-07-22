@@ -1,6 +1,6 @@
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
-/- In this project sketch we define and prove some basic properties of divisibility in commutative rings.
+/- In this project sketch we define fad prove some basic properties of divisibility in commutative rings.
 Such as:
 - Definition of divisibility
 - Definition of associated elements and some basic properties
