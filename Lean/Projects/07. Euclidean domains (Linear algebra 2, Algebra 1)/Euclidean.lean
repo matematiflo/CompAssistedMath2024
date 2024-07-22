@@ -228,7 +228,11 @@ theorem isPID_of_euclidean (R : Type) [CommRing R] (h : IsEuclideanDomain R) : I
 
       · intro hy
         rw [Ideal.mem_span_singleton']
+        obtain ⟨a, ha⟩ : I := by
+
+          sorry
         -- Should be easy to find an a and show that y/x = a is in R but i cant do it rn
+
         sorry
 
 open Polynomial
@@ -259,16 +263,13 @@ def Polynomial.euclidean (k : Type) [Field k] : EuclideanFunction k[X] where
       · left
         sorry
 
-
-
-
-
-
-
-
-
-
-    sorry
+    use q
+    use r
+    constructor
+    · exact h1
+    · simp
+      rw[or_comm]
+      exact h2
 
 
 theorem Polynomial.isEuclidean_of_field (k : Type) [Field k] : IsEuclideanDomain k[X] := by
