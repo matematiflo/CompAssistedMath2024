@@ -233,16 +233,9 @@ theorem isPID_of_euclidean (R : Type) [CommRing R] (h : IsEuclideanDomain R) : I
       · intro hy
         rw [Ideal.mem_span_singleton']
         sorry
-
-        /-by_cases ha : y = x
-        · use 1
-          simp
-          subst ha
-          rfl
-        -/
-
-
         -- Should be easy to find an a and show that y/x = a is in R but i cant do it rn
+
+
 open Polynomial
 
 /-
