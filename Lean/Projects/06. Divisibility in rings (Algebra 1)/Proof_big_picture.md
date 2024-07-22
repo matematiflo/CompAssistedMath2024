@@ -61,38 +61,3 @@ In this project, we define irreducible and prime elements of a commutative ring.
 
     Consider the ring of integers $\mathbb{Z}$. In $\mathbb{Z}$, every integer is either a unit, zero, or can be represented as a product of irreducible numbers (which are commonly called prime). Euclid's lemma applies there: if an irreducible (prime in the ordinary sense) number like 3 divides a product $a \cdot b$, then it divides either $a$ or $b$. Thus, 3 is also prime in the algebraic definition.
 
-## Proof Details from Lean Code
-
-1. **Lemma:** If zero divides $ x $, then $ x $ is zero.
-
-    **Proof:**
-
-    Let $ 0 \mid x $. Then there exists $ a \in R $ such that
-    $$
-    x = a \cdot 0.
-    $$
-    Since $ a \cdot 0 = 0 $, it follows
-    $$
-    x = 0.
-    $$
-
-    **Example:**
-
-    Consider the ring of integers $\mathbb{Z}$. If 0 divides an integer $x$, then $x$ must be 0, since any number multiplied by 0 is again 0.
-
-2. **Lemma:** If $ x $ divides a non-zero element $ y $, then $ x $ is non-zero.
-
-    **Proof:**
-
-    Let $ x \mid y $ and $ y \neq 0 $. Assume $ x = 0 $. Then there exists $ a \in R $ such that
-    $$
-    y = a \cdot x = a \cdot 0 = 0,
-    $$
-    which contradicts $ y \neq 0 $. Therefore,
-    $$
-    x \neq 0.
-    $$
-
-    **Example:**
-
-    Consider the ring of integers $\mathbb{Z}$. If a number $x$ divides a non-zero number $y$, then $x$ cannot be zero, since the product of a non-zero number with 0 is zero.
