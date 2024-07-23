@@ -228,7 +228,7 @@ theorem isPID_of_euclidean (R : Type) [CommRing R] (h : IsEuclideanDomain R) : I
 
       · intro hy
         rw [Ideal.mem_span_singleton']
-        let a := y-x
+
 
         sorry
         -- Had a problem formalizing β(x) = min{β(b):∀b ∈ I}
@@ -266,6 +266,7 @@ def Polynomial.euclidean (k : Type) [Field k] : EuclideanFunction k[X] where
       have hg: g = g' := by apply Polynomial.as_sum_range
       rw[hf,hg]
       sorry
+      --had a problem with representation of polynomials and monomials
 
 
 theorem Polynomial.isEuclidean_of_field (k : Type) [Field k] : IsEuclideanDomain k[X] where
