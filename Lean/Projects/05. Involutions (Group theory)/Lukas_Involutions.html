@@ -15,6 +15,7 @@
 		<link rel="stylesheet" href="src/reset.css">
 		<link rel="stylesheet" href="src/reveal.css">
 		<link rel="stylesheet" href="src/theme.css" id="theme">
+
 	</head>
 
 	<body>
@@ -155,7 +156,8 @@
 				<section>
 					<div>
 						<h3>Theorem</h3>
-						<p>Let $(G, *)$ be a finite group. If an involution with no non-trivial fixpoints on $(G, *)$ exists, then $(G, *)$ is commutative.</p>
+						<p>Let $(G, *)$ be a finite group. If an involution with no non-trivial fixpoints on $(G, *)$ exists, then $*$ is commutative.
+							<span class="sec">Thus making $(G, *)$ an abelian group.</span></p>
 					</div>
 					<div class="fragment">
 						<span class="sec">proof: Later ...</span>
@@ -235,9 +237,13 @@
 				<section>
 					<div>
 						<h3>Theorem</h3>
-						<p>Let $(G, *)$ be a finite group. If an involution with no non-trivial fixpoints on $(G, *)$ exists, then $(G, *)$ is commutative.</p>
+						<p>Let $(G, *)$ be a finite group. If an involution with no non-trivial fixpoints on $(G, *)$ exists, then $*$ is commutative.
+							<span class="sec">Thus making $(G, *)$ an abelian group.</span></p>
 					</div>
-					<div class="fragment">
+				</section>
+
+				<section>
+					<div>
 						<span class="sec">proof:</span>
 						<p>Let $a, b\in G$.
 							$$\begin{align}a*b&=(a^{-1})^{-1}*(b^{-1})^{-1}\\
@@ -246,7 +252,7 @@
 							&=\sigma(b^{-1})*\sigma(a^{-1})\\
 							&=b*a
 							\end{align}$$
-							$\Rightarrow (G, *)$ is commutative
+							$\Rightarrow *$ is commutative, $(G, *)$ is abelian.
 						</p>
 						<span class="sec right">$\square$</span>
 					</div>
@@ -279,7 +285,7 @@
 					<div>
 						<h3>Counter-Example</h3>
 						<p>We will look at a free group $(F_2, *)$ on two generators $\{a, b\}:$
-							$$e,\quad ab,\quad a^{-1}bb,\quad a^{-1}bbaab^{-1}a,\quad ...$$
+							$$e,\quad a*b,\quad a^{-1}*b*b,\quad a^{-1}*b*b*a*a*b^{-1}a,\quad ...$$
 						</p>
 					</div>
 				</section>
@@ -287,11 +293,34 @@
 				<section>
 					<div>
 						<p>We can define an automorphism $s$ that swaps the generators over a free group $(F_2, *)$.
-							$$s(x):= \begin{cases}a,\quad\text{if }\space x=b\\b,\quad\text{if }\space x=a
+							$$s(x):= \begin{cases}a,\qquad\qquad\quad\text{if }\space x=b\\b,\qquad\qquad\quad\text{if }\space x=a\\s(u)*s(v),\quad\text{for }\space x=u*v,\quad u,v\in F_2
 							\end{cases}$$
-							This function is just defined on the generators, but by the universal property of free groups, it also constructs
-							a unique automorphism on the whole group.
 						</p>
+					</div>
+					<div class="fragment">
+						<h4>Examples</h4>
+						<p>$s(abba) = baab$ &nbsp;&nbsp;&nbsp;<span class="sec inline right"> <b>Note:</b> $abba$ is short for $a * b * b * a.$</span></p>
+						<p class="sec"></p>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<p>By it's construction, $s$ is a homorphism. It is therefore not difficult to show that $s$ is indeed an involution on $(F_2, *)$.</p>
+					</div>
+					<div class="fragment">
+						<h4>$s$ has no non trivial-fixed points</h4>
+						<p>Let's assume that $x$ is a fixed point of $s$:$$s(x)=x$$</p>
+						<p class="fragment">
+						$x$ has to look the same, with $a$ and $b$ swapped. This can only be the case if $x$ is the empty word $e$, thus beeing a trivial fixed point.
+						</p>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<h4>$(F_2, *)$ is not abelian</h4>
+						<p>By the very construction of any free group (on more than one generator), elements $a * b$ and $b * a$ are considered different, because there's no imposed property proving their equality.</p>
 					</div>
 				</section>
 
@@ -328,6 +357,8 @@
 					obj.contentDocument.querySelector('svg').classList.add('active');
 				})
 			});
+
+			document.body.style.cursor = "none";
 
 		</script>
 

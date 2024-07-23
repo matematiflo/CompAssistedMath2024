@@ -215,8 +215,16 @@ points but `FreeGroup (Fin 2)` is not-abelian.
 lemma swap_is_involution : ∀ x, swap (swap x) = x := by
   intro x
   simp [swap]
+  induction x using FreeGroup.induction_on with
+  | C1 => simp
+  | Cp =>
+    sorry
 
-  sorry
+  | Ci =>
+    sorry
+
+  | Cm =>
+    sorry
 
 
 lemma swap_no_fixed_points : ∀ g, swap g = g → g = 1 := by
@@ -225,8 +233,20 @@ lemma swap_no_fixed_points : ∀ g, swap g = g → g = 1 := by
   have : g ≠ swap g := by
     intro heq
     rw [heq] at h
+    induction g using FreeGroup.induction_on with
+    | C1 =>
+      simp [swap] at heq
+      simp [swap] at h
 
-    sorry
+    | Cp =>
+      sorry
+
+    | Ci =>
+      sorry
+
+    | Cm =>
+      sorry
+
   have : swap g = g := hg
 
   sorry
@@ -238,7 +258,8 @@ theorem FreeGroup_not_commutative : ¬(∀ a b : FreeGroup (Fin 2), a * b = b * 
   let b := FreeGroup.of 1
   have h_comm := h a b
   have h_swap : swap (a * b) ≠ b * a := by
-    simp [swap, a, b]
+    simp [swap, a, b, FreeGroup.of]
+    intro contra
 
     sorry
   have h_eq : swap (a * b) = b * a := by
