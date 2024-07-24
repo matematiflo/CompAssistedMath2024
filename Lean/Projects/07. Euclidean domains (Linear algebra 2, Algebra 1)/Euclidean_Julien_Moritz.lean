@@ -202,18 +202,14 @@ theorem isPID_of_euclidean (R : Type) [CommRing R] (h : IsEuclideanDomain R) : I
   isDomain := h.isDomain
   ideal_principal := by
     intro I
-    by_cases h : I = 0
-    -- Case 1: I = 0
-    · subst h
-      use 0
+    by_cases hi: I = 0
+    · use 0
+      rw[hi]
       simp
-    -- Case 2: I ≠ 0
-    · simp at h   --i dont think this does much...
-      have h2 : ∃ x ∈ I, x ≠ 0 := by
-        --since k is a field and I is a non zero ideal, it must contain a non zero element
+    · simp at hi   --i dont think this does much...
+      have h2 : ∃ x ∈ I, x ≠ 0:= by
         -- exact?
-        exact Submodule.exists_mem_ne_zero_of_ne_bot h
-
+        exact Submodule.exists_mem_ne_zero_of_ne_bot hi
       -- Let x be a nonzero element of I
       obtain ⟨x, hx, hnezero⟩ := h2
       use x
@@ -232,8 +228,10 @@ theorem isPID_of_euclidean (R : Type) [CommRing R] (h : IsEuclideanDomain R) : I
 
       · intro hy
         rw [Ideal.mem_span_singleton']
+
+
         sorry
-        -- Should be easy to find an a and show that y/x = a is in R but i cant do it rn
+        -- Had a problem formalizing β(x) = min{β(b):∀b ∈ I}
 
 
 open Polynomial
@@ -247,38 +245,33 @@ def Polynomial.euclidean (k : Type) [Field k] : EuclideanFunction k[X] where
     exact degree_eq_bot.mp hf
 
   division := by
-    intro a
-    intro b
+    intro f
+    intro g
     intro hb
-    -- Initialize quotient and remainder
-    let q := a / b
-    let r := a % b
-    -- div. identity
-
-    have h1 : a = b * q + r := by
-      exact Eq.symm (EuclideanDomain.div_add_mod a b)
-    -- Deg. condition
-
-
-    have h2 : degree r < degree b ∨ r = 0 := by
-      left
-
-        --modulos with polinimails
-      sorry
-
-    use q
-    use r
-    constructor
-    · exact h1
+    by_cases hdeg: f.degree < g.degree
+    · let r:= f
+      let q:= 0
+      use q , r
+      simp only [self_eq_add_left, mul_eq_zero]
+      constructor
+      · right
+        exact AddMonoidWithOne.natCast_zero
+      · right
+        exact hdeg
     · simp
-      rw[or_comm]
-      exact h2
+      simp at hdeg
+      let f' := ∑ i ∈ Finset.range (f.natDegree + 1), (monomial i) (f.coeff i)
+      let g' := ∑ i ∈ Finset.range (g.natDegree + 1), (monomial i) (g.coeff i)
+      have hf: f = f' := by apply Polynomial.as_sum_range
+      have hg: g = g' := by apply Polynomial.as_sum_range
+      rw[hf,hg]
+      sorry
+      --had a problem with representation of polynomials and monomials
 
 
 theorem Polynomial.isEuclidean_of_field (k : Type) [Field k] : IsEuclideanDomain k[X] where
   isDomain := inferInstance
   exists_euclideanFunction := ⟨Polynomial.euclidean k⟩
-
 /-
 `Polynomial.isEuclidean_of_field` is wrong if we drop the field assumption. For example:
 -/
