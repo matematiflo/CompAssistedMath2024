@@ -19,8 +19,7 @@ We can find lemma names by using the library search tactic `exact?`.
 -/
 
 example (a b : ℤ) : a % b + b * (a / b) = a := by
-  --exact?
-  exact Int.emod_add_ediv a b
+  exact?
 
 /-
 A commutative ring is a *principal ideal domain* (PID) if it is a domain and every ideal is principal.
@@ -44,55 +43,20 @@ For more information about structures, see https://lean-lang.org/theorem_proving
 Next we prove that a field is a principal ideal domain.
 -/
 
-
-
-
-
-
-
-/- `IsDomain` is a so-called 'typeclass'. We don't get into the details here, but this means that we can use `inferInstance` to ask Lean to automatically fill in a proof.
-  In this case `IsDomain` is already proven for any field. -/
-
--- Fields are PID's
 lemma isPID_of_field (k : Type) [Field k] : IsPID k where
+  /- `IsDomain` is a so-called 'typeclass'. We don't get into the details here, but this means that we can use `inferInstance` to ask Lean to automatically fill in a proof.
+  In this case `IsDomain` is already proven for any field. -/
   isDomain := inferInstance
   ideal_principal := by
     intro I
     by_cases h : I = 0
-    -- Case 1: I = 0
     · subst h
       use 0
       simp
-    -- Case 2: I ≠ 0
-    · simp at h   --i dont think this does much...
-      have h2 : ∃ x ∈ I, x ≠ 0 := by
-        --since k is a field and I is a non zero ideal, it must contain a non zero element
-        -- exact?
-        exact Submodule.exists_mem_ne_zero_of_ne_bot h
-
-      -- Let x be a nonzero element of I
+    · simp at h
+      have h2 : ∃ x ∈ I, x ≠ 0 := sorry
       obtain ⟨x, hx, hnezero⟩ := h2
-      use x
-      apply Ideal.ext
-      intro y
-      constructor
-      · intro
-        have hxu: IsUnit x := by {
-          rw[isUnit_iff_ne_zero]
-          exact hnezero
-        }
-        have h2 : I = ⊤ := by exact Ideal.eq_top_of_isUnit_mem I hx hxu
-        rw[h2]
-        exact trivial
-
-      · intro
-        have hxu: IsUnit x := by {
-          rw[isUnit_iff_ne_zero]
-          exact hnezero
-        }
-        rw[← Ideal.span_singleton_eq_top] at hxu
-        rw[hxu]
-        exact trivial
+      sorry
 
 /-
 A *Euclidean function* on a commutative ring is a height function `R → ℕ` and a division with remainder, where the height of the remainder is smaller than the denominator.
@@ -100,8 +64,7 @@ A *Euclidean function* on a commutative ring is a height function `R → ℕ` an
 Note: This is not merely a proposition, but contains the data of a height function. This height function is not unique, so the datum of a ring `R` with a term `h : Euclidean R` is not equivalent to the notion of a Euclidean domain (see `IsEuclideanDomain`).
 -/
 
--- Euclidean Function
-structure EuclideanFunction ( R : Type) [CommRing R] where
+structure EuclideanFunction (R : Type) [CommRing R] where
   /-- Height function. -/
   height : R → WithBot ℕ
   zero_of_bot (x : R) : height x = ⊥ → x = 0
@@ -112,7 +75,6 @@ structure EuclideanFunction ( R : Type) [CommRing R] where
 An integral domain is called a Euclidean domain if it admits a Euclidean function.
 -/
 
--- Euclidean domain
 structure IsEuclideanDomain (R : Type) [CommRing R] : Prop where
   isDomain : IsDomain R
   exists_euclideanFunction : Nonempty (EuclideanFunction R)
@@ -126,7 +88,7 @@ Note 2: This is a `def` and not a `theorem`, because it contains data. Try to se
 
 def euclideanOfField (k : Type) [Field k] : EuclideanFunction k where
   height _ := 42
-  zero_of_bot x h := by simp_all;/- absurd h; decide-/
+  zero_of_bot x h := by simp_all; absurd h; decide
   division a b hb := by
     use a / b
     use 0
@@ -134,7 +96,6 @@ def euclideanOfField (k : Type) [Field k] : EuclideanFunction k where
     simp only [add_zero, lt_self_iff_false, or_false, and_true]
     field_simp
 
--- Fields are euclidiean domains
 theorem isEuclidean_of_field (k : Type) [Field k] : IsEuclideanDomain k where
   isDomain := inferInstance
   exists_euclideanFunction := ⟨euclideanOfField k⟩
@@ -151,90 +112,21 @@ Hint: The remainder of integer division of `a : ℤ` by `b : ℤ` is `a % b`.
 -/
 
 def Int.euclidean : EuclideanFunction ℤ where
-  height := λ n => n.natAbs
-  zero_of_bot := by
-    intro a
-    simp
-  division a b hb := by
-    let q := a / b
-    let r := a % b
-
-    -- Proof that a = b * q + r
-    have h1 : a = b * q + r := by{
-      nth_rewrite 1 [← Int.emod_add_ediv a b, add_comm]
-      rfl
-    }
-    --proof 0 ≤ r
-    have h2 : 0 ≤ r := by{
-      --exact?
-      exact emod_nonneg a hb
-    }
-        --proof r = |r|
-    have h3 :   r = |r| := by{
-      rw [← abs_eq_self] at h2
-      symm
-      exact h2}
-    --proof |r| < |b|
-    have h4 :  natAbs r < natAbs b := by{
-      zify
-      rw[← h3]
-      exact emod_lt a hb
-    }
-    use q, r
-    constructor
-    · apply h1
-    · right
-      simp
-      exact h4
-
-
+  height := sorry
+  zero_of_bot := sorry
+  division a b hb := sorry
 
 theorem Int.isEuclidean : IsEuclideanDomain ℤ where
   isDomain := inferInstance
   exists_euclideanFunction := ⟨Int.euclidean⟩
 
 /-
-Any Euclidean ring (domain) is a principal ideal domain.
+Any Euclidean ring is a principal ideal domain.
 -/
 
--- Euclidean Domains are PID's
 theorem isPID_of_euclidean (R : Type) [CommRing R] (h : IsEuclideanDomain R) : IsPID R where
   isDomain := h.isDomain
-  ideal_principal := by
-    intro I
-    by_cases h : I = 0
-    -- Case 1: I = 0
-    · subst h
-      use 0
-      simp
-    -- Case 2: I ≠ 0
-    · simp at h   --i dont think this does much...
-      have h2 : ∃ x ∈ I, x ≠ 0 := by
-        --since k is a field and I is a non zero ideal, it must contain a non zero element
-        -- exact?
-        exact Submodule.exists_mem_ne_zero_of_ne_bot h
-
-      -- Let x be a nonzero element of I
-      obtain ⟨x, hx, hnezero⟩ := h2
-      use x
-
-      apply Ideal.ext
-      intro y
-      constructor
-      · intro hy
-        -- Since `x` generates the ideal, `y` should be in the ideal generated by `x`
-        rw [Ideal.mem_span_singleton] at hy
-        obtain ⟨q, hq⟩ := hy
-
-        apply Ideal.mul_mem_right q at hx
-        subst hq
-        exact hx
-
-      · intro hy
-        rw [Ideal.mem_span_singleton']
-        sorry
-        -- Should be easy to find an a and show that y/x = a is in R but i cant do it rn
-
+  ideal_principal := sorry
 
 open Polynomial
 
@@ -243,54 +135,15 @@ The canonical Euclidean function on the polynomial ring in one variable over a f
 -/
 def Polynomial.euclidean (k : Type) [Field k] : EuclideanFunction k[X] where
   height f := f.degree
-  zero_of_bot f hf := by
-    exact degree_eq_bot.mp hf
+  zero_of_bot f hf := sorry
+  division := sorry
 
-  division := by
-    intro a
-    intro b
-    intro hb
-    -- Initialize quotient and remainder
-    let q := a / b
-    let r := a % b
-    -- div. identity
-
-    have h1 : a = b * q + r := by
-      exact Eq.symm (EuclideanDomain.div_add_mod a b)
-    -- Deg. condition
-
-
-    have h2 : degree r < degree b ∨ r = 0 := by
-      left
-
-        --modulos with polinimails
-      sorry
-
-    use q
-    use r
-    constructor
-    · exact h1
-    · simp
-      rw[or_comm]
-      exact h2
-
-
-theorem Polynomial.isEuclidean_of_field (k : Type) [Field k] : IsEuclideanDomain k[X] where
-  isDomain := inferInstance
-  exists_euclideanFunction := ⟨Polynomial.euclidean k⟩
+theorem Polynomial.isEuclidean_of_field (k : Type) [Field k] : IsEuclideanDomain k[X] :=
+  sorry
 
 /-
 `Polynomial.isEuclidean_of_field` is wrong if we drop the field assumption. For example:
 -/
 
-theorem not_isPID_Zx : ¬ IsPID (Polynomial ℤ) := by
+example : ¬ IsEuclideanDomain ℤ[X] :=
   sorry
-
-example : ¬ IsEuclideanDomain ℤ[X] := by
-  have h1 := not_isPID_Zx
-  have h2 := isPID_of_euclidean
-
-  intro h
-  apply h2 at h
-  apply h1 at h
-  exact h
