@@ -120,12 +120,12 @@
 			\begin{proof}
 				\begin{itemize}
 					\item Proof of linear independence:\\
-					Let's assume $\{\ell_0, \ldots \ell_n \}$ is linearly dependent and use the $\delta_{ij}$ property of $\ell_j$:
 					\begin{align*}
-						&\exists j \in \{1, \ldots ,n \} : \ell_j(x) = \sum_{\substack{i= 0 \\ i \neq j }}^{n} \alpha_i \ell_i(x)
-						\Rightarrow\quad  \ell_j(x_j) = \sum_{\substack{i= 0 \\ i \neq j }}^{n} \alpha_i \ell_i(x_j)\\
-						&\Rightarrow 1 = \ell_j(x_j) = \sum_{\substack{i= 0 \\ i \neq j }}^{n} \alpha_i \underbrace{\ell_i(x_j)}_{=0} = 0 \lightning\\& \Rightarrow \text{Lagrange polynomials are linearly independent}
+						0 &= \sum_{i = 0}^{n}\alpha_i\ell_i \Rightarrow \sum_{i = 0}^{n}\alpha_i\ell_i(x_j) = 0\\
+						\Rightarrow & \alpha_j\ell_j(x_j) = 0 \Rightarrow \alpha_j = 0 \text{ because $\ell_j(x_j) = 1$}\\
 					\end{align*}
+					because $j \in \{0, \ldots n\}$ was arbitrary but constant we get $\alpha_j = 0 \quad \forall j \in \{0, \ldots n\}$\\
+					thus we can conclude linear independance 
 				\end{itemize}
 			\end{proof}
 		\end{frame}
@@ -152,6 +152,7 @@
 				We know that $\#\{\ell_0,\ldots, \ell_n\} = n+1 = \dim(P_n)$. The Lagrange polynomials are linearly independent and $\{\ell_0,\ldots, \ell_n\} \subset P_n$. according to our previous theorem, $\{\ell_0,\ldots, \ell_n\}$ is a basis of $P_n$.
 			\end{proof}
 		\end{frame}
+		
 		\begin{frame}{Sources}
 			\begin{thebibliography}{9}
 				\setbeamertemplate{bibliography item}[number]
