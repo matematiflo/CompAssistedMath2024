@@ -4,9 +4,9 @@ open Lake DSL
 package «leanproject» where
   -- Settings applied to both builds and interactive editing
   leanOptions := #[
-    ⟨`pp.unicode.fun, true⟩, -- pretty-prints `fun a ↦ b`
-    ⟨`pp.proofs, true⟩,  -- if pp.proofs is false (default is false), then proofs that are any more complicated than a free variable or a constant print as ⋯
-    ⟨`pp.proofs.withType, true⟩  -- if pp.proofs is false and pp.proofs.withType is true (the default just changed to false), then omitted proofs print with their types, like (⋯ : p)
+    ⟨`pp.unicode.fun, false⟩, -- pretty-prints `fun a ↦ b`
+    ⟨`pp.proofs, false⟩,  -- if pp.proofs is false (default is false), then proofs that are any more complicated than a free variable or a constant print as ⋯
+    ⟨`pp.proofs.withType, false⟩  -- if pp.proofs is false and pp.proofs.withType is true (the default just changed to false), then omitted proofs print with their types, like (⋯ : p)
     -- if pp.proofs is false, then pp.proofs.threshold can be set to a number greater than 0 to allow more complicated proof terms to be pretty printed.
   ]
   -- add any additional package configuration options here
