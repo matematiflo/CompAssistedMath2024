@@ -14,6 +14,7 @@ This project explores the proof of the result for finite groups and constructs
 a counter-example in the non-finite case.
 -/
 
+import Mathlib.Tactic.Ring
 import Mathlib.GroupTheory.FreeGroup.Basic
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Fintype.Basic
