@@ -1,3 +1,19 @@
+/-
+# Inner automorphisms
+
+Edited by Roy Steffen and Clara Vossbeck
+
+This project was built on the project sketch file given out by
+Judith Ludwig, Christian Merten and Florent Schaffhauser, during
+the (pro)seminar on computer-assisted mathematics,
+Heidelberg, Summer Semester 2024
+
+In this file, we define the group of inner automorphisms of a group and
+show that the group GLₙ(ℝ) has an automorphism that is not inner.
+We will construct this automorphism and along the way also prove a very
+useful theorem to check if an automorphism is truly inner.
+-/
+
 import Mathlib.Algebra.Group.Basic
 import Mathlib.Algebra.Group.Subgroup.Basic
 import Mathlib.Algebra.Group.Aut
@@ -5,7 +21,7 @@ import Mathlib.Algebra.Group.Hom.Defs
 import Mathlib.Algebra.Polynomial.Basic
 import Mathlib.LinearAlgebra.Charpoly.ToMatrix
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
-import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup
+import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Basic
 import Mathlib.Data.Matrix.Basic
 import Mathlib.Data.Real.Basic
 
@@ -92,8 +108,8 @@ noncomputable def diag_mat_with_two (n : ℕ) : GL (Fin n) ℝ where
     dsimp
     simp
 
-@[simp] lemma diag_mat_with_two_apply (n : ℕ) : diag_mat_with_two n = Matrix.scalar (Fin n) (2 : ℝ) := rfl
-@[simp] lemma diag_mat_with_two_inverse_apply (n : ℕ) : (diag_mat_with_two n)⁻¹ = Matrix.scalar (Fin n) (2⁻¹ : ℝ) := rfl
+lemma diag_mat_with_two_apply (n : ℕ) : diag_mat_with_two n = Matrix.scalar (Fin n) (2 : ℝ) := rfl
+lemma diag_mat_with_two_inverse_apply (n : ℕ) : (diag_mat_with_two n)⁻¹ = Matrix.scalar (Fin n) (2⁻¹ : ℝ) := rfl
 
 -- We show that if A ∈ GLₙ(ℝ), we also have Aᵗ ∈ GLₙ(ℝ).
 
@@ -119,8 +135,8 @@ def Matrix.GeneralLinearGroup.transpose (A : GL (Fin n) ℝ) : GL (Fin n) ℝ wh
     rw_mod_cast [mul_right_inv]
     rw_mod_cast [Matrix.transpose_one]
 
-@[simp] lemma transpose_apply (A : GL (Fin n) ℝ) : A.transpose = A.val.transpose := rfl
-@[simp] lemma transpose_inverse_apply (A : GL (Fin n) ℝ) : (A.transpose)⁻¹ = A.inv.transpose := rfl
+lemma transpose_apply (A : GL (Fin n) ℝ) : A.transpose = A.val.transpose := rfl
+lemma transpose_inverse_apply (A : GL (Fin n) ℝ) : (A.transpose)⁻¹ = A.inv.transpose := rfl
 
 -- We will now define and prove that the map α: GLₙ(ℝ) → GLₙ(ℝ), A ↦ (A⁻¹)ᵗ
 -- is a group automorphism, as wished.
@@ -193,8 +209,8 @@ lemma zero_pow_nat (n : ℕ) (not_zero : n ≠ 0) : (0 : ℝ) ^ n = (0 : ℝ) :=
 -- We evaluate our counterexample at 2.
 
 lemma eval_at_two (not_zero : n ≠ 0) : Polynomial.eval 2 ((diag_mat_with_two n).val).charpoly ≠ Polynomial.eval 2 ((α (diag_mat_with_two n)).val).charpoly := by
-  simp [-map_ofNat, -Matrix.coe_units_inv]
-  dsimp [Matrix.charpoly, Matrix.charmatrix]
+  simp only [diag_mat_with_two_apply, α_apply, transpose_apply, ne_eq]
+  dsimp [Matrix.charpoly, Matrix.charmatrix, diag_mat_with_two_inverse_apply]
   simp
   ring_nf
   intro hyp
