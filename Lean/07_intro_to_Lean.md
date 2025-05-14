@@ -10,7 +10,7 @@ It was created and first implemented by **Leonardo de Moura** at Microsoft Resea
 
 ## Goals for today
 
-* Learn to read basic Lean syntax such `def t : T := sorry`.
+* Learn to read basic Lean syntax such as `def t : T := sorry`.
 * Learn to think about *propositions as types* and *terms as proofs*.
 * Write simple equality proofs using the `reflexivity` tactic (or `refl`).
 * See a first example of a function and of a proof that uses the `exact` tactic.
@@ -245,7 +245,7 @@ The following command `#check Eq.refl 2` returns `Eq.refl 2 : 2 = 2`, which mean
 -- #check @Eq.refl
 ```
 
-To conclude, let us see an example of a case when we do not get what we might expect. If we write to write fractions naively, we see that the types of those terms is not what we think it is.
+To conclude, let us see an example of a case when we do not get what we might expect. If we write fractions naively, we see that the types of those terms is not what we think it is.
 
 ```lean
 #check 42 / 21  -- 42 / 21 : Nat
