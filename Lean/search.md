@@ -14,8 +14,7 @@ For example, if you want to find the cosine rule in mathlib, you can just type "
 
 ### Good examples
 
-Try searching for the cosine rule! Search for the fact that the tensor product is commutative. 
-
+Try searching for the cosine rule! Search for the fact that the tensor product is commutative.
 
 ## The API docs
 
@@ -37,5 +36,3 @@ convention), then you can use [loogle](https://loogle.lean-lang.org/). This is a
 ### Example
 
 Try searching for all functions `ℕ → ℕ` by typing `ℕ → ℕ` into the search box in loogle. There are plenty more examples on the loogle home page.
-
-
