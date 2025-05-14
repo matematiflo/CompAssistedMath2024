@@ -5,12 +5,11 @@ By Judith Ludwig, Christian Merten and Florent Schaffhauser,
 Proseminar on computer-assisted mathematics,
 Heidelberg, Summer Semester 2024
 
-In this project sketch we define the group of inner automorphisms of a group and
-show that the group `GL (Fin n) ℝ` has an automorphism that is not inner.
+In this project sketch we define the group of inner automorphisms of a group and show that the group `GL (Fin n) ℝ` has an automorphism that is not inner.
 -/
 
-import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
-import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup
+import Mathlib.LinearAlgebra.Charpoly.Basic
+import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 import Mathlib.GroupTheory.FreeGroup.Basic
 import Mathlib.Data.Complex.Basic
 
@@ -104,7 +103,8 @@ theorem conjugateHom_ker : (conjugateHom G).ker = Subgroup.center G := by
     group
 
 /-
-The group of inner automorphisms of `G` is the subgroup of automorphisms, which are given by conjugation with an element of `G`.
+The group of inner automorphisms of `G` is the subgroup of automorphisms, which are given by
+conjugation with an element of `G`.
 -/
 
 def InnerAut : Subgroup (G ≃* G) where
@@ -116,7 +116,8 @@ def InnerAut : Subgroup (G ≃* G) where
 end
 
 /-
-If `φ` is an inner automorphism of `GL (Fin n) ℝ` and `A : GL (Fin n) ℝ`, the characteristic polynomials of `A` and `φ A` agree.
+If `φ` is an inner automorphism of `GL (Fin n) ℝ` and `A : GL (Fin n) ℝ`, the characteristic
+polynomials of `A` and `φ A` agree.
 -/
 
 theorem charpoly_eq_of_inner (A : GL (Fin n) ℝ) (φ : InnerAut (GL (Fin n) ℝ)) :
