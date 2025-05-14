@@ -1,5 +1,4 @@
-{
-    "name": "MathlibDependency dev container",
+{  "name": "MathlibDependency dev container",
 
     "build": {
       "dockerfile": "Dockerfile"
